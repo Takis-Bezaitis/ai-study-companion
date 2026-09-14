@@ -50,6 +50,7 @@ function generateRefreshToken(userId: string) {
     env.JWT_REFRESH_SECRET,
     {
       subject: userId,
+      jwtid: crypto.randomUUID(),
       expiresIn: REFRESH_TOKEN_EXPIRES_IN!,
       issuer: JWT_ISSUER,
       audience: JWT_AUDIENCE,
