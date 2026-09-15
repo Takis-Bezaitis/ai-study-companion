@@ -9,6 +9,7 @@ export const API = {
     me: `${BASE_URL}/api/auth/me`,
   },
 
+  categories: `${BASE_URL}/api/categories`,
   lessons: `${BASE_URL}/api/lessons`,
   progress: `${BASE_URL}/api/progress`,
 };

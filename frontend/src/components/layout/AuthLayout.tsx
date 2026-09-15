@@ -1,8 +1,13 @@
 import { Outlet, Navigate } from "react-router";
 import { useAuthStore } from "../../store/authStore";
+import LoadingScreen from "../common/LoadingScreen";
 
 const AuthLayout = () => {
-  const { user } = useAuthStore();
+  const { user, loading } = useAuthStore();
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   if (user) {
     // If already logged in, don't allow access to /auth/*

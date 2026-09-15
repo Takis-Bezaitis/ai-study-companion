@@ -3,16 +3,14 @@ import { Moon, Sun } from 'lucide-react';
 
 const ThemeToggle = () => {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
-    // Check saved preference first
+
     const stored = localStorage.getItem("ai-study-companion-theme");
     if (stored === "light" || stored === "dark") return stored;
 
-    // Otherwise match system preference
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     return prefersDark ? "dark" : "light";
   });
 
-  // Apply theme to <html> tag
   useEffect(() => {
     const root = document.documentElement;
     if (theme === "dark") root.classList.add("dark");

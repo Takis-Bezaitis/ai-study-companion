@@ -1,1 +1,208 @@
 @import "tailwindcss";
+
+/* =========================================================
+   Global
+   ========================================================= */
+
+html,
+body,
+#root {
+  height: 100dvh;
+  margin: 0;
+  overflow: hidden;
+}
+
+html,
+body,
+#root,
+* {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+/* =========================================================
+   Theme Variables
+   ========================================================= */
+
+:root {
+  /* Backgrounds */
+  --color-background: #f8f7fb;
+  --color-surface: #ffffff;
+  --color-surface-secondary: #f3f0fa;
+  --color-surface-secondary-hover: #e9e4f3;
+
+  /* Text */
+  --color-text-primary: #20202a;
+  --color-text-secondary: #5f6170;
+  --color-text-muted: #858795;
+
+  /* Borders */
+  --color-border: #e4e1ea;
+
+  /* Primary */
+  --color-primary: #6d5acf;
+  --color-primary-hover: #5b48b8;
+  --color-primary-soft: #ede9fe;
+
+  /* Warm Accent */
+  --color-accent: #d97706;
+  --color-accent-hover: #b45309;
+  --color-accent-soft: #fef3c7;
+
+  /* Success */
+  --color-success: #059669;
+  --color-success-soft: #d1fae5;
+
+  /* Buttons */
+  --color-button-main: #6d5acf;
+  --color-button-hover: #5b48b8;
+  --color-button-text: #ffffff;
+}
+
+.dark {
+  /* Backgrounds */
+  --color-background: #12111a;
+  --color-surface: #1b1925;
+  --color-surface-secondary: #252231;
+  --color-surface-secondary-hover: #302b3d;
+
+  /* Text */
+  --color-text-primary: #f5f3fa;
+  --color-text-secondary: #c4c0cf;
+  --color-text-muted: #918c9f;
+
+  /* Borders */
+  --color-border: #34303f;
+
+  /* Primary */
+  --color-primary: #a78bfa;
+  --color-primary-hover: #c4b5fd;
+  --color-primary-soft: #2d2545;
+
+  /* Warm Accent */
+  --color-accent: #fbbf24;
+  --color-accent-hover: #fcd34d;
+  --color-accent-soft: #3a2d13;
+
+  /* Success */
+  --color-success: #34d399;
+  --color-success-soft: #12382e;
+
+  /* Buttons */
+  --color-button-main: #7c5ce6;
+  --color-button-hover: #8b6bea;
+  --color-button-text: #ffffff;
+}
+
+@layer utilities {
+  /* Backgrounds */
+
+  .bg-background {
+    background-color: var(--color-background);
+  }
+
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+
+  .bg-surface-secondary {
+    background-color: var(--color-surface-secondary);
+  }
+
+  .hover\:bg-surface-secondary-hover:hover {
+    background-color: var(--color-surface-secondary-hover);
+  }
+
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+
+  .bg-primary-soft {
+    background-color: var(--color-primary-soft);
+  }
+
+  .bg-accent {
+    background-color: var(--color-accent);
+  }
+
+  .bg-accent-soft {
+    background-color: var(--color-accent-soft);
+  }
+
+  .bg-success {
+    background-color: var(--color-success);
+  }
+
+  .bg-success-soft {
+    background-color: var(--color-success-soft);
+  }
+
+  .bg-button-main {
+    background-color: var(--color-button-main);
+  }
+
+  .bg-button-hover:hover {
+    background-color: var(--color-button-hover);
+  }
+
+  /* Text */
+
+  .text-primary {
+    color: var(--color-text-primary);
+  }
+
+  .text-secondary {
+    color: var(--color-text-secondary);
+  }
+
+  .text-muted {
+    color: var(--color-text-muted);
+  }
+
+  .text-primary-color {
+    color: var(--color-primary);
+  }
+
+  .text-accent {
+    color: var(--color-accent);
+  }
+
+  .text-success {
+    color: var(--color-success);
+  }
+
+  .text-button {
+    color: var(--color-button-text);
+  }
+
+  /* Borders */
+
+  .border-default {
+    border-color: var(--color-border);
+  }
+
+  .border-primary {
+    border-color: var(--color-primary);
+  }
+
+  .border-accent {
+    border-color: var(--color-accent);
+  }
+
+  /* Focus */
+
+  .ring-primary {
+    --tw-ring-color: var(--color-primary);
+  }
+
+  .ring-accent {
+    --tw-ring-color: var(--color-accent);
+  }
+}
