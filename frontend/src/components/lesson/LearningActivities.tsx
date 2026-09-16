@@ -51,20 +51,17 @@ const LearningActivities = ({
 
   return (
     <section aria-labelledby="activities-heading">
-      <header className="mb-4">
+      <header className="mb-3">
         <h2
           id="activities-heading"
-          className="text-lg font-bold text-primary"
+          className="text-lg text-center font-bold text-primary"
         >
-          Test your knowledge
+          Activities
         </h2>
 
-        <p className="mt-1 text-sm text-secondary">
-          Practice what you learned.
-        </p>
       </header>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-4 xl:grid-cols-1 gap-2.5">
         {activities.map((activity) => {
           const Icon = activity.icon;
 
@@ -72,18 +69,20 @@ const LearningActivities = ({
             <Link
               key={activity.title}
               to={activity.href}
-              className="group rounded-2xl border border-default bg-surface p-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-secondary-hover"
+              className="group rounded-2xl border border-default bg-surface p-3 transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-secondary-hover"
             >
               <article className="flex h-full flex-col">
-                <div
-                  className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${activity.accent}`}
-                >
+                <div className="flex place-items-center">
+                  <div
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl ${activity.accent}`}
+                  >
                   <Icon aria-hidden="true" size={20} />
                 </div>
 
-                <h3 className="text-sm font-semibold text-primary">
-                  {activity.title}
-                </h3>
+                  <h3 className="ml-2 text-sm font-semibold text-primary">
+                    {activity.title}
+                  </h3>
+                </div>
 
                 <p className="mt-1 flex-1 text-xs leading-5 text-secondary">
                   {activity.description}

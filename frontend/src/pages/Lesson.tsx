@@ -58,22 +58,29 @@ const Lesson = () => {
 
   return (
     <section className="flex h-full min-h-0 w-full flex-col overflow-hidden p-4 sm:p-6">
-      <div className="grid min-h-0 w-full flex-1 grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid min-h-0 w-full flex-1 gap-6">
         {/* Main learning area */}
-        <div className="flex min-h-0 flex-col overflow-hidden">
-          <LessonHeader lesson={lesson} />
-
-          <div className="min-h-0 flex-1 overflow-hidden">
-            <LessonContent lesson={lesson} />
+        <div className="block xl:flex min-h-0 overflow-hidden">
+          <div className="w-full xl:flex-3 min-w-0">
+            <LessonHeader lesson={lesson} />
           </div>
+
+          <aside className="hidden xl:block xl:flex-2 mb-4 min-w-0 sm:mb-5 xl:mb-0">
+            <AskAI />
+          </aside>
+          
         </div>
 
-        {/* AI & activities */}
-        <aside className="flex min-h-0 flex-col gap-5 overflow-hidden">
-          <AskAI />
+        <div className="contents xl:flex min-h-0 gap-6">
+          <div className="min-w-0 overflow-hidden xl:flex-9 min-[1600px]:flex-10">
+            <LessonContent lesson={lesson} />
+          </div>
 
-          <LearningActivities lessonId={lesson.id} />
-        </aside>
+          <aside className="min-h-0 min-w-0 overflow-hidden hidden xl:block xl:flex-3 min-[1600px]:flex-2">
+            <LearningActivities lessonId={lesson.id} />
+          </aside>
+        </div>
+        
       </div>
     </section>
   );
