@@ -120,6 +120,10 @@ body {
     background-color: var(--color-surface-secondary-hover);
   }
 
+  .hover\:text-primary-color:hover {
+    color: var(--color-primary);
+  }
+
   .bg-primary {
     background-color: var(--color-primary);
   }

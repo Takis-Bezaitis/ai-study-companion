@@ -6,23 +6,26 @@ const AskAI = () => {
       aria-labelledby="ask-ai-heading"
       className="rounded-2xl border border-default bg-surface p-5"
     >
-      <header className="mb-4 flex items-center gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-color">
-          <Bot aria-hidden="true" size={20} />
+      <header className="mb-4 flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-color">
+            <Bot aria-hidden="true" size={20} />
+          </div>
+
+          <div>
+            <h2
+              id="ask-ai-heading"
+              className="text-lg font-bold text-primary"
+            >
+              Ask AI
+            </h2>
+
+            <p className="text-sm text-secondary">
+              Ask anything about this lesson.
+            </p>
+          </div>
         </div>
 
-        <div>
-          <h2
-            id="ask-ai-heading"
-            className="text-lg font-bold text-primary"
-          >
-            Ask AI
-          </h2>
-
-          <p className="text-sm text-secondary">
-            Ask anything about this lesson.
-          </p>
-        </div>
       </header>
 
       <form className="flex gap-2">
@@ -51,4 +54,3 @@ const AskAI = () => {
 };
 
 export default AskAI;
-
