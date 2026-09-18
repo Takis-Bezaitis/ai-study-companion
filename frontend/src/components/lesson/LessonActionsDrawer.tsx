@@ -123,8 +123,17 @@ const LessonActionsDrawer = ({
             />
           </span>
         </button>
-
+        
         {/* Activities */}
+        <header className="mb-3">
+          <h2
+            id="activities-heading"
+            className="text-center text-lg font-bold text-primary"
+          >
+            Activities
+          </h2>
+        </header>
+
         <div className="grid gap-3 sm:grid-cols-2">
           {activities.map((activity) => {
             const Icon = activity.icon;

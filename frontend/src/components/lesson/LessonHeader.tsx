@@ -9,7 +9,7 @@ type LessonHeaderProps = {
 
 const LessonHeader = ({ lesson }: LessonHeaderProps) => {
   return (
-    <header className="mb-6">
+    <header>
       <Link
         to="/lessons"
         className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-secondary transition-colors hover:text-primary-color"

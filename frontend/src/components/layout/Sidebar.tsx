@@ -30,7 +30,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
       <aside
         className={`
-          fixed inset-y-0 left-0 z-50 m-3 flex w-64 flex-col rounded-2xl
+          fixed inset-y-0 left-0 z-50 m-3 flex w-52 flex-col rounded-2xl
           border border-default bg-surface
           transition-transform duration-200
           lg:static lg:z-auto lg:m-3 lg:flex

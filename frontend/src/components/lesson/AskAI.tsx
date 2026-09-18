@@ -4,7 +4,7 @@ const AskAI = () => {
   return (
     <section
       aria-labelledby="ask-ai-heading"
-      className="rounded-2xl border border-default bg-surface p-5"
+      className="rounded-2xl border border-default bg-surface p-3"
     >
       <header className="mb-4 flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">

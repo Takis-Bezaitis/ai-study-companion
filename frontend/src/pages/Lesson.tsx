@@ -8,6 +8,7 @@ import LearningActivities from "../components/lesson/LearningActivities";
 import { useLesson } from "../hooks/queries/useLesson";
 import LessonActionsDrawer from "../components/lesson/LessonActionsDrawer";
 import AIChatPanel from "../components/lesson/AIChatPanel";
+import CompactActivities from "../components/lesson/CompactActivities";
 
 const Lesson = () => {
   const [showActions, setShowActions] = useState(false);
@@ -64,52 +65,71 @@ const Lesson = () => {
     <section className="flex h-full min-h-0 w-full flex-col overflow-hidden p-4 sm:p-6">
       <div className="grid min-h-0 w-full flex-1 gap-6 xl:flex">
         {/* Main learning area */}
-        <div className="min-h-0 min-w-0 overflow-hidden xl:flex-9 min-[1600px]:flex-10">
+        <div className="min-h-0 min-w-0 overflow-hidden xl:flex-9">
           <div className="flex h-full min-h-0 flex-col overflow-hidden">
-            <LessonHeader lesson={lesson} />
 
-            {/* for mobile, sm, md, lg views */}
-            <aside className="flex items-end justify-end xl:hidden">
-              <button
-                type="button"
-                onClick={() => setShowActions(true)}
-                aria-label="Open lesson activities"
-                aria-expanded={showActions}
-                className="flex cursor-pointer flex-col items-center rounded-xl px-3 py-1.5 
-                  text-primary-color transition-colors hover:bg-surface-secondary-hover 
-                  sm:flex-row sm:gap-2"
-              >
-                <LayoutGrid
-                  aria-hidden="true"
-                  size={30}
-                />
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 mb-6">
+              <LessonHeader lesson={lesson} />
 
-                <span className="text-sm font-semibold sm:text-lg">
-                  Activities
-                </span>
-              </button>
-            </aside>
-
-            <div className="relative min-h-0 flex-1 overflow-hidden">
-              <LessonContent lesson={lesson} />
-
-              {showAskAI &&
-                <div className="absolute inset-0 z-20 xl:hidden">
-                  <AIChatPanel
-                    onClose={() => setShowAskAI(false)}
+              {/* Activities choices for mobile, sm, md, lg views */}
+              <aside className="flex items-end justify-end xl:hidden">
+                <button
+                  type="button"
+                  onClick={() => setShowActions(true)}
+                  aria-label="Open lesson activities"
+                  aria-expanded={showActions}
+                  className="flex cursor-pointer flex-col items-center rounded-xl px-3 py-1.5 
+                    text-primary-color transition-colors hover:bg-surface-secondary-hover 
+                    sm:flex-row sm:gap-2"
+                >
+                  <LayoutGrid
+                    aria-hidden="true"
+                    size={30}
                   />
-                </div>
-              }
+
+                  <span className="text-sm font-semibold sm:text-lg">
+                    Activities
+                  </span>
+                </button>
+              </aside>
             </div>
+
+            {/* UI for mobile, sm, md, lg views: LessonContent and AIChatPanel */}
+            <div
+              className={`relative min-h-0 flex-1 overflow-hidden ${
+                showAskAI ? "md:flex md:gap-4" : ""
+              }`}
+            >
+              <div className={showAskAI ? "md:min-w-0 md:flex-1" : "h-full"}>
+                <LessonContent lesson={lesson} />
+              </div>
+
+              {showAskAI && (
+                <div className="absolute inset-0 z-20 md:static md:min-h-0 md:w-2/5 xl:hidden">
+                  <AIChatPanel onClose={() => setShowAskAI(false)} />
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
 
         {/* for xl views */}
-        <aside className="hidden min-h-0 min-w-0 overflow-hidden xl:block xl:flex-3 min-[1600px]:flex-2">
+        <aside
+          className={`hidden min-h-0 min-w-0 overflow-hidden xl:flex xl:flex-col ${
+            showAskAI ? "xl:flex-5 2xl:flex-6" : "xl:flex-3"
+          }`}
+        >
           {showAskAI ? (
-            <AIChatPanel
-              onClose={() => setShowAskAI(false)}
-            />
+            <>
+              <CompactActivities lessonId={lesson.id} />
+
+              <div className="min-h-0 flex-1 pt-3">
+                <AIChatPanel
+                  onClose={() => setShowAskAI(false)}
+                />
+              </div>
+            </>
           ) : (
             <LearningActivities
               lessonId={lesson.id}
