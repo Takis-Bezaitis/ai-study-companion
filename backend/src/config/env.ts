@@ -33,6 +33,12 @@ const envSchema = z.object({
   JWT_REFRESH_EXPIRES_IN: z
     .string()
     .default('7d') as z.ZodType<SignOptions['expiresIn']>,
+
+  GEMINI_API_KEY: z.string().min(1),
+
+  GEMINI_MODEL: z
+    .string()
+    .default('gemini-2.5-flash'),    
 });
 
 export const env = envSchema.parse(process.env);
