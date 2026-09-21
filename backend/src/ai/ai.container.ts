@@ -1,4 +1,4 @@
-import { AIService } from './ai.service.js';
+import { AIService } from '../services/ai/ai.service.js';
 import { GeminiProvider } from './providers/gemini.provider.js';
 
 const geminiProvider = new GeminiProvider();

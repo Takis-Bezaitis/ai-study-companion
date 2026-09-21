@@ -62,13 +62,15 @@ model Lesson {
 }
 
 model LessonChunk {
-  id        String   @id @default(uuid())
-  lessonId  String
-  content   String
-  chunkIndex Int
-  createdAt DateTime @default(now())
+  id           String   @id @default(uuid())
+  lessonId     String
+  content      String
+  sectionTitle String
+  chunkIndex   Int
+  embedding    Unsupported("vector(1536)")?
+  createdAt    DateTime @default(now())
 
-  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lesson       Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@unique([lessonId, chunkIndex])
   @@index([lessonId])

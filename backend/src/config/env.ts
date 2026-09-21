@@ -38,7 +38,20 @@ const envSchema = z.object({
 
   GEMINI_MODEL: z
     .string()
-    .default('gemini-2.5-flash'),    
+    .default('gemini-2.5-flash'),
+  
+  GEMINI_EMBEDDING_MODEL: z
+    .string()
+    .default('gemini-embedding-001'),
+
+  GEMINI_EMBEDDING_DIMENSIONS: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(1536),
+    
+  GEMINI_INGESTION_MAX_REQUESTS_PER_RUN: z.coerce.number().int().positive(),
+
 });
 
 export const env = envSchema.parse(process.env);
