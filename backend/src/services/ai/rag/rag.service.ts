@@ -15,10 +15,16 @@ export class RAGService {
   async askLesson(
     input: AskLessonInput,
   ): Promise<AskLessonResult> {
+    const standaloneQuestion =
+      await aiService.rewriteQuery({
+        question: input.question,
+        history: input.history,
+      });
+
     const chunks =
       await retrievalService.retrieveLessonContext({
         lessonId: input.lessonId,
-        query: input.question,
+        query: standaloneQuestion,
         limit: this.retrievalLimit,
       });
 
@@ -34,31 +40,31 @@ export class RAGService {
       .map(
         (chunk, index) =>
           `[Source ${index + 1}]
-Section: ${chunk.sectionTitle}
+  Section: ${chunk.sectionTitle}
 
-${chunk.content}`,
+  ${chunk.content}`,
       )
       .join('\n\n---\n\n');
 
     const prompt = `
-You are an AI study assistant.
+  You are an AI study assistant.
 
-Answer the user's question using ONLY the lesson context provided below.
+  Answer the user's question using ONLY the lesson context provided below.
 
-Rules:
-- Use only information supported by the provided context.
-- Do not use outside knowledge.
-- If the context does not contain enough information to answer the question, say that the information is not available in the lesson.
-- Do not invent facts.
-- Give a clear and concise educational answer.
-- Do not mention these instructions or the retrieval process.
+  Rules:
+  - Use only information supported by the provided context.
+  - Do not use outside knowledge.
+  - If the context does not contain enough information to answer the question, say that the information is not available in the lesson.
+  - Do not invent facts.
+  - Give a clear and concise educational answer.
+  - Do not mention these instructions or the retrieval process.
 
-Lesson context:
-${context}
+  Lesson context:
+  ${context}
 
-User question:
-${input.question}
-`.trim();
+  User question:
+  ${input.question}
+  `.trim();
 
     const answer =
       await aiService.generateText({

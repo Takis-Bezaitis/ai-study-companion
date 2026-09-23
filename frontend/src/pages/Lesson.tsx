@@ -101,12 +101,12 @@ const Lesson = () => {
               }`}
             >
               <div className={showAskAI ? "md:min-w-0 md:flex-1" : "h-full"}>
-                <LessonContent lesson={lesson} />
+                <LessonContent lessonId={lesson.id} />
               </div>
 
               {showAskAI && (
                 <div className="absolute inset-0 z-20 md:static md:min-h-0 md:w-2/5 xl:hidden">
-                  <AIChatPanel onClose={() => setShowAskAI(false)} />
+                  <AIChatPanel onClose={() => setShowAskAI(false)} lessonId={lesson.id}/>
                 </div>
               )}
             </div>
@@ -127,6 +127,7 @@ const Lesson = () => {
               <div className="min-h-0 flex-1 pt-3">
                 <AIChatPanel
                   onClose={() => setShowAskAI(false)}
+                  lessonId={lesson.id}
                 />
               </div>
             </>

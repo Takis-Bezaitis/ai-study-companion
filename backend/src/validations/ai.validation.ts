@@ -35,6 +35,16 @@ export type RetrieveLessonInput = z.infer<
   typeof retrieveLessonSchema
 >;
 
+const chatHistoryMessageSchema =
+  z.object({
+    role: z.enum(['user', 'assistant']),
+    content: z
+      .string()
+      .trim()
+      .min(1)
+      .max(2000),
+  });
+
 export const askLessonSchema = z.object({
   lessonId: z
     .string()
@@ -45,8 +55,15 @@ export const askLessonSchema = z.object({
     .trim()
     .min(1, 'Question is required')
     .max(2000, 'Question is too long'),
+
+  history: z
+    .array(chatHistoryMessageSchema)
+    .max(20)
+    .default([]),
+
 });
 
 export type AskLessonInput = z.infer<
   typeof askLessonSchema
 >;
+

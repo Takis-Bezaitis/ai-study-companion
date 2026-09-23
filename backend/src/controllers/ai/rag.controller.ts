@@ -12,12 +12,13 @@ export async function askLesson(
   req: Request,
   res: Response,
 ) {
-  const input = askLessonSchema.parse(
-    req.body,
-  );
+  const input = askLessonSchema.parse({
+    lessonId: req.params.lessonId,
+    question: req.body.question,
+    history: req.body.history,
+  });
 
-  const result =
-    await ragService.askLesson(input);
+  const result = await ragService.askLesson(input);
 
   return res.status(200).json({
     data: result,

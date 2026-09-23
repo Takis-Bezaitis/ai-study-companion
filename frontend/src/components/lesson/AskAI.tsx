@@ -1,6 +1,32 @@
 import { ArrowRight, Bot } from "lucide-react";
+import { useId, useState } from "react";
 
-const AskAI = () => {
+type AskAIProps = {
+  onSubmit: (question: string) => void;
+  disabled?: boolean;
+};
+
+const AskAI = ({
+  onSubmit,
+  disabled = false,
+}: AskAIProps) => {
+  const [aiQuestion, setAiQuestion] = useState("");
+  const questionInputId = useId();
+
+  const isButtonDisabled =
+    disabled || aiQuestion.trim() === "";
+
+  const handleSubmit = () => {
+    const question = aiQuestion.trim();
+
+    if (!question || disabled) {
+      return;
+    }
+
+    onSubmit(question);
+    setAiQuestion("");
+  };
+
   return (
     <section
       aria-labelledby="ask-ai-heading"
@@ -8,7 +34,10 @@ const AskAI = () => {
     >
       <header className="mb-4 flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-color">
+          <div
+            className="flex h-10 w-10 shrink-0 items-center justify-center 
+            rounded-xl bg-primary-soft text-primary-color"
+          >
             <Bot aria-hidden="true" size={20} />
           </div>
 
@@ -25,30 +54,58 @@ const AskAI = () => {
             </p>
           </div>
         </div>
-
       </header>
 
-      <form className="flex gap-2">
-        <label htmlFor="lesson-question" className="sr-only">
+      <div className="flex gap-2">
+        <label
+          htmlFor={questionInputId}
+          className="sr-only"
+        >
           Ask a question about this lesson
         </label>
 
         <input
-          id="lesson-question"
+          id={questionInputId}
           type="text"
-          placeholder="Ask a question..."
-          className="min-w-0 flex-1 rounded-xl border border-default bg-background px-3 py-2.5 text-sm text-primary outline-none placeholder:text-muted focus:border-primary"
+          autoFocus
+          value={aiQuestion}
+          disabled={disabled}
+          placeholder={
+            disabled
+              ? "Waiting for AI..."
+              : "Ask a question..."
+          }
+          className="min-w-0 flex-1 rounded-xl border border-default 
+          bg-background px-3 py-2.5 text-sm text-primary 
+          outline-none placeholder:text-muted focus:border-primary 
+          disabled:cursor-not-allowed disabled:opacity-60"
+          onChange={(e) =>
+            setAiQuestion(e.target.value)
+          }
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
         />
 
         <button
-          type="submit"
-          disabled
+          type="button"
+          disabled={isButtonDisabled}
           aria-label="Ask AI"
-          className="flex shrink-0 cursor-not-allowed items-center justify-center rounded-xl bg-button-main px-3 text-button opacity-60"
+          className="flex shrink-0 cursor-pointer items-center justify-center 
+            rounded-xl bg-button-main px-3 text-button 
+            disabled:cursor-not-allowed disabled:opacity-60"
+          onClick={handleSubmit}
         >
-          <ArrowRight aria-hidden="true" size={18} />
+          <ArrowRight
+            aria-hidden="true"
+            size={18}
+          />
         </button>
-      </form>
+
+      </div>
     </section>
   );
 };

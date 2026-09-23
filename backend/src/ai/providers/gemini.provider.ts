@@ -4,9 +4,11 @@ import { env } from '../../config/env.js';
 
 import type {
   AIProvider,
+  ChatHistoryMessage,
   GenerateEmbeddingInput,
   GenerateEmbeddingsInput,
   GenerateTextInput,
+  RewriteQueryInput,
 } from '../types/ai.types.js';
 
 export class GeminiProvider implements AIProvider {
@@ -33,6 +35,58 @@ export class GeminiProvider implements AIProvider {
           });
 
         return interaction.output_text ?? '';
+      },
+    );
+  }
+
+  async rewriteQuery(
+    input: RewriteQueryInput,
+  ): Promise<string> {
+    return this.withRetry(
+      async () => {
+        const history = input.history
+          .map(
+            (message) =>
+              `${message.role}: ${message.content}`,
+          )
+          .join('\n');
+
+        const prompt = `
+  You are a query rewriting assistant for a lesson-based AI study application.
+
+  Rewrite the user's latest question into a standalone question that can be understood without the conversation history.
+
+  Use the conversation history only to resolve references such as:
+  - it
+  - they
+  - this country
+  - that event
+  - the previous topic
+
+  Rules:
+  - Preserve the user's original intent.
+  - Do not answer the question.
+  - Do not add information that is not present in the conversation.
+  - If the question is already standalone, return it unchanged.
+  - Return only the rewritten question.
+
+  Conversation history:
+  ${history || '(No previous conversation)'}
+
+  Latest user question:
+  ${input.question}
+  `.trim();
+
+        const interaction =
+          await this.client.interactions.create({
+            model: env.GEMINI_MODEL,
+            input: prompt,
+          });
+
+        return (
+          interaction.output_text?.trim() ??
+          input.question
+        );
       },
     );
   }

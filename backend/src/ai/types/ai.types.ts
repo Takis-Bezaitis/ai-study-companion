@@ -1,5 +1,15 @@
+export interface ChatHistoryMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 export interface GenerateTextInput {
   prompt: string;
+}
+
+export interface RewriteQueryInput {
+  question: string;
+  history: ChatHistoryMessage[];
 }
 
 export type EmbeddingTask =
@@ -19,6 +29,10 @@ export interface GenerateEmbeddingsInput {
 export interface AIProvider {
   generateText(input: GenerateTextInput): Promise<string>;
 
+  rewriteQuery(
+    input: RewriteQueryInput,
+  ): Promise<string>;
+
   generateEmbedding(
     input: GenerateEmbeddingInput,
   ): Promise<number[]>;
@@ -27,3 +41,4 @@ export interface AIProvider {
     input: GenerateEmbeddingsInput,
   ): Promise<number[][]>;
 }
+

@@ -9,6 +9,7 @@ import {
   createLesson as createLessonService,
   getLessons as getLessonsService,
   getLesson as getLessonService,
+  getLessonChunks as getLessonChunksService,
 } from '../../services/lessons/lesson.service.js';
 
 export async function createLesson(
@@ -49,5 +50,24 @@ export async function getLesson(
 
   return res.status(200).json({
     data: lesson,
+  });
+}
+
+export async function getLessonChunks(
+  req: Request,
+  res: Response,
+) {
+  const lessonId = req.params.lessonId;
+
+  if (typeof lessonId !== 'string') {
+    return res.status(400).json({
+      error: 'Invalid lesson ID',
+    });
+  }
+
+  const chunks = await getLessonChunksService( lessonId, );
+
+  return res.status(200).json({
+    data: chunks,
   });
 }

@@ -10,6 +10,10 @@ export const API = {
   },
 
   categories: `${BASE_URL}/api/categories`,
-  lessons: `${BASE_URL}/api/lessons`,
+  lessons: {
+    base: `${BASE_URL}/api/lessons`,
+    ask: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/ask`,
+    chunks: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/chunks`,
+  },
   progress: `${BASE_URL}/api/progress`,
 };

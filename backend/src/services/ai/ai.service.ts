@@ -3,6 +3,7 @@ import type {
   GenerateEmbeddingInput,
   GenerateEmbeddingsInput,
   GenerateTextInput,
+  RewriteQueryInput,
 } from '../../ai/types/ai.types.js';
 
 export class AIService {
@@ -14,6 +15,12 @@ export class AIService {
     input: GenerateTextInput,
   ): Promise<string> {
     return this.provider.generateText(input);
+  }
+
+  async rewriteQuery(
+    input: RewriteQueryInput,
+  ): Promise<string> {
+    return this.provider.rewriteQuery(input);
   }
 
   async generateEmbedding(
