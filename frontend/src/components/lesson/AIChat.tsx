@@ -1,10 +1,11 @@
 import { X } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
-import type { ChatMessage } from "./AIChatPanel";
+import type { AiMessage } from "../../store/aiMessageStore";
 
 type AIChatProps = {
   onClose: () => void;
-  messages: ChatMessage[];
+  messages: AiMessage[];
   isLoading: boolean;
   error: Error | null;
 };
@@ -23,8 +24,8 @@ const AIChat = ({ onClose, messages, isLoading, error }: AIChatProps) => {
   )}
 
   return (
-    <div className="relative min-h-0 flex-1 overflow-hidden">
-      <div className="bg-primary h-9">
+    <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+      <div className="h-9 shrink-0 bg-primary">
         <button
           type="button"
           onClick={onClose}
@@ -37,8 +38,8 @@ const AIChat = ({ onClose, messages, isLoading, error }: AIChatProps) => {
         </button>
       </div>
 
-      <div className="h-full">
-        <div className="flex flex-col h-full overflow-y-auto px-3 gap-4">
+      <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-4">
+        <div className="flex flex-col gap-4">
 
           {messages.map((message) => {
             if (message.role === "user") {
@@ -60,10 +61,39 @@ const AIChat = ({ onClose, messages, isLoading, error }: AIChatProps) => {
                 className="flex justify-start"
               >
                 <div className="max-w-[80%] rounded-2xl bg-surface-secondary px-4 py-3 text-sm leading-6 text-secondary">
-                  {message.content}
+                  <ReactMarkdown
+                    components={{
+                      ul: ({ children }) => (
+                        <ul className="my-2 list-disc space-y-1 pl-5">
+                          {children}
+                        </ul>
+                      ),
+                      ol: ({ children }) => (
+                        <ol className="my-2 list-decimal space-y-1 pl-5">
+                          {children}
+                        </ol>
+                      ),
+                      li: ({ children }) => (
+                        <li className="pl-1">{children}</li>
+                      ),
+                      strong: ({ children }) => (
+                        <strong className="font-semibold text-primary">
+                          {children}
+                        </strong>
+                      ),
+                      p: ({ children }) => (
+                        <p className="mb-2 last:mb-0">
+                          {children}
+                        </p>
+                      ),
+                    }}
+                  >
+                    {message.content}
+                  </ReactMarkdown>
                 </div>
               </div>
             );
+
           })}
 
           {isLoading && (

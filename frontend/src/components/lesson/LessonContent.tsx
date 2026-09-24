@@ -1,4 +1,5 @@
 import { BookOpen } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 import { useLessonChunks } from "../../hooks/queries/useLessonChunks";
 
@@ -49,17 +50,65 @@ const LessonContent = ({ lessonId }: LessonContentProps) => {
 
         {chunks && (
           <div className="max-w-4xl space-y-6 text-sm leading-7 text-secondary sm:text-base">
-            {chunks.map((chunk) => (
-              <section key={chunk.id}>
-                <h2 className="text-xl font-bold text-primary">
-                  {chunk.sectionTitle}
-                </h2>
+            {chunks.map((chunk, index) => {
+              const [mainSection, subsectionTitle] =
+                chunk.sectionTitle.split(" — ");
 
-                <div className="mt-3 whitespace-pre-line">
-                  {chunk.content}
-                </div>
-              </section>
-            ))}
+              const previousMainSection =
+                index > 0
+                  ? chunks[index - 1]?.sectionTitle.split(" — ")[0]
+                  : undefined;
+
+              const showMainSection =
+                mainSection !== previousMainSection;
+
+              return (
+                <section key={chunk.id}>
+                  {showMainSection && (
+                    <h2 className="text-2xl font-bold text-primary">
+                      {mainSection}
+                      <br /><br />
+                    </h2>
+                  )}
+
+                  <h3 className="text-xl font-semibold text-primary">
+                    {subsectionTitle}
+                  </h3>
+
+                  <div className="mt-3">
+                    <ReactMarkdown
+                      components={{
+                        ul: ({ children }) => (
+                          <ul className="my-3 list-disc space-y-1 pl-6">
+                            {children}
+                          </ul>
+                        ),
+                        ol: ({ children }) => (
+                          <ol className="my-3 list-decimal space-y-1 pl-6">
+                            {children}
+                          </ol>
+                        ),
+                        li: ({ children }) => (
+                          <li className="pl-1">{children}</li>
+                        ),
+                        strong: ({ children }) => (
+                          <strong className="font-semibold text-primary">
+                            {children}
+                          </strong>
+                        ),
+                        h3: ({ children }) => (
+                          <h3 className="mt-6 text-lg font-semibold text-primary">
+                            {children}
+                          </h3>
+                        ),
+                      }}
+                    >
+                      {chunk.content}
+                    </ReactMarkdown>
+                  </div>
+                </section>
+              );
+            })}
           </div>
         )}
       </article>

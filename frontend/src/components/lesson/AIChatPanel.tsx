@@ -1,26 +1,30 @@
-import { useState } from "react";
-
 import AskAI from "./AskAI";
 import AIChat from "./AIChat";
 
 import { useAskLesson } from "../../hooks/ai/useAskLesson";
+import { useAiMessageStore, type AiMessage } from "../../store/aiMessageStore";
+
+const EMPTY_MESSAGES: AiMessage[] = [];
 
 type AIChatPanelProps = {
   onClose: () => void;
   lessonId: string;
 };
 
-export type ChatMessage = {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-};
-
 const AIChatPanel = ({
   onClose,
   lessonId,
 }: AIChatPanelProps) => {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+  const messages = useAiMessageStore(
+    (state) =>
+      state.messagesByLesson[lessonId] ??
+      EMPTY_MESSAGES,
+  );
+
+  const addMessage = useAiMessageStore(
+    (state) => state.addMessage,
+  );
 
   const askLessonMutation = useAskLesson();
 
@@ -32,20 +36,17 @@ const AIChatPanel = ({
     }
 
     const history = messages
-    .slice(-20)
-    .map((message) => ({
-      role: message.role,
-      content: message.content,
-    }));
+      .slice(-20)
+      .map((message) => ({
+        role: message.role,
+        content: message.content,
+      }));
 
-    setMessages((currentMessages) => [
-      ...currentMessages,
-      {
-        id: crypto.randomUUID(),
-        role: "user",
-        content: trimmedQuestion,
-      },
-    ]);
+    addMessage(lessonId, {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: trimmedQuestion,
+    });
 
     askLessonMutation.mutate(
       {
@@ -55,14 +56,11 @@ const AIChatPanel = ({
       },
       {
         onSuccess: (data) => {
-          setMessages((currentMessages) => [
-            ...currentMessages,
-            {
-              id: crypto.randomUUID(),
-              role: "assistant",
-              content: data.answer,
-            },
-          ]);
+          addMessage(lessonId, {
+            id: crypto.randomUUID(),
+            role: "assistant",
+            content: data.answer,
+          });
         },
       },
     );

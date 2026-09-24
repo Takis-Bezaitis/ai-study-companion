@@ -9,62 +9,83 @@ export interface MarkdownChunk {
 export async function chunkMarkdownFile(
   filePath: string,
 ): Promise<MarkdownChunk[]> {
-  const markdown = await fs.readFile(filePath, 'utf-8');
+  const markdown = await fs.readFile(
+    filePath,
+    'utf-8',
+  );
 
   const lines = markdown.split(/\r?\n/);
 
   const chunks: MarkdownChunk[] = [];
 
-  let currentCountry = '';
-  let currentSection = '';
+  let currentMainSection = '';
+  let currentSubsection = '';
   let currentContent: string[] = [];
+  let hasStartedLesson = false;
 
   function saveCurrentChunk() {
     const content = currentContent
-        .join('\n')
-        .trim();
+      .join('\n')
+      .trim();
 
     if (!content) {
-        return;
+      return;
     }
 
-    const sectionTitle = currentSection
-        ? `${currentCountry} — ${currentSection}`
-        : currentCountry;
+    const sectionTitle = currentSubsection
+      ? `${currentMainSection} — ${currentSubsection}`
+      : currentMainSection;
 
     chunks.push({
-        content: `${sectionTitle}\n\n${content}`,
-        sectionTitle,
-        chunkIndex: chunks.length,
+      content,
+      sectionTitle,
+      chunkIndex: chunks.length,
     });
 
     currentContent = [];
   }
 
   for (const line of lines) {
-    if (line.startsWith('## ')) {
+    const trimmedLine = line.trim();
+
+    // Ignore everything before the first numbered H1.
+    if (!hasStartedLesson) {
+      if (/^#\s+\d+\.\s+/.test(trimmedLine)) {
+        hasStartedLesson = true;
+
+        currentMainSection = trimmedLine
+          .replace(/^#\s+/, '')
+          .trim();
+      }
+
+      continue;
+    }
+
+    // New main lesson section.
+    if (/^#\s+\d+\.\s+/.test(trimmedLine)) {
       saveCurrentChunk();
 
-      currentCountry = line
+      currentMainSection = trimmedLine
+        .replace(/^#\s+/, '')
+        .trim();
+
+      currentSubsection = '';
+
+      continue;
+    }
+
+    // New subsection — this becomes the chunk boundary.
+    if (/^##\s+\d+\.\d+\s+/.test(trimmedLine)) {
+      saveCurrentChunk();
+
+      currentSubsection = trimmedLine
         .replace(/^##\s+/, '')
         .trim();
 
-      currentSection = '';
-
       continue;
     }
 
-    if (line.startsWith('### ')) {
-      saveCurrentChunk();
-
-      currentSection = line
-        .replace(/^###\s+/, '')
-        .trim();
-
-      continue;
-    }
-
-    if (line.trim()) {
+    if (trimmedLine) {
       currentContent.push(line);
     }
   }
