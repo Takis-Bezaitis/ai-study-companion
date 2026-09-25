@@ -17,6 +17,12 @@ export class AIService {
     return this.provider.generateText(input);
   }
 
+  async *streamText(
+    input: GenerateTextInput,
+  ): AsyncIterable<string> {
+    yield* this.provider.streamText(input);
+  }
+
   async rewriteQuery(
     input: RewriteQueryInput,
   ): Promise<string> {

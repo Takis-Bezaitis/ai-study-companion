@@ -9,6 +9,7 @@ import { useLesson } from "../hooks/queries/useLesson";
 import LessonActionsDrawer from "../components/lesson/LessonActionsDrawer";
 import AIChatPanel from "../components/lesson/AIChatPanel";
 import CompactActivities from "../components/lesson/CompactActivities";
+import LoadingScreen from "../components/common/LoadingScreen";
 
 const Lesson = () => {
   const [showActions, setShowActions] = useState(false);
@@ -25,9 +26,7 @@ const Lesson = () => {
   if (isLoading) {
     return (
       <section className="w-full p-4 sm:p-6">
-        <div className="flex min-h-64 items-center justify-center rounded-2xl border border-default bg-surface">
-          <p className="text-secondary">Loading lesson...</p>
-        </div>
+        <LoadingScreen fullScreen={false} />
       </section>
     );
   }

@@ -29,6 +29,10 @@ export interface GenerateEmbeddingsInput {
 export interface AIProvider {
   generateText(input: GenerateTextInput): Promise<string>;
 
+  streamText(
+    input: GenerateTextInput,
+  ): AsyncIterable<string>;
+
   rewriteQuery(
     input: RewriteQueryInput,
   ): Promise<string>;

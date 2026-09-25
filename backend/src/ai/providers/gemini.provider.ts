@@ -39,6 +39,26 @@ export class GeminiProvider implements AIProvider {
     );
   }
 
+  async *streamText(
+    input: GenerateTextInput,
+  ): AsyncIterable<string> {
+    const stream =
+      await this.client.interactions.create({
+        model: env.GEMINI_MODEL,
+        input: input.prompt,
+        stream: true,
+      });
+
+    for await (const event of stream) {
+      if (
+        event.event_type === 'step.delta' &&
+        event.delta.type === 'text'
+      ) {
+        yield event.delta.text;
+      }
+    }
+  }
+
   async rewriteQuery(
     input: RewriteQueryInput,
   ): Promise<string> {

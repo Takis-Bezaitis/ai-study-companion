@@ -3,6 +3,7 @@ import { BookOpen } from "lucide-react";
 
 import { useLessons } from "../hooks/queries/useLessons";
 import type { Lesson } from "../types/custom";
+import LoadingScreen from "../components/common/LoadingScreen";
 
 const Lessons = () => {
   const { data: lessons, isLoading, isError, error } = useLessons();
@@ -20,9 +21,7 @@ const Lessons = () => {
           </p>
         </header>
 
-        <div className="flex items-center justify-center rounded-2xl border border-default bg-surface p-12">
-          <p className="text-secondary">Loading lessons...</p>
-        </div>
+        <LoadingScreen fullScreen={false} />
       </section>
     );
   }

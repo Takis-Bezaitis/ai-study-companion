@@ -42,6 +42,13 @@ const AIChat = ({ onClose, messages, isLoading, error }: AIChatProps) => {
         <div className="flex flex-col gap-4">
 
           {messages.map((message) => {
+            if (
+              message.role === "assistant" &&
+              !message.content
+            ) {
+              return null;
+            }
+
             if (message.role === "user") {
               return (
                 <div

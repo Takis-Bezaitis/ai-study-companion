@@ -22,16 +22,26 @@ const AIChatPanel = ({
       EMPTY_MESSAGES,
   );
 
+  const appendMessageContent = useAiMessageStore(
+    (state) => state.appendMessageContent,
+  );
+
   const addMessage = useAiMessageStore(
     (state) => state.addMessage,
   );
 
   const askLessonMutation = useAskLesson();
 
-  const submitQuestion = (question: string) => {
-    const trimmedQuestion = question.trim();
+  const submitQuestion = (
+    question: string,
+  ) => {
+    const trimmedQuestion =
+      question.trim();
 
-    if (!trimmedQuestion || askLessonMutation.isPending) {
+    if (
+      !trimmedQuestion ||
+      askLessonMutation.isPending
+    ) {
       return;
     }
 
@@ -48,22 +58,27 @@ const AIChatPanel = ({
       content: trimmedQuestion,
     });
 
-    askLessonMutation.mutate(
-      {
-        lessonId,
-        question: trimmedQuestion,
-        history,
+    const assistantMessageId =
+      crypto.randomUUID();
+
+    addMessage(lessonId, {
+      id: assistantMessageId,
+      role: "assistant",
+      content: "",
+    });
+
+    askLessonMutation.mutate({
+      lessonId,
+      question: trimmedQuestion,
+      history,
+      onDelta: (text) => {
+        appendMessageContent(
+          lessonId,
+          assistantMessageId,
+          text,
+        );
       },
-      {
-        onSuccess: (data) => {
-          addMessage(lessonId, {
-            id: crypto.randomUUID(),
-            role: "assistant",
-            content: data.answer,
-          });
-        },
-      },
-    );
+    });
   };
 
   return (

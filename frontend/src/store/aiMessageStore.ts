@@ -13,6 +13,13 @@ interface AiMessageState {
     lessonId: string,
     message: AiMessage,
   ) => void;
+
+  appendMessageContent: (
+    lessonId: string,
+    messageId: string,
+    content: string,
+  ) => void;
+
 }
 
 export const useAiMessageStore =
@@ -27,6 +34,28 @@ export const useAiMessageStore =
             ...(state.messagesByLesson[lessonId] ?? []),
             message,
           ],
+        },
+      })),
+
+      appendMessageContent: (
+      lessonId,
+      messageId,
+      content,
+    ) =>
+      set((state) => ({
+        messagesByLesson: {
+          ...state.messagesByLesson,
+          [lessonId]: (
+            state.messagesByLesson[lessonId] ?? []
+          ).map((message) =>
+            message.id === messageId
+              ? {
+                  ...message,
+                  content:
+                    message.content + content,
+                }
+              : message,
+          ),
         },
       })),
   }));

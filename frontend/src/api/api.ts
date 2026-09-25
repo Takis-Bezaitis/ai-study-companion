@@ -13,6 +13,7 @@ export const API = {
   lessons: {
     base: `${BASE_URL}/api/lessons`,
     ask: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/ask`,
+    stream: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/ask/stream`,
     chunks: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/chunks`,
   },
   progress: `${BASE_URL}/api/progress`,
