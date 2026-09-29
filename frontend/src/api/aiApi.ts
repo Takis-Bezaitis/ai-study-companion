@@ -59,23 +59,6 @@ type StreamAskLessonProps = {
   ) => void;
 };
 
-type StreamEvent =
-  | {
-      type: "delta";
-      text: string;
-    }
-  | {
-      type: "sources";
-      sources: AskLessonResult["sources"];
-    }
-  | {
-      type: "done";
-    }
-  | {
-      type: "error";
-      message: string;
-    };
-
 export async function streamAskLesson({
   lessonId,
   question,
@@ -125,6 +108,8 @@ export async function streamAskLesson({
   let buffer = "";
 
   const processEvent = (rawEvent: string) => {
+    console.log("[SSE RAW EVENT]", rawEvent);
+
     const lines = rawEvent.split("\n");
 
     let eventType = "";
@@ -151,11 +136,13 @@ export async function streamAskLesson({
     const event = JSON.parse(data);
 
     if (eventType === "delta") {
+        console.log("[SSE DELTA]", event.text);
         onDelta(event.text);
         return;
     }
 
     if (eventType === "sources") {
+        console.log("[SSE SOURCES]", event.sources);
         onSources?.(event.sources);
         return;
     }

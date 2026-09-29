@@ -29,6 +29,9 @@ export async function streamAskLesson(
   req: Request,
   res: Response,
 ) {
+  console.log('[AI TIMING] streamAskLesson started');
+  const requestStartedAt = performance.now();
+
   const input = askLessonSchema.parse({
     lessonId: req.params.lessonId,
     question: req.body.question,
@@ -37,6 +40,12 @@ export async function streamAskLesson(
 
   const result =
     await ragService.streamLesson(input);
+
+  console.log(
+    `[AI TIMING] request → stream ready: ${Math.round(
+      performance.now() - requestStartedAt,
+    )} ms`,
+  );
 
   res.status(200);
 

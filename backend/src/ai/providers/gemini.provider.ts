@@ -14,7 +14,7 @@ import type {
 export class GeminiProvider implements AIProvider {
   private readonly client: GoogleGenAI;
 
-  private readonly maxRetries = 3;
+  private readonly maxRetries = 1;
   private readonly initialRetryDelayMs = 1000;
 
   constructor() {
@@ -42,6 +42,10 @@ export class GeminiProvider implements AIProvider {
   async *streamText(
     input: GenerateTextInput,
   ): AsyncIterable<string> {
+    const startedAt = performance.now();
+
+    console.log('[AI TIMING] streamText started');
+
     const stream =
       await this.client.interactions.create({
         model: env.GEMINI_MODEL,
@@ -49,14 +53,52 @@ export class GeminiProvider implements AIProvider {
         stream: true,
       });
 
+    console.log(
+      `[AI TIMING] stream connection: ${Math.round(
+        performance.now() - startedAt,
+      )} ms`,
+    );      
+
+    let isFirstDelta = true;
+
     for await (const event of stream) {
+      if (event.event_type === 'error') {
+        throw new Error(
+          event.error?.message ??
+            'Gemini streaming request failed.',
+        );
+      }
+
+      console.log(
+        '[GEMINI STREAM EVENT]',
+        JSON.stringify(event),
+      );
+
       if (
         event.event_type === 'step.delta' &&
         event.delta.type === 'text'
       ) {
+
+        if (isFirstDelta) {
+          console.log(
+            `[AI TIMING] time to first token: ${Math.round(
+              performance.now() - startedAt,
+            )} ms`,
+          );
+
+          isFirstDelta = false;
+        }
+
         yield event.delta.text;
       }
     }
+
+    console.log(
+      `[AI TIMING] stream complete: ${Math.round(
+        performance.now() - startedAt,
+      )} ms`,
+    );
+
   }
 
   async rewriteQuery(
@@ -76,12 +118,11 @@ export class GeminiProvider implements AIProvider {
 
   Rewrite the user's latest question into a standalone question that can be understood without the conversation history.
 
-  Use the conversation history only to resolve references such as:
-  - it
-  - they
-  - this country
-  - that event
-  - the previous topic
+  Use the conversation history only to resolve references or ambiguities that depend on the previous conversation.
+  Examples:
+  - "it", "they", "this", "that"
+  - "this country", "that event", "the previous topic"
+  - references to a person, place, concept, event, or object mentioned earlier
 
   Rules:
   - Preserve the user's original intent.
@@ -189,30 +230,41 @@ export class GeminiProvider implements AIProvider {
     );
   }
 
-  private isRateLimitError(
-    error: unknown,
-  ): boolean {
+  private isRateLimitError(error: unknown): boolean {
     if (
-      typeof error !== 'object' ||
-      error === null
+      typeof error === 'object' &&
+      error !== null
     ) {
-      return false;
+      const candidate = error as {
+        status?: number;
+        code?: number;
+        message?: string;
+      };
+
+      if (
+        candidate.status === 429 ||
+        candidate.status === 503 ||
+        candidate.code === 429 ||
+        candidate.code === 503
+      ) {
+        return true;
+      }
+
+      if (
+        candidate.message?.includes('429') ||
+        candidate.message?.includes('503') ||
+        candidate.message
+          ?.toLowerCase()
+          .includes('resource exhausted') ||
+        candidate.message
+          ?.toLowerCase()
+          .includes('service unavailable')
+      ) {
+        return true;
+      }
     }
 
-    const candidate = error as {
-      status?: number;
-      code?: number | string;
-      message?: string;
-    };
-
-    return (
-      candidate.status === 429 ||
-      candidate.code === 429 ||
-      candidate.message?.includes('429') === true ||
-      candidate.message
-        ?.toLowerCase()
-        .includes('resource exhausted') === true
-    );
+    return false;
   }
 
   private sleep(

@@ -83,11 +83,24 @@ export class RAGService {
     sources: AskLessonResult['sources'];
     stream: AsyncIterable<string>;
   }> {
+    const startedAt = performance.now();
+    console.log('[AI TIMING] streamLesson started');
+
     const standaloneQuestion =
-      await aiService.rewriteQuery({
-        question: input.question,
-        history: input.history,
-      });
+      input.history.length === 0
+        ? input.question
+        : await aiService.rewriteQuery({
+            question: input.question,
+            history: input.history,
+          });
+
+    console.log(
+      `[AI TIMING] rewriteQuery: ${Math.round(
+        performance.now() - startedAt,
+      )} ms`,
+    );
+
+    const retrievalStartedAt = performance.now();
 
     const chunks =
       await retrievalService.retrieveLessonContext({
@@ -95,6 +108,12 @@ export class RAGService {
         query: standaloneQuestion,
         limit: this.retrievalLimit,
       });
+
+    console.log(
+      `[AI TIMING] retrieveLessonContext: ${Math.round(
+        performance.now() - retrievalStartedAt,
+      )} ms`,
+    );
 
     if (chunks.length === 0) {
       return {

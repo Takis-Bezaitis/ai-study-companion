@@ -57,6 +57,8 @@ model Lesson {
   chunks      LessonChunk[]
   progress    UserProgress[]
   quizzes     Quiz[]
+  gameItems   GameItem[]
+  gameMissions GameMission[]
 
   @@index([categoryId])
 }
@@ -169,4 +171,34 @@ model RefreshSession {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+model GameItem {
+  id          String   @id @default(uuid())
+  lessonId    String
+  type        String
+  name        String
+  group       String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([lessonId])
+  @@index([lessonId, type])
+  @@index([lessonId, type, group])
+}
+
+model GameMission {
+  id                  String   @id @default(uuid())
+  lessonId            String
+  title               String
+  description         String?
+  correctGroup        String
+  wrongGroup          String?
+  createdAt           DateTime @default(now())
+
+  lesson              Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([lessonId])
 }

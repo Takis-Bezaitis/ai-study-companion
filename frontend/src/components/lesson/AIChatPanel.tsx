@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import AskAI from "./AskAI";
 import AIChat from "./AIChat";
 
@@ -11,10 +13,8 @@ type AIChatPanelProps = {
   lessonId: string;
 };
 
-const AIChatPanel = ({
-  onClose,
-  lessonId,
-}: AIChatPanelProps) => {
+const AIChatPanel = ({ onClose, lessonId, }: AIChatPanelProps) => {
+  const [hasStartedStreaming, setHasStartedStreaming] = useState(false);
 
   const messages = useAiMessageStore(
     (state) =>
@@ -32,11 +32,8 @@ const AIChatPanel = ({
 
   const askLessonMutation = useAskLesson();
 
-  const submitQuestion = (
-    question: string,
-  ) => {
-    const trimmedQuestion =
-      question.trim();
+  const submitQuestion = (question: string, ) => {
+    const trimmedQuestion = question.trim();
 
     if (
       !trimmedQuestion ||
@@ -45,8 +42,14 @@ const AIChatPanel = ({
       return;
     }
 
+    setHasStartedStreaming(false);
+
     const history = messages
       .slice(-20)
+      .filter(
+        (message) =>
+          message.content.trim().length > 0,
+      )
       .map((message) => ({
         role: message.role,
         content: message.content,
@@ -58,8 +61,7 @@ const AIChatPanel = ({
       content: trimmedQuestion,
     });
 
-    const assistantMessageId =
-      crypto.randomUUID();
+    const assistantMessageId = crypto.randomUUID();
 
     addMessage(lessonId, {
       id: assistantMessageId,
@@ -72,6 +74,8 @@ const AIChatPanel = ({
       question: trimmedQuestion,
       history,
       onDelta: (text) => {
+        setHasStartedStreaming(true);
+
         appendMessageContent(
           lessonId,
           assistantMessageId,
@@ -89,7 +93,7 @@ const AIChatPanel = ({
       <AIChat
         onClose={onClose}
         messages={messages}
-        isLoading={askLessonMutation.isPending}
+        isLoading={askLessonMutation.isPending && !hasStartedStreaming}
         error={askLessonMutation.error}
       />
 
