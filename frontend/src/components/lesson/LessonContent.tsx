@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
-import { useLessonChunks } from "../../hooks/queries/useLessonChunks";
+import { useLessonChunks } from "../../hooks/queries/lessons/useLessonChunks";
 
 type LessonContentProps = {
   lessonId: string;

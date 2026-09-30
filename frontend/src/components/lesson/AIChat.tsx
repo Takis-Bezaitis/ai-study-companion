@@ -11,17 +11,6 @@ type AIChatProps = {
 };
 
 const AIChat = ({ onClose, messages, isLoading, error }: AIChatProps) => {
-  {isLoading && (
-    <div className="text-sm text-secondary">
-      AI is thinking...
-    </div>
-  )}
-
-  {error && (
-    <div className="text-sm text-red-500">
-      {error.message}
-    </div>
-  )}
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
@@ -106,7 +95,14 @@ const AIChat = ({ onClose, messages, isLoading, error }: AIChatProps) => {
           {isLoading && (
             <div className="flex justify-start">
               <div className="max-w-[80%] rounded-2xl bg-surface-secondary px-4 py-3 text-sm leading-6 text-secondary">
-                AI is thinking...
+                <span>
+                  AI is thinking
+                  <span className="inline-block w-5 text-left">
+                    <span className="animate-[thinking_1.2s_steps(4,end)_infinite]">
+                      ...
+                    </span>
+                  </span>
+                </span>
               </div>
             </div>
           )}

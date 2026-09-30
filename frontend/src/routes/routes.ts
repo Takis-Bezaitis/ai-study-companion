@@ -12,7 +12,10 @@ const Dashboard = lazy(() => import('../pages/Dashboard'));
 const Lessons = lazy(() => import('../pages/Lessons'));
 const Lesson = lazy(() => import('../pages/Lesson'));
 const Quiz = lazy(() => import('../pages/Quiz'));
-const Game = lazy(() => import('../pages/Game'));
+
+const RoadRace = lazy(() => import('../pages/games/RoadRace'));
+const CatchItems = lazy(() => import('../pages/games/CatchItems'));
+
 const Progress = lazy(() => import('../pages/Progress'));
 const Settings = lazy(() => import('../pages/Settings'));
 
@@ -40,7 +43,8 @@ export const routes = createBrowserRouter([
                             { index: true, Component: Lessons },
                             { path: ":lessonId", Component: Lesson, },
                             { path: ":lessonId/quiz", Component: Quiz, },
-                            { path: ":lessonId/games", Component: Game, },
+                            { path: ':lessonId/games/road-race', Component: RoadRace },
+                            { path: ':lessonId/games/catch-items', Component: CatchItems },
                         ],
                     },
 

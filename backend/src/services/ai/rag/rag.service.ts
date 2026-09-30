@@ -83,7 +83,7 @@ export class RAGService {
     sources: AskLessonResult['sources'];
     stream: AsyncIterable<string>;
   }> {
-    const startedAt = performance.now();
+    const rewriteStartedAt = performance.now();
     console.log('[AI TIMING] streamLesson started');
 
     const standaloneQuestion =
@@ -96,7 +96,7 @@ export class RAGService {
 
     console.log(
       `[AI TIMING] rewriteQuery: ${Math.round(
-        performance.now() - startedAt,
+        performance.now() - rewriteStartedAt,
       )} ms`,
     );
 

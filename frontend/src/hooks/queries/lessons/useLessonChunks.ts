@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getLessonChunks } from "../../api/lessons";
+import { getLessonChunks } from "../../../api/lessons";
 
 export const lessonChunksQueryKey = (
   lessonId: string,

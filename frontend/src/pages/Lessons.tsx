@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { BookOpen } from "lucide-react";
 
-import { useLessons } from "../hooks/queries/useLessons";
+import { useLessons } from "../hooks/queries/lessons/useLessons";
 import type { Lesson } from "../types/custom";
 import LoadingScreen from "../components/common/LoadingScreen";
 

@@ -30,14 +30,14 @@ const CompactActivities = ({ lessonId }: CompactActivitiesProps) => {
     {
       title: "Catch Items",
       icon: Gamepad2,
-      href: `/lessons/${lessonId}/games`,
+      href: `/lessons/${lessonId}/games/catch-items`,
       accent: "bg-accent-soft text-accent",
       action: "Play",
     },
     {
       title: "Road Race",
       icon: CarFront,
-      href: `/lessons/${lessonId}/games`,
+      href: `/lessons/${lessonId}/games/road-race`,
       accent: "bg-accent-soft text-accent",
       action: "Play",
     },

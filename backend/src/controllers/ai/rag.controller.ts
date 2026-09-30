@@ -25,6 +25,39 @@ export async function askLesson(
   });
 }
 
+function getAIErrorMessage(
+  error: unknown,
+): string {
+  if (
+    typeof error === 'object' &&
+    error !== null
+  ) {
+    const candidate = error as {
+      status?: number;
+      code?: number;
+      message?: string;
+    };
+
+    if (
+      candidate.status === 429 ||
+      candidate.code === 429 ||
+      candidate.message?.includes('429')
+    ) {
+      return 'The AI is temporarily unavailable because the usage limit has been reached. Please try again later.';
+    }
+
+    if (
+      candidate.status === 503 ||
+      candidate.code === 503 ||
+      candidate.message?.includes('503')
+    ) {
+      return 'The AI service is temporarily unavailable. Please try again later.';
+    }
+  }
+
+  return 'Failed to generate AI response.';
+}
+
 export async function streamAskLesson(
   req: Request,
   res: Response,
@@ -97,8 +130,7 @@ export async function streamAskLesson(
   } catch (error) {
     if (!res.writableEnded) {
       sendEvent('error', {
-        message:
-          'Failed to generate AI response.',
+        message: getAIErrorMessage(error),
       });
 
       res.end();

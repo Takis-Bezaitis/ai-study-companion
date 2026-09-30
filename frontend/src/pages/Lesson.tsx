@@ -5,7 +5,7 @@ import { ArrowLeft, LayoutGrid } from "lucide-react";
 import LessonHeader from "../components/lesson/LessonHeader";
 import LessonContent from "../components/lesson/LessonContent";
 import LearningActivities from "../components/lesson/LearningActivities";
-import { useLesson } from "../hooks/queries/useLesson";
+import { useLesson } from "../hooks/queries/lessons/useLesson";
 import LessonActionsDrawer from "../components/lesson/LessonActionsDrawer";
 import AIChatPanel from "../components/lesson/AIChatPanel";
 import CompactActivities from "../components/lesson/CompactActivities";

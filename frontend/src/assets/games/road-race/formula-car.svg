@@ -1,0 +1,113 @@
+<svg
+  width="80"
+  height="140"
+  viewBox="0 0 80 140"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Rear wing -->
+  <rect x="12" y="8" width="56" height="8" rx="2" fill="#20202a"/>
+  <rect x="8" y="16" width="12" height="14" rx="3" fill="#20202a"/>
+  <rect x="60" y="16" width="12" height="14" rx="3" fill="#20202a"/>
+
+  <!-- Rear tires -->
+  <rect x="3" y="28" width="15" height="34" rx="6" fill="#111111"/>
+  <rect x="62" y="28" width="15" height="34" rx="6" fill="#111111"/>
+
+  <!-- Main body -->
+  <path
+    d="
+      M40 18
+      C29 18 23 27 21 42
+      L17 93
+      C16 108 23 123 31 130
+      L40 137
+      L49 130
+      C57 123 64 108 63 93
+      L59 42
+      C57 27 51 18 40 18
+      Z
+    "
+    fill="#6d5acf"
+  />
+
+  <!-- Cockpit -->
+  <path
+    d="
+      M31 39
+      C32 30 35 26 40 26
+      C45 26 48 30 49 39
+      L47 59
+      C45 65 35 65 33 59
+      Z
+    "
+    fill="#20202a"
+  />
+
+  <!-- Driver helmet -->
+  <circle
+    cx="40"
+    cy="39"
+    r="7"
+    fill="#f8f7fb"
+  />
+
+  <!-- Front nose -->
+  <path
+    d="
+      M33 59
+      L47 59
+      L52 102
+      L40 132
+      L28 102
+      Z
+    "
+    fill="#5b48b8"
+  />
+
+  <!-- Front wing -->
+  <path
+    d="
+      M20 111
+      L60 111
+      L67 119
+      L13 119
+      Z
+    "
+    fill="#20202a"
+  />
+
+  <rect
+    x="8"
+    y="119"
+    width="22"
+    height="7"
+    rx="2"
+    fill="#20202a"
+  />
+
+  <rect
+    x="50"
+    y="119"
+    width="22"
+    height="7"
+    rx="2"
+    fill="#20202a"
+  />
+
+  <!-- Front tires -->
+  <rect x="4" y="83" width="14" height="32" rx="6" fill="#111111"/>
+  <rect x="62" y="83" width="14" height="32" rx="6" fill="#111111"/>
+
+  <!-- Center stripe -->
+  <path
+    d="
+      M37 66
+      L43 66
+      L45 103
+      L40 121
+      L35 103
+      Z
+    "
+    fill="#d97706"
+  />
+</svg>

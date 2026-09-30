@@ -210,3 +210,13 @@ body {
     --tw-ring-color: var(--color-accent);
   }
 }
+
+@keyframes thinking {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 1.25rem;
+  }
+}
