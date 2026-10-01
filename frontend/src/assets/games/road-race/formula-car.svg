@@ -4,40 +4,53 @@
   viewBox="0 0 80 140"
   xmlns="http://www.w3.org/2000/svg"
 >
-  <!-- Rear wing -->
-  <rect x="12" y="8" width="56" height="8" rx="2" fill="#20202a"/>
-  <rect x="8" y="16" width="12" height="14" rx="3" fill="#20202a"/>
-  <rect x="60" y="16" width="12" height="14" rx="3" fill="#20202a"/>
-
   <!-- Rear tires -->
-  <rect x="3" y="28" width="15" height="34" rx="6" fill="#111111"/>
-  <rect x="62" y="28" width="15" height="34" rx="6" fill="#111111"/>
+  <rect
+    x="5"
+    y="20"
+    width="15"
+    height="30"
+    rx="5"
+    fill="#0f3636"
+  />
+
+  <rect
+    x="60"
+    y="20"
+    width="15"
+    height="30"
+    rx="5"
+    fill="#0f3636"
+  />
 
   <!-- Main body -->
   <path
     d="
-      M40 18
-      C29 18 23 27 21 42
-      L17 93
-      C16 108 23 123 31 130
-      L40 137
-      L49 130
-      C57 123 64 108 63 93
-      L59 42
-      C57 27 51 18 40 18
+      M31 10
+      C35 7 45 7 49 10
+      C53 15 55 23 56 32
+      L60 58
+      L64 103
+      C65 113 60 122 53 127
+      C46 132 34 132 27 127
+      C20 122 15 113 16 103
+      L20 58
+      L24 32
+      C25 23 27 15 31 10
       Z
     "
-    fill="#6d5acf"
+    fill="#d3ad30"
   />
 
   <!-- Cockpit -->
   <path
     d="
-      M31 39
-      C32 30 35 26 40 26
-      C45 26 48 30 49 39
-      L47 59
-      C45 65 35 65 33 59
+      M32 36
+      C33 29 36 25 40 25
+      C44 25 47 29 48 36
+      L47 56
+      L40 64
+      L33 56
       Z
     "
     fill="#20202a"
@@ -46,68 +59,36 @@
   <!-- Driver helmet -->
   <circle
     cx="40"
-    cy="39"
-    r="7"
+    cy="47"
+    r="5"
     fill="#f8f7fb"
   />
 
-  <!-- Front nose -->
-  <path
-    d="
-      M33 59
-      L47 59
-      L52 102
-      L40 132
-      L28 102
-      Z
-    "
-    fill="#5b48b8"
-  />
-
-  <!-- Front wing -->
-  <path
-    d="
-      M20 111
-      L60 111
-      L67 119
-      L13 119
-      Z
-    "
-    fill="#20202a"
-  />
-
-  <rect
-    x="8"
-    y="119"
-    width="22"
-    height="7"
-    rx="2"
-    fill="#20202a"
-  />
-
-  <rect
-    x="50"
-    y="119"
-    width="22"
-    height="7"
-    rx="2"
-    fill="#20202a"
-  />
-
   <!-- Front tires -->
-  <rect x="4" y="83" width="14" height="32" rx="6" fill="#111111"/>
-  <rect x="62" y="83" width="14" height="32" rx="6" fill="#111111"/>
+  <rect
+    x="0"
+    y="82"
+    width="15"
+    height="34"
+    rx="5"
+    fill="#0f3636"
+  />
+
+  <rect
+    x="65"
+    y="82"
+    width="15"
+    height="34"
+    rx="5"
+    fill="#0f3636"
+  />
 
   <!-- Center stripe -->
-  <path
-    d="
-      M37 66
-      L43 66
-      L45 103
-      L40 121
-      L35 103
-      Z
-    "
-    fill="#d97706"
+  <rect
+    x="37"
+    y="64"
+    width="6"
+    height="45"
+    fill="#66190d"
   />
 </svg>

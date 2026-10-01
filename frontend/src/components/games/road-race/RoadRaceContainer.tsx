@@ -19,38 +19,27 @@ const RoadRaceContainer = ({ lessonId, }: RoadRaceContainerProps) => {
 
   const { data: game, isLoading, isError, error } = useRoadRace(lessonId);
 
-  if (isLoading) {
-    return (
-      <section className="flex h-full min-h-0 w-full items-center justify-center">
+  return (
+  <section className="flex h-full min-h-0 w-full items-center justify-center overflow-hidden p-4 sm:p-6">
+    <div
+      ref={containerRef}
+      className="flex h-full min-h-0 w-full items-center justify-center"
+    >
+      {isLoading && (
         <p className="text-sm text-muted-foreground">
           Loading game...
         </p>
-      </section>
-    );
-  }
+      )}
 
-  if (isError) {
-    return (
-      <section className="flex h-full min-h-0 w-full items-center justify-center">
+      {isError && (
         <p className="text-sm text-destructive">
           {error instanceof Error
             ? error.message
             : "Failed to load the game."}
         </p>
-      </section>
-    );
-  }
+      )}
 
-  if (!game) {
-    return null;
-  }
-
-  return (
-    <section className="flex h-full min-h-0 w-full items-center justify-center overflow-hidden p-4 sm:p-6">
-      <div
-        ref={containerRef}
-        className="flex h-full min-h-0 w-full items-center justify-center"
-      >
+      {game && (
         <div
           className="relative overflow-hidden rounded-2xl bg-black shadow-2xl"
           style={{
@@ -58,16 +47,20 @@ const RoadRaceContainer = ({ lessonId, }: RoadRaceContainerProps) => {
             height: viewport.height,
           }}
         >
-          <RoadRaceCanvas />
+          <RoadRaceCanvas
+            width={viewport.width}
+            height={viewport.height}
+          />
 
-          <RoadRaceUI 
+          <RoadRaceUI
             title={game.mission.title}
             description={game.mission.description}
           />
         </div>
-      </div>
-    </section>
-  );
+      )}
+    </div>
+  </section>
+);
 };
 
 export default RoadRaceContainer;

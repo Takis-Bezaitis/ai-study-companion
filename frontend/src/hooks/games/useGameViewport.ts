@@ -45,14 +45,14 @@ export function useGameViewport(
     }
 
     const updateViewport = () => {
-      const { width, height } =
-        container.getBoundingClientRect();
+      const { width, height } = container.getBoundingClientRect();
 
-      const availableWidth =
-        width * VIEWPORT_USAGE;
+      if (width <= 0 || height <= 0) {
+        return;
+      }
 
-      const availableHeight =
-        height * VIEWPORT_USAGE;
+      const availableWidth = width * VIEWPORT_USAGE;
+      const availableHeight = height * VIEWPORT_USAGE;
 
       const scale = Math.min(
         availableWidth / gameSize.width,
