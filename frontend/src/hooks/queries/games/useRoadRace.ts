@@ -8,5 +8,7 @@ export function useRoadRace(lessonId: string) {
   return useQuery({
     queryKey: roadRaceQueryKey(lessonId),
     queryFn: () => getRoadRaceGame(lessonId),
+    enabled: Boolean(lessonId),
+    refetchOnMount: "always",
   });
 }

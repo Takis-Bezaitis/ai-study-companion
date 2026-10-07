@@ -10,7 +10,7 @@ const TopBar = ({ onMenuClick }: TopBarProps) => {
   const { user } = useAuthStore();
 
   return (
-    <header className="m-3 flex h-20 shrink-0 items-center justify-between rounded-2xl border border-default bg-surface px-4 sm:px-6">
+    <header className="m-3 flex h-14 shrink-0 items-center justify-between rounded-2xl border border-default bg-surface px-4 sm:px-6">
       <div className="flex min-w-0 items-center gap-3">
         <button
           type="button"

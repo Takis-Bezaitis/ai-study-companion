@@ -64,6 +64,12 @@ body {
   --color-button-main: #6d5acf;
   --color-button-hover: #5b48b8;
   --color-button-text: #ffffff;
+
+  /* games */
+  --color-game-button-main: #FFB300;
+  --color-game-button-hover: #cf9307;
+  --color-game-button-text: #212121;
+
 }
 
 .dark {
@@ -99,6 +105,12 @@ body {
   --color-button-main: #7c5ce6;
   --color-button-hover: #8b6bea;
   --color-button-text: #ffffff;
+
+  /* games */
+  --color-game-button-main: #FFEA00;
+  --color-game-button-hover: #dacc32;
+  --color-game-button-text: #000000;
+
 }
 
 @layer utilities {
@@ -156,6 +168,14 @@ body {
     background-color: var(--color-button-hover);
   }
 
+  .bg-game-button-main {
+    background-color: var(--color-game-button-main);
+  }
+
+  .hover\:bg-game-button-hover:hover {
+    background-color: var(--color-game-button-hover);
+  }
+
   /* Text */
 
   .text-primary {
@@ -184,6 +204,10 @@ body {
 
   .text-button {
     color: var(--color-button-text);
+  }
+
+  .text-game-button {
+    color: var(--color-game-button-text);
   }
 
   /* Borders */

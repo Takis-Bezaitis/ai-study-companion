@@ -19,17 +19,16 @@ const GAME_SIZES = {
   },
   landscape: {
     width: 1200,
-    height: 1000,
+    height: 1100,
   },
 } as const;
-
-const VIEWPORT_USAGE = 1;
 
 export function useGameViewport(
   containerRef: RefObject<HTMLDivElement | null>,
   orientation: GameOrientation,
 ): GameViewport {
   const gameSize = GAME_SIZES[orientation];
+  const VIEWPORT_USAGE = orientation === "landscape" ? 1 : 0.96;
 
   const [viewport, setViewport] = useState<GameViewport>({
     width: gameSize.width,
