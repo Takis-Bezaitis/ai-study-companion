@@ -1,11 +1,24 @@
 import { useEffect, useRef } from "react";
 
+import useGameAudio from "../../../hooks/games/useGameAudio";
+
 import type { RoadRaceGame } from "../../../types/games/roadRace.types";
 import type { GameSprite } from "../../../types/games/roadRace.types";
 
-import formulaCarUrl from "../../../assets/games/road-race/formula-car.svg";
-import enemyCarUrl from "../../../assets/games/road-race/formula-enemy-car.svg";
-import fuelCanUrl from "../../../assets/games/road-race/fuel-can.svg";
+import formulaCarUrl from "../../../assets/games/road-race/images/formula-car.svg";
+import enemyCarUrl from "../../../assets/games/road-race/images/formula-enemy-car.svg";
+import fuelCanUrl from "../../../assets/games/road-race/images/fuel-can.svg";
+
+import engineLevel1 from "../../../assets/games/road-race/sounds/engine-level-1.mp3";
+import engineLevel2 from "../../../assets/games/road-race/sounds/engine-level-2.mp3";
+import engineLevel3 from "../../../assets/games/road-race/sounds/engine-level-3.mp3";
+import engineLevel4 from "../../../assets/games/road-race/sounds/engine-level-4.mp3";
+import engineLevel5 from "../../../assets/games/road-race/sounds/engine-level-5.mp3";
+import engineLevel6 from "../../../assets/games/road-race/sounds/engine-level-6.mp3";
+import engineLevel7 from "../../../assets/games/road-race/sounds/engine-level-7.mp3";
+import correctSound from "../../../assets/games/road-race/sounds/correct.mp3";
+import wrongSound from "../../../assets/games/road-race/sounds/wrong.mp3";
+import collisionSound from "../../../assets/games/road-race/sounds/collision.mp3";
 
 type RoadRaceCanvasProps = {
   width: number;
@@ -63,8 +76,16 @@ const ENEMY_COLLISION_COOLDOWN = 0.5;
 const COLLISION_PUSH_DURATION = 0.15;
 const COLLISION_PUSH_SPEED = 320;
 
+const MOBILE_SCREEN = 640;
+
 const ROAD_COLORS = [{roadColor: "#b91c1c"}, {roadColor: "#38bdf8"}, {roadColor: "#7c3aed"},
   {roadColor: "#f9bc16"}, {roadColor: "#059669"}, {roadColor: "#2563eb"}, {roadColor: "#050113"}];
+
+const engineSounds = [engineLevel1, engineLevel2, engineLevel3, engineLevel4, engineLevel5,
+  engineLevel6, engineLevel7,
+];
+
+const lessonSounds = [correctSound, wrongSound, collisionSound];
 
 const getRandomInt = (min: number, max: number,) =>
   Math.floor(Math.random() * (max - min + 1), ) + min;
@@ -161,6 +182,8 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
   let landscapeCollisionCooldown = 0;
   let gameOver = false;
 
+  const {preload, playLoop, playOneShot, stop, stopAll, } = useGameAudio();
+
   useEffect(() => {
     const canvas = canvasRef.current;
 
@@ -177,7 +200,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
     let isActive = true;
 
     // player
-    const carWidth = canvas.width < 640
+    const carWidth = canvas.width < MOBILE_SCREEN
       ? canvas.width * MOBILE_CAR_WIDTH_RATIO
       : canvas.width * CAR_WIDTH_RATIO;
     const carHeight = carWidth / CAR_ASPECT_RATIO;
@@ -265,11 +288,9 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
       generatedStrips++;
 
       return {
-        y: Math.round(y),
-        height:
-          ROAD_STRIPE_HEIGHT,
-        centerX:
-          currentCenterX,
+        y,
+        height: ROAD_STRIPE_HEIGHT,
+        centerX: currentCenterX,
         roadWidth,
         color,
       };
@@ -307,7 +328,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
         nextItemIndex = 0;
       }
 
-      const size = canvas.width < 640
+      const size = canvas.width < MOBILE_SCREEN
         ? canvas.width * MOBILE_FUEL_SIZE_RATIO
         : canvas.width * FUEL_SIZE_RATIO;
 
@@ -356,9 +377,10 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
     };
 
     /*Generate enough road strips to cover the whole canvas. */
-    let y = 0;
+    let y = -ROAD_STRIPE_HEIGHT;
+
     while (y < canvas.height) {
-      road.push(createRoadStrip(y),);
+      road.push(createRoadStrip(y));
       y += ROAD_STRIPE_HEIGHT;
     }
 
@@ -412,20 +434,16 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
       for (
         const strip of road
       ) {
-        const stripY = Math.round(strip.y,);
+        const stripY = Math.floor(strip.y); 
+        const stripHeight = Math.ceil(strip.height) + 1;
+
         let roadLeft = strip.centerX - strip.roadWidth / 2;
         let roadRight = strip.centerX + strip.roadWidth / 2;
 
-        /*
-        * Keep a guaranteed minimum
-        * landscape width on the left.
-        */
+        /* Keep a guaranteed minimum landscape width on the left. */
         roadLeft = Math.min(Math.max(roadLeft, minLandscapeWidth,), canvas.width - minLandscapeWidth,);
 
-        /*
-        * Keep a guaranteed minimum
-        * landscape width on the right.
-        */
+        /* Keep a guaranteed minimum landscape width on the right. */
         roadRight = Math.max(Math.min(roadRight, canvas.width - minLandscapeWidth, ),
             minLandscapeWidth,
           );
@@ -433,15 +451,20 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
         context.fillStyle = strip.color;
 
         /* Left landscape.*/
-        context.fillRect(0, stripY, roadLeft, strip.height + 1, );
+        context.fillRect(0, stripY, roadLeft, stripHeight,);
 
         /* Right landscape. */
-        context.fillRect(roadRight, stripY, canvas.width - roadRight, strip.height + 1,);
+        context.fillRect(roadRight, stripY, canvas.width - roadRight, stripHeight,);
+      }
+      
+      /* enemy cars moving */
+      for (const item of roadItems) {
+        if (item.type === "enemy-car" && enemyCarLoaded) {
+          context.drawImage(enemyCarImage, item.x - carWidth / 2, item.y, carWidth, carHeight,);
+        }
       }
 
-      /* player movement */
-      context.drawImage(carImage, playerX - carWidth / 2, playerY, carWidth, carHeight, );
-
+      /* lesson items moving */
       for (const item of roadItems) {
         if (item.type === "lesson-item") {
           context.font = `bold ${Math.max(
@@ -454,11 +477,10 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
           context.fillText(item.name ?? "", item.x, item.y - ITEM_LABEL_GAP,);
           context.drawImage(fuelImage, item.x - item.size / 2, item.y, item.size, item.size, );
         }
-
-        if (item.type === "enemy-car" && enemyCarLoaded) {
-          context.drawImage(enemyCarImage, item.x - carWidth / 2, item.y, carWidth, carHeight,);
-        }
       }
+
+      /* player movement */
+      context.drawImage(carImage, playerX - carWidth / 2, playerY, carWidth, carHeight, );
 
       if (gameOver) {
         drawGameOverOverlay();
@@ -485,8 +507,8 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
     window.addEventListener("keydown", handleKeyDown,);
     window.addEventListener("keyup", handleKeyUp,);
 
-    const gameLoop = ( currentTime: number, ) => {
-      if (gameOver) {
+    const gameLoop = (currentTime: number) => {
+      if (!isActive || gameOver) {
          return;
       }
 
@@ -620,8 +642,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
         }
       }
 
-      /*
-       * Generate new road strips above the screen. */
+      /* Generate new road strips above the screen. */
       while (highestY > -ROAD_STRIPE_HEIGHT) {
         const newStripY = highestY - ROAD_STRIPE_HEIGHT;
 
@@ -634,7 +655,8 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
 
       if (newSpeedLevel !== speedLevel) {
         speedLevel = newSpeedLevel;
-        changeColorPalette(speedLevel,);
+        changeColorPalette(speedLevel);
+        void playLoop("engine", engineSounds[speedLevel], 0.1);
       }
 
       itemSpawnTimer += deltaTime;
@@ -666,6 +688,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
 
         fuel = Math.max(0, fuel - ENEMY_CAR_FUEL,);
         enemyCollisionCooldown = ENEMY_COLLISION_COOLDOWN;
+        void playOneShot("collision", collisionSound, 0.3);
 
         /* Push the player away from the enemy. */
         const playerPushDirection = playerX < item.x ? -1 : 1;
@@ -728,9 +751,11 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
         }
 
         if (item.isCorrect) {
+          void playOneShot("correct", correctSound, 0.3);
           fuel = Math.min(100, fuel + CORRECT_ITEM_FUEL,);
           score += CORRECT_ITEM_SCORE;
         } else {
+          void playOneShot("wrong", wrongSound, 0.3);
           fuel = Math.max(0, fuel - WRONG_ITEM_FUEL,);
         }
 
@@ -748,12 +773,14 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
           if (playerLeft < roadLeft) {
             playerX = roadLeft + carWidth / 2;
             fuel = Math.max(0, fuel - LANDSCAPE_COLLISION_FUEL,);
+            void playOneShot("collision", collisionSound, 0.3);
             collisionPushDirection = 1;
             collisionPushTimer = COLLISION_PUSH_DURATION;
             landscapeCollisionCooldown = LANDSCAPE_COLLISION_COOLDOWN;
           } else if (playerRight > roadRight) {
             playerX = roadRight - carWidth / 2;
             fuel = Math.max(0, fuel - LANDSCAPE_COLLISION_FUEL,);
+            void playOneShot("collision", collisionSound, 0.3);
             collisionPushDirection = -1;
             collisionPushTimer = COLLISION_PUSH_DURATION;
             landscapeCollisionCooldown = LANDSCAPE_COLLISION_COOLDOWN;
@@ -782,6 +809,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
       if (fuel <= 0) {
         fuel = 0;
         gameOver = true;
+        stop("engine");
       }
 
       draw();
@@ -798,15 +826,31 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
 
     let carLoaded = false;
     let fuelLoaded = false;
+    let isStarting = false;
 
-    const startGame = () => {
-      if (!isActive || !carLoaded || !fuelLoaded || !enemyCarLoaded) {
+    const startGame = async () => {
+      if (!isActive || isStarting || !carLoaded || !fuelLoaded || !enemyCarLoaded) {
         return;
       }
 
-      draw();
-      lastTime = performance.now();
-      animationFrameId = requestAnimationFrame(gameLoop, );
+      isStarting = true;
+
+      try {
+        await preload(engineSounds);
+        await preload(lessonSounds);
+        
+        if (!isActive) {
+          return;
+        }
+
+        void playLoop("engine", engineSounds[0], 0.1);
+
+        draw();
+        lastTime = performance.now();
+        animationFrameId = requestAnimationFrame(gameLoop);
+      } catch (error) {
+        console.error("Failed to preload engine sounds:", error);
+      }
     };
 
     carImage.onload = () => {
@@ -848,12 +892,14 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
 
     return () => {
       isActive = false;
-      cancelAnimationFrame(animationFrameId,);
-      window.removeEventListener("keydown", handleKeyDown,);
-      window.removeEventListener("keyup", handleKeyUp,);
+      cancelAnimationFrame(animationFrameId);
+      stopAll();
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
       playerDirectionRef.current = null;
     };
-  }, [width, height, game, scoreTextRef, fuelBarRef, playerDirectionRef,]);
+  }, [width, height, game, scoreTextRef, fuelBarRef, playerDirectionRef,
+      preload, playLoop, stopAll,]);
 
   return (
     <canvas
