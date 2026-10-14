@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import AskAI from "./AskAI";
 import AIChat from "./AIChat";
@@ -74,6 +74,10 @@ const AIChatPanel = ({ onClose, lessonId, }: AIChatPanelProps) => {
       question: trimmedQuestion,
       history,
       onDelta: (text) => {
+        console.log("[STREAM UPDATE]", {
+          time: performance.now().toFixed(1),
+          chunkLength: text.length,
+        });
         setHasStartedStreaming(true);
 
         appendMessageContent(
@@ -84,6 +88,25 @@ const AIChatPanel = ({ onClose, lessonId, }: AIChatPanelProps) => {
       },
     });
   };
+
+  useEffect(() => {
+    const lastAssistantMessage = [...messages]
+      .reverse()
+      .find((message) => message.role === "assistant");
+
+    if (!lastAssistantMessage?.content) return;
+
+    const length = lastAssistantMessage.content.length;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        console.log("[UI PAINT CHECK]", {
+          time: Math.round(performance.now()),
+          length,
+        });
+      });
+    });
+  }, [messages]);
 
   return (
     <section

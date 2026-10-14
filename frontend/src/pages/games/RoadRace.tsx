@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { ChevronLeft, ChevronRight, Play } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Play } from "lucide-react";
 
 import RoadRaceContainer from "../../components/games/road-race/RoadRaceContainer";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
@@ -83,8 +83,7 @@ const RoadRaceStartScreen = ({title, description, onStart, onBack,}: RoadRaceSta
               onClick={onBack}
               className="inline-flex cursor-pointer items-center gap-1 text-sm font-semibold text-secondary transition-colors hover:text-primary-color"
             >
-              <ChevronLeft size={18} />
-              Back to lesson
+              <ArrowLeft aria-hidden="true" size={18} /> Back to lesson
             </button>
           </div>
 

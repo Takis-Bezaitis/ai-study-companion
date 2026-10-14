@@ -1,47 +1,18 @@
+import { Link } from "react-router";
+import type { Lesson } from "../../types/custom";
+
 import {
   ArrowRight,
-  Brain,
-  CarFront,
-  CircleHelp,
-  Gamepad2,
 } from "lucide-react";
-import { Link } from "react-router";
+
+import { getLessonActivities } from "./lessonActivities";
 
 type CompactActivitiesProps = {
-  lessonId: string;
+  lesson: Lesson;
 };
 
-const CompactActivities = ({ lessonId }: CompactActivitiesProps) => {
-  const activities = [
-    {
-      title: "Quiz",
-      icon: Brain,
-      href: `/lessons/${lessonId}/quiz`,
-      accent: "bg-primary-soft text-primary-color",
-      action: "Start",
-    },
-    {
-      title: "Question",
-      icon: CircleHelp,
-      href: `/lessons/${lessonId}`,
-      accent: "bg-primary-soft text-primary-color",
-      action: "Try",
-    },
-    {
-      title: "Catch Items",
-      icon: Gamepad2,
-      href: `/lessons/${lessonId}/games/catch-items`,
-      accent: "bg-accent-soft text-accent",
-      action: "Play",
-    },
-    {
-      title: "Road Race",
-      icon: CarFront,
-      href: `/lessons/${lessonId}/games/road-race`,
-      accent: "bg-accent-soft text-accent",
-      action: "Play",
-    },
-  ];
+const CompactActivities = ({ lesson }: CompactActivitiesProps) => {
+  const activities = getLessonActivities(lesson.id);
 
   return (
     <section aria-labelledby="compact-activities-heading" className="shrink-0">

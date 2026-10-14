@@ -14,8 +14,7 @@ const LessonHeader = ({ lesson }: LessonHeaderProps) => {
         to="/lessons"
         className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-secondary transition-colors hover:text-primary-color"
       >
-        <ArrowLeft aria-hidden="true" size={18} />
-        Back to Lessons
+        <ArrowLeft aria-hidden="true" size={18} />Back to Lessons
       </Link>
 
       <div className="flex items-start gap-4">

@@ -136,7 +136,11 @@ export async function streamAskLesson({
     const event = JSON.parse(data);
 
     if (eventType === "delta") {
-        console.log("[SSE DELTA]", event.text);
+        console.log(
+    `[SSE DELTA +${Math.round(performance.now())}ms]`,
+    event.text,
+  );
+
         onDelta(event.text);
         return;
     }

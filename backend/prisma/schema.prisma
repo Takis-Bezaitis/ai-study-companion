@@ -25,16 +25,18 @@ enum Difficulty {
 }
 
 model User {
-  id             String           @id @default(uuid())
-  email          String           @unique
-  passwordHash   String
-  name           String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  id                      String           @id @default(uuid())
+  email                   String           @unique
+  passwordHash            String
+  name                    String?
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
 
-  progress       UserProgress[]
-  quizAttempts   QuizAttempt[]
-  refreshSessions RefreshSession[]
+  progress                UserProgress[]
+  quizAttempts            QuizAttempt[]
+  refreshSessions         RefreshSession[]
+  openQuestions           OpenQuestion[]
+  openQuestionEvaluations OpenQuestionEvaluation[]
 }
 
 model Category {
@@ -46,19 +48,20 @@ model Category {
 }
 
 model Lesson {
-  id          String   @id @default(uuid())
-  categoryId  String
-  title       String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(uuid())
+  categoryId    String
+  title         String
+  description   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  category    Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  chunks      LessonChunk[]
-  progress    UserProgress[]
-  quizzes     Quiz[]
-  gameItems   GameItem[]
-  gameMissions GameMission[]
+  category      Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  chunks        LessonChunk[]
+  progress      UserProgress[]
+  quizzes       Quiz[]
+  gameItems     GameItem[]
+  gameMissions  GameMission[]
+  openQuestions OpenQuestion[]
 
   @@index([categoryId])
 }
@@ -201,4 +204,39 @@ model GameMission {
   lesson              Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@index([lessonId])
+}
+
+model OpenQuestion {
+  id                 String   @id @default(uuid())
+  userId             String
+  lessonId           String
+  sectionTitle       String
+  question           String
+  referenceAnswer    String
+  evaluationCriteria Json
+  sourceChunkIds     String[]
+  createdAt          DateTime @default(now())
+
+  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson                  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  evaluations OpenQuestionEvaluation[]
+
+  @@index([userId, createdAt])
+  @@index([lessonId, createdAt])
+}
+
+model OpenQuestionEvaluation {
+  id          String   @id @default(uuid())
+  userId      String
+  questionId  String
+  answer      String
+  score       Float
+  feedback    Json
+  createdAt   DateTime @default(now())
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question    OpenQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([questionId, createdAt])
 }

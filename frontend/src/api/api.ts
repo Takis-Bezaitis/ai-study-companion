@@ -15,6 +15,9 @@ export const API = {
     ask: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/ask`,
     stream: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/ask/stream`,
     chunks: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/chunks`,
+    openQuestions: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/open-questions`,
+    evaluateOpenQuestion: (lessonId: string, questionId: string,) =>
+      `${BASE_URL}/api/lessons/${lessonId}/open-questions/${questionId}/evaluate`,
   },
   games: {
     roadRace: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/games/road-race`,

@@ -112,11 +112,23 @@ export async function streamAskLesson(
     sources: result.sources,
   });
 
+  let previousDeltaAt = performance.now();
+
   try {
     for await (const chunk of result.stream) {
       if (res.writableEnded) {
         break;
       }
+
+      const now = performance.now();
+
+      console.log(
+        `[AI TIMING] delta received; gap: ${Math.round(
+          now - previousDeltaAt,
+        )} ms`,
+      );
+
+      previousDeltaAt = now;
 
       sendEvent('delta', {
         text: chunk,
@@ -128,14 +140,14 @@ export async function streamAskLesson(
       res.end();
     }
   } catch (error) {
-    if (!res.writableEnded) {
+    console.error('[AI STREAM ERROR]', error);
+
+    if (!res.writableEnded && !res.destroyed) {
       sendEvent('error', {
         message: getAIErrorMessage(error),
       });
 
       res.end();
     }
-
-    throw error;
   }
 }

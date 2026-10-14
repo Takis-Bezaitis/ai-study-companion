@@ -18,14 +18,15 @@ export class RetrievalService {
     private readonly lessonChunkRepository: LessonChunkRepository,
   ) {}
 
-  async retrieveLessonContext(
-    input: RetrieveLessonContextInput,
-  ): Promise<RetrievedLessonChunk[]> {
-    const embedding =
-      await aiService.generateEmbedding({
-        text: input.query,
-        task: 'RETRIEVAL_QUERY',
-      });
+  async retrieveLessonContext(input: RetrieveLessonContextInput,): Promise<RetrievedLessonChunk[]> {
+    const embeddingStartedAt = performance.now();
+    const embedding = await aiService.generateEmbedding({text: input.query, task: 'RETRIEVAL_QUERY',});
+
+    console.log(
+      `[AI TIMING] generateEmbedding: ${Math.round(
+        performance.now() - embeddingStartedAt,
+      )} ms`,
+    );
 
     if (embedding.length === 0) {
       throw new Error(
@@ -33,12 +34,23 @@ export class RetrievalService {
       );
     }
 
-    return this.lessonChunkRepository.searchSimilar({
-      lessonId: input.lessonId,
-      embedding,
-      limit:
-        input.limit ?? this.defaultLimit,
-    });
+    const searchStartedAt = performance.now();
+
+    const chunks =
+      await this.lessonChunkRepository.searchSimilar({
+        lessonId: input.lessonId,
+        embedding,
+        limit:
+          input.limit ?? this.defaultLimit,
+      });
+
+    console.log(
+      `[AI TIMING] searchSimilar: ${Math.round(
+        performance.now() - searchStartedAt,
+      )} ms`,
+    );
+
+    return chunks;
   }
 }
 

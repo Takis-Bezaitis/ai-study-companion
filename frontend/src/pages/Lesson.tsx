@@ -61,7 +61,7 @@ const Lesson = () => {
   }
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col overflow-hidden p-4 sm:p-6">
+    <section className="flex h-full min-h-0 w-full flex-col overflow-hidden p-4 sm:p-6 sm:pt-2">
       <div className="grid min-h-0 w-full flex-1 gap-6 xl:flex">
         {/* Main learning area */}
         <div className="min-h-0 min-w-0 overflow-hidden xl:flex-9">
@@ -121,7 +121,7 @@ const Lesson = () => {
         >
           {showAskAI ? (
             <>
-              <CompactActivities lessonId={lesson.id} />
+              <CompactActivities lesson={lesson} />
 
               <div className="min-h-0 flex-1 pt-3">
                 <AIChatPanel
@@ -132,7 +132,7 @@ const Lesson = () => {
             </>
           ) : (
             <LearningActivities
-              lessonId={lesson.id}
+              lesson={lesson}
               onAskAI={() => setShowAskAI(true)}
             />
           )}
@@ -141,7 +141,7 @@ const Lesson = () => {
         {/* for mobile, sm, md, lg views */}
         <LessonActionsDrawer
           open={showActions}
-          lessonId={lesson.id}
+          lesson={lesson}
           onClose={() => setShowActions(false)}
           onAskAI={() => {
             setShowActions(false);

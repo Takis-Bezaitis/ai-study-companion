@@ -12,6 +12,7 @@ const Dashboard = lazy(() => import('../pages/Dashboard'));
 const Lessons = lazy(() => import('../pages/Lessons'));
 const Lesson = lazy(() => import('../pages/Lesson'));
 const Quiz = lazy(() => import('../pages/Quiz'));
+const OpenQuestion = lazy(() => import('../pages/OpenQuestion'));
 
 const RoadRace = lazy(() => import('../pages/games/RoadRace'));
 const CatchItems = lazy(() => import('../pages/games/CatchItems'));
@@ -45,6 +46,7 @@ export const routes = createBrowserRouter([
                             { path: ":lessonId/quiz", Component: Quiz, },
                             { path: ':lessonId/games/road-race', Component: RoadRace },
                             { path: ':lessonId/games/catch-items', Component: CatchItems },
+                            { path: ":lessonId/open-question", Component: OpenQuestion },
                         ],
                     },
 
