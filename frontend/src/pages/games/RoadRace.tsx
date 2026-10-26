@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { ArrowLeft, ChevronLeft, ChevronRight, Play } from "lucide-react";
 
 import RoadRaceContainer from "../../components/games/road-race/RoadRaceContainer";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
-import { useRoadRace } from "../../hooks/queries/games/useRoadRace";
+import { useRoadRaceMission } from "../../hooks/queries/games/useRoadRace";
+
+import { ArrowLeft, ChevronLeft, ChevronRight, Play } from "lucide-react";
 
 const RoadRace = () => {
   const { lessonId } = useParams();
@@ -15,7 +16,9 @@ const RoadRace = () => {
     navigate(`/lessons/${lessonId}`);
   };
 
-  const { data: game, isLoading, isError, error } = useRoadRace(
+
+
+  const { data: mission, isLoading, isError, error } = useRoadRaceMission(
     lessonId ?? "",
   );
 
@@ -26,7 +29,7 @@ const RoadRace = () => {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <p className="text-sm text-muted">Loading game...</p>
+        <p className="text-primary-color text-lg">Loading game...</p>
       </div>
     );
   }
@@ -43,18 +46,27 @@ const RoadRace = () => {
     );
   }
 
-  if (!game) {
+  if (!mission) {
     return null;
   }
 
+  const { mission: missionDetails, itemType } = mission;
+
   if (gameStarted) {
-    return <RoadRaceContainer game={game} onBack={handleBack} />;
+    return (
+      <RoadRaceContainer 
+        lessonId={lessonId}
+        missionDetails={missionDetails} 
+        itemType={itemType} 
+        onBack={handleBack}
+        onContinue={() => setGameStarted(false)}
+      />);
   }
 
   return (
     <RoadRaceStartScreen
-      title={game.mission.title}
-      description={game.mission.description}
+      title={missionDetails.title}
+      description={missionDetails.description}
       onStart={() => setGameStarted(true)}
       onBack={handleBack}
     />
@@ -68,7 +80,7 @@ type RoadRaceStartScreenProps = {
   onBack: () => void;
 };
 
-const RoadRaceStartScreen = ({title, description, onStart, onBack,}: RoadRaceStartScreenProps) => {
+const RoadRaceStartScreen = ({title, description, onStart, onBack}: RoadRaceStartScreenProps) => {
   const isMobileOrTablet = useMediaQuery("(max-width: 1023px)");
 
   return (

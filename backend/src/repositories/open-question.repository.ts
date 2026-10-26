@@ -15,6 +15,7 @@ export interface CreateOpenQuestionInput {
 
 export interface CreateOpenQuestionEvaluationInput {
   userId: string;
+  lessonId: string;
   questionId: string;
   answer: string;
   score: number;
@@ -62,19 +63,36 @@ export class OpenQuestionRepository {
     });
   }
 
+  
   async createEvaluation(
     input: CreateOpenQuestionEvaluationInput,
   ) {
-    return prisma.openQuestionEvaluation.create({
-      data: {
-        userId: input.userId,
-        questionId: input.questionId,
-        answer: input.answer,
-        score: input.score,
-        feedback: input.feedback,
-      },
+    return prisma.$transaction(async (tx) => {
+      const evaluation = await tx.openQuestionEvaluation.create({
+        data: {
+          userId: input.userId,
+          questionId: input.questionId,
+          answer: input.answer,
+          score: input.score,
+          feedback: input.feedback,
+        },
+      });
+
+      await tx.activityAttempt.create({
+        data: {
+          userId: input.userId,
+          lessonId: input.lessonId,
+          activityType: "OPEN_QUESTION",
+          gameScore: 0,
+          educationalScore: input.score,
+          openQuestionEvaluationId: evaluation.id,
+        },
+      });
+
+      return evaluation;
     });
   }
+
 
   async findEvaluationsByUser(
     userId: string,

@@ -27,6 +27,14 @@ type RoadRaceCanvasProps = {
   scoreTextRef: React.RefObject<HTMLSpanElement | null>;
   fuelBarRef: React.RefObject<HTMLDivElement | null>;
   playerDirectionRef: React.RefObject<"left" | "right" | null>;
+  onGameOver: (result: {
+    gameScore: number;
+    resolvedSpawns: {
+      spawnId: string;
+      signature: string;
+      collected: boolean;
+    }[];
+  }) => void;
 };
 
 type RoadStrip = {
@@ -69,6 +77,7 @@ const FUEL_DRAIN_INTERVAL = 1;
 const CORRECT_ITEM_FUEL = 10;
 const WRONG_ITEM_FUEL = 10;
 const CORRECT_ITEM_SCORE = 100;
+const WRONG_ITEM_SCORE = 100;
 const ENEMY_CAR_FUEL = 10;
 const LANDSCAPE_COLLISION_FUEL = 10;
 const LANDSCAPE_COLLISION_COOLDOWN = 0.4;
@@ -170,21 +179,28 @@ const getSpawnX = (canvas: HTMLCanvasElement, road: RoadStrip[], spawnY: number,
   return minX + Math.random() * (maxX - minX);
 };
 
-const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDirectionRef }: RoadRaceCanvasProps) => {
+const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDirectionRef, onGameOver}: RoadRaceCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  let score = 0;
-  let fuel = 100;
-  let fuelTimer = 0;
-  let enemyCarSpawnTimer = 0;
-
-  let collisionPushTimer = 0;
-  let collisionPushDirection = 0;
-  let landscapeCollisionCooldown = 0;
-  let gameOver = false;
-
   const {preload, playLoop, playOneShot, stop, stopAll, } = useGameAudio();
 
+  const onGameOverRef = useRef(onGameOver);
+  onGameOverRef.current = onGameOver;
+
   useEffect(() => {
+    let score = 0;
+    let educationalScore = 0;
+    let fuel = 100;
+
+    let fuelTimer = 0;
+    let enemyCarSpawnTimer = 0;
+
+    let collisionPushTimer = 0;
+    let collisionPushDirection = 0;
+    let landscapeCollisionCooldown = 0;
+    
+    let gameOver = false;
+    let resultReported = false;
+    
     const canvas = canvasRef.current;
 
     if (!canvas || width <= 0 || height <= 0) {
@@ -235,35 +251,24 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
       }
     >();
     
-    const itemPool = shuffle([...game.correctItems, ...game.wrongItems, ]);
+    const itemPool = shuffle(game?.items ?? []);
     let nextItemIndex = 0;
     let itemSpawnTimer = 0;
 
+    const resolvedSpawns: {
+      spawnId: string;
+      signature: string;
+      collected: boolean;
+    }[] = [];
+
     const chooseNextTarget = () => {
-      const direction =
-        getRandomDirection();
+      const direction = getRandomDirection();
 
-      targetCenterX =
-        currentCenterX +
-        direction *
-          centerStep;
+      targetCenterX = currentCenterX + direction * centerStep;
+      const minCenter = centerX - maxCenterOffset;
+      const maxCenter = centerX + maxCenterOffset;
 
-      const minCenter =
-        centerX -
-        maxCenterOffset;
-
-      const maxCenter =
-        centerX +
-        maxCenterOffset;
-
-      targetCenterX =
-        Math.max(
-          minCenter,
-          Math.min(
-            targetCenterX,
-            maxCenter,
-          ),
-        );
+      targetCenterX = Math.max(minCenter, Math.min(targetCenterX, maxCenter),);
     };
 
     const createRoadStrip = (y: number, ): RoadStrip => {
@@ -342,10 +347,12 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
       const x = getSpawnX(canvas, road, spawnY, size, size, );
 
       roadItems.push({
-        itemId: item.id,
+        itemId: item.gameItemId,
+        spawnId: item.spawnId,
         name: item.name,
         type: "lesson-item",
         isCorrect: item.isCorrect,
+        signature: item.signature,
         x,
         y: spawnY,
         size,
@@ -390,50 +397,13 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
 
     chooseNextTarget();
     
-    const drawGameOverOverlay = () => {
-      context.fillStyle = "rgba(0, 0, 0, 0.65)";
-
-      context.fillRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height,
-      );
-
-      context.fillStyle = "#ffffff";
-
-      context.textAlign = "center";
-      context.textBaseline = "middle";
-
-      context.font = "bold 42px sans-serif";
-
-      context.fillText(
-        "Game Over",
-        canvas.width / 2,
-        canvas.height / 2 - 30,
-      );
-
-      context.font = "bold 22px sans-serif";
-
-      context.fillText(
-        `Score: ${Math.floor(score)
-          .toString()
-          .padStart(6, "0")}`,
-        canvas.width / 2,
-        canvas.height / 2 + 25,
-      );
-    };
-
     const draw = () => {
-      //const fuelSize = canvas.width * FUEL_SIZE_RATIO;
       context.clearRect(0, 0, canvas.width, canvas.height,);
       context.fillStyle = "#000";
       context.fillRect(0, 0, canvas.width, canvas.height,);
       const minLandscapeWidth = canvas.width * MIN_LEFT_LANDSCAPE_WIDTH_RATIO;
 
-      for (
-        const strip of road
-      ) {
+      for (const strip of road) {
         const stripY = Math.floor(strip.y); 
         const stripHeight = Math.ceil(strip.height) + 1;
 
@@ -481,10 +451,6 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
 
       /* player movement */
       context.drawImage(carImage, playerX - carWidth / 2, playerY, carWidth, carHeight, );
-
-      if (gameOver) {
-        drawGameOverOverlay();
-      }
     };
 
     const handleKeyDown = (event: KeyboardEvent,) => {
@@ -618,6 +584,22 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
         }
       }
 
+      /* Record lesson items that leave the screen without being collected. */
+      for (const item of roadItems) {
+        if (
+          item.type === "lesson-item" &&
+          item.y >= canvas.height + item.size &&
+          item.spawnId &&
+          item.signature
+        ) {
+          resolvedSpawns.push({
+            spawnId: item.spawnId,
+            signature: item.signature,
+            collected: false,
+          });
+        }
+      }
+
       /* Remove road items that have left the screen. */
       const visibleItems = roadItems.filter(
           (item) =>
@@ -686,7 +668,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
           continue;
         }
 
-        fuel = Math.max(0, fuel - ENEMY_CAR_FUEL,);
+        fuel = Math.max(0, fuel - ENEMY_CAR_FUEL);
         enemyCollisionCooldown = ENEMY_COLLISION_COOLDOWN;
         void playOneShot("collision", collisionSound, 0.3);
 
@@ -749,14 +731,24 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
         if (!collision) {
           continue;
         }
+        
+        if (item.spawnId && item.signature) {
+          resolvedSpawns.push({
+            spawnId: item.spawnId,
+            signature: item.signature,
+            collected: true,
+          });
+        }
 
         if (item.isCorrect) {
           void playOneShot("correct", correctSound, 0.3);
           fuel = Math.min(100, fuel + CORRECT_ITEM_FUEL,);
           score += CORRECT_ITEM_SCORE;
+          educationalScore += CORRECT_ITEM_SCORE;
         } else {
           void playOneShot("wrong", wrongSound, 0.3);
           fuel = Math.max(0, fuel - WRONG_ITEM_FUEL,);
+          score -= WRONG_ITEM_SCORE;
         }
 
         /* remove the item */
@@ -813,6 +805,12 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
       }
 
       draw();
+
+      if (gameOver && !resultReported) {
+        resultReported = true;
+
+        onGameOverRef.current({ gameScore: score, resolvedSpawns: [...resolvedSpawns]});
+      }
 
       if (!gameOver) {
         animationFrameId = requestAnimationFrame(gameLoop);
@@ -899,7 +897,11 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
       playerDirectionRef.current = null;
     };
   }, [width, height, game, scoreTextRef, fuelBarRef, playerDirectionRef,
-      preload, playLoop, stopAll,]);
+      preload, playLoop, stopAll]);
+
+  if (!game) {
+    return null;
+  }
 
   return (
     <canvas

@@ -11,3 +11,11 @@ export interface GameMission {
   correctGroup: string;
   wrongGroup: string | null;
 }
+
+export interface GameSpawn {
+  spawnId: string;
+  gameItemId: string;
+  name: string;
+  isCorrect: boolean;
+  signature: string;
+}

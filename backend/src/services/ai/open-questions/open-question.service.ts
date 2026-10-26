@@ -319,6 +319,7 @@ ${sourceText}
     const savedEvaluation =
         await openQuestionRepository.createEvaluation({
         userId,
+        lessonId,
         questionId,
         answer,
         score,

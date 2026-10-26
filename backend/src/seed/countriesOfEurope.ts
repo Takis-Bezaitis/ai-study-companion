@@ -317,6 +317,7 @@ const gameMissions = [
       "Head north and avoid everything coming from the south.",
     correctGroup: "NORTH",
     wrongGroup: "SOUTH",
+    gameType: "ROAD_RACE" as const,
   },
   {
     title: "Mediterranean Sprint",
@@ -324,6 +325,7 @@ const gameMissions = [
       "Race toward the south and avoid items from the north.",
     correctGroup: "SOUTH",
     wrongGroup: "NORTH",
+    gameType: "ROAD_RACE" as const,
   },
   {
     title: "Western Route",
@@ -331,6 +333,7 @@ const gameMissions = [
       "Follow the route west and watch out for items from the east.",
     correctGroup: "WEST",
     wrongGroup: "EAST",
+    gameType: "ROAD_RACE" as const,
   },
   {
     title: "Heading East",
@@ -338,6 +341,7 @@ const gameMissions = [
       "Move east and avoid items coming from the west.",
     correctGroup: "EAST",
     wrongGroup: "WEST",
+    gameType: "ROAD_RACE" as const,
   },
   {
     title: "Central Passage",
@@ -345,6 +349,7 @@ const gameMissions = [
       "Stay in the heart of Europe and avoid items from the south.",
     correctGroup: "CENTRAL",
     wrongGroup: "SOUTH",
+    gameType: "ROAD_RACE" as const,
   },
 ];
 
@@ -396,6 +401,7 @@ async function seedCountriesOfEurope() {
         description: mission.description,
         correctGroup: mission.correctGroup,
         wrongGroup: mission.wrongGroup,
+        gameType: mission.gameType,
       })),
     });
   });

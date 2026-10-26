@@ -12,6 +12,21 @@ datasource db {
   provider = "postgresql"
 }
 
+enum ActivityType {
+  OPEN_QUESTION
+  ROAD_RACE
+}
+
+enum GameType {
+  ROAD_RACE
+}
+
+enum GameSessionStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+}
+
 enum QuestionType {
   MULTIPLE_CHOICE
   TRUE_FALSE
@@ -37,6 +52,8 @@ model User {
   refreshSessions         RefreshSession[]
   openQuestions           OpenQuestion[]
   openQuestionEvaluations OpenQuestionEvaluation[]
+  activityAttempts        ActivityAttempt[]
+  gameSessions            GameSession[]
 }
 
 model Category {
@@ -48,20 +65,22 @@ model Category {
 }
 
 model Lesson {
-  id            String   @id @default(uuid())
-  categoryId    String
-  title         String
-  description   String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                String   @id @default(uuid())
+  categoryId        String
+  title             String
+  description       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  category      Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  chunks        LessonChunk[]
-  progress      UserProgress[]
-  quizzes       Quiz[]
-  gameItems     GameItem[]
-  gameMissions  GameMission[]
-  openQuestions OpenQuestion[]
+  category          Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  chunks            LessonChunk[]
+  progress          UserProgress[]
+  quizzes           Quiz[]
+  gameItems         GameItem[]
+  gameMissions      GameMission[]
+  openQuestions     OpenQuestion[]
+  activityAttempts  ActivityAttempt[]
+  gameSessions      GameSession[]
 
   @@index([categoryId])
 }
@@ -176,36 +195,6 @@ model RefreshSession {
   @@index([expiresAt])
 }
 
-model GameItem {
-  id          String   @id @default(uuid())
-  lessonId    String
-  type        String
-  name        String
-  group       String?
-  metadata    Json?
-  createdAt   DateTime @default(now())
-
-  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-
-  @@index([lessonId])
-  @@index([lessonId, type])
-  @@index([lessonId, type, group])
-}
-
-model GameMission {
-  id                  String   @id @default(uuid())
-  lessonId            String
-  title               String
-  description         String?
-  correctGroup        String
-  wrongGroup          String?
-  createdAt           DateTime @default(now())
-
-  lesson              Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-
-  @@index([lessonId])
-}
-
 model OpenQuestion {
   id                 String   @id @default(uuid())
   userId             String
@@ -226,17 +215,113 @@ model OpenQuestion {
 }
 
 model OpenQuestionEvaluation {
-  id          String   @id @default(uuid())
-  userId      String
-  questionId  String
-  answer      String
-  score       Float
-  feedback    Json
-  createdAt   DateTime @default(now())
+  id              String   @id @default(uuid())
+  userId          String
+  questionId      String
+  answer          String
+  score           Float
+  feedback        Json
+  createdAt       DateTime @default(now())
 
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  question    OpenQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question        OpenQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  activityAttempt ActivityAttempt?
 
   @@index([userId, createdAt])
   @@index([questionId, createdAt])
+}
+
+model ActivityAttempt {
+  id                       String       @id @default(uuid())
+  userId                   String
+  lessonId                 String
+  activityType             ActivityType
+  gameScore                Int          @default(0)
+  educationalScore         Float        @default(0)
+  openQuestionEvaluationId String?      @unique
+  completedAt              DateTime     @default(now())
+
+  user                     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson                   Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  openQuestionEvaluation   OpenQuestionEvaluation? @relation(fields: [openQuestionEvaluationId], references: [id], onDelete: Cascade)
+  gameSessionId            String?      @unique
+  gameSession              GameSession? @relation(fields: [gameSessionId], references: [id], onDelete: SetNull)
+
+  @@index([userId, activityType, completedAt])
+  @@index([lessonId, activityType, completedAt])
+  @@index([activityType, gameScore])
+}
+
+model GameSession {
+  id        String            @id @default(uuid())
+  userId    String
+  lessonId  String
+  gameType  GameType
+  status    GameSessionStatus @default(ACTIVE)
+
+  missionId String
+  itemType  String
+
+  startedAt DateTime          @default(now())
+  endedAt   DateTime?
+  updatedAt DateTime          @updatedAt
+
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson           Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  activityAttempt  ActivityAttempt?
+  spawns           GameSessionSpawn[]
+  mission          GameMission @relation(fields: [missionId], references: [id], onDelete: Restrict)
+
+  @@index([userId, status])
+  @@index([lessonId, gameType, status])
+}
+
+model GameSessionSpawn {
+  id         String    @id @default(uuid())
+  sessionId  String
+  gameItemId String
+  isCorrect  Boolean
+  signature  String
+  spawnedAt  DateTime  @default(now())
+  resolvedAt DateTime?
+  elapsedMs  Int?
+
+  session  GameSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  gameItem GameItem    @relation(fields: [gameItemId], references: [id], onDelete: Restrict)
+
+  @@index([sessionId, resolvedAt])
+  @@index([gameItemId])
+}
+
+model GameItem {
+  id            String   @id @default(uuid())
+  lessonId      String
+  type          String
+  name          String
+  group         String?
+  metadata      Json?
+  createdAt     DateTime @default(now())
+
+  lesson        Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  sessionSpawns GameSessionSpawn[]
+
+  @@index([lessonId])
+  @@index([lessonId, type])
+  @@index([lessonId, type, group])
+}
+
+model GameMission {
+  id                  String   @id @default(uuid())
+  lessonId            String
+  gameType            GameType
+  title               String
+  description         String?
+  correctGroup        String
+  wrongGroup          String?
+  createdAt           DateTime @default(now())
+
+  lesson              Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  sessions            GameSession[]
+
+  @@index([lessonId])
 }

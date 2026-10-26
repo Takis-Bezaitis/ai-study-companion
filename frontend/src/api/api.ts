@@ -19,9 +19,15 @@ export const API = {
     evaluateOpenQuestion: (lessonId: string, questionId: string,) =>
       `${BASE_URL}/api/lessons/${lessonId}/open-questions/${questionId}/evaluate`,
   },
+  
   games: {
-    roadRace: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/games/road-race`,
+    roadRaceMission: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/games/road-race/mission`,
+    startRoadRace: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/games/road-race/start`,
+    nextRoadRaceBatch: (sessionId: string) => `${BASE_URL}/api/games/sessions/${sessionId}/spawns/next`,
     catchItems: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/games/catch-items`,
   },
+
+  completeGameSession: (sessionId: string) => `${BASE_URL}/api/games/sessions/${sessionId}/complete`,
+
   progress: `${BASE_URL}/api/progress`,
 };
