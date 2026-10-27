@@ -1,5 +1,6 @@
-import { Menu } from "lucide-react";
+import { Menu, Trophy } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
+import { useMyTotalScore } from "../../hooks/leaderboards/useLeaderboard";
 import ThemeToggle from "../common/ThemeToggle";
 
 type TopBarProps = {
@@ -8,6 +9,7 @@ type TopBarProps = {
 
 const TopBar = ({ onMenuClick }: TopBarProps) => {
   const { user } = useAuthStore();
+  const { data: score, isPending, isError} = useMyTotalScore();
 
   return (
     <header className="m-3 flex h-14 shrink-0 items-center justify-between rounded-2xl border border-default bg-surface px-4 sm:px-6">
@@ -26,8 +28,40 @@ const TopBar = ({ onMenuClick }: TopBarProps) => {
         </h1>
       </div>
 
-      <div className="flex items-center gap-4">
-        {/* Future Search */}
+      <div className="flex shrink-0 items-center gap-3 sm:gap-4">
+        <div
+          aria-label={
+            isError
+              ? "Total score unavailable"
+              : `Total score: ${score ?? 0}`
+          }
+          title={
+            isError
+              ? "Could not load total score"
+              : "Your total score"
+          }
+          className="flex items-center gap-2 rounded-xl border border-default bg-surface-secondary px-3 py-2"
+        >
+          <Trophy
+            aria-hidden="true"
+            size={18}
+            className="text-accent"
+          />
+
+          <span className="text-sm font-semibold text-primary">
+            {isPending
+              ? "..."
+              : isError
+                ? "—"
+                : score!.toLocaleString("el-GR")}
+          </span>
+
+          <span className="hidden text-xs text-secondary sm:inline">
+            Points
+          </span>
+        </div>
+
+
 
         <ThemeToggle />
       </div>

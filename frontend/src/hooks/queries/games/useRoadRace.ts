@@ -1,5 +1,6 @@
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { myTotalScoreQueryKey } from "../../leaderboards/useLeaderboard";
 
 import {
   getRoadRaceMission,
@@ -43,6 +44,8 @@ export function useNextRoadRaceBatch() {
 
 
 export function useCompleteRoadRace() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: ({
       sessionId,
@@ -51,5 +54,12 @@ export function useCompleteRoadRace() {
       sessionId: string;
       input: RoadRaceCompletionInput;
     }) => completeRoadRaceGame(sessionId, input),
+
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: myTotalScoreQueryKey,
+      });
+    },
+
   });
 }

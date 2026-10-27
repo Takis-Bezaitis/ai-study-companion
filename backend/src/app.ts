@@ -9,6 +9,7 @@ import categoryRoutes from './routes/category.routes.js';
 import lessonRoutes from './routes/lesson.routes.js';
 import aiRoutes from './routes/ai.routes.js';
 import roadRaceRoutes from './routes/game.routes.js';
+import leaderboardRoutes from "./routes/leaderboard.routes.js";
 
 import { errorHandler } from './middleware/errorHandler.js';
 
@@ -32,6 +33,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/lessons', lessonRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api', roadRaceRoutes);
+app.use("/api/leaderboards", leaderboardRoutes);
 
 app.use(errorHandler);
 

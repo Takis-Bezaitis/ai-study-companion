@@ -30,4 +30,14 @@ export const API = {
   completeGameSession: (sessionId: string) => `${BASE_URL}/api/games/sessions/${sessionId}/complete`,
 
   progress: `${BASE_URL}/api/progress`,
+
+  leaderboards: {
+    overall: `${BASE_URL}/api/leaderboards/overall`,
+    myScore: `${BASE_URL}/api/leaderboards/me/score`,
+    lesson: (lessonId: string) => `${BASE_URL}/api/leaderboards/lessons/${lessonId}`,
+    games: `${BASE_URL}/api/leaderboards/games`,
+    game: (gameType: string) => `${BASE_URL}/api/leaderboards/games/${gameType}`,
+    knowledgeCheck: `${BASE_URL}/api/leaderboards/knowledge-check`,
+  },
+
 };
