@@ -1,0 +1,277 @@
+import { GoogleGenAI } from '@google/genai';
+
+import { env } from '../../config/env.js';
+
+import type {
+  AIProvider,
+  ChatHistoryMessage,
+  GenerateEmbeddingInput,
+  GenerateEmbeddingsInput,
+  GenerateTextInput,
+  RewriteQueryInput,
+} from '../types/ai.types.js';
+
+export class GeminiProvider implements AIProvider {
+  private readonly client: GoogleGenAI;
+
+  private readonly maxRetries = 1;
+  private readonly initialRetryDelayMs = 1000;
+
+  constructor() {
+    this.client = new GoogleGenAI({
+      apiKey: env.GEMINI_API_KEY,
+    });
+  }
+
+  async generateText(
+    input: GenerateTextInput,
+  ): Promise<string> {
+    return this.withRetry(
+      async () => {
+        const interaction =
+          await this.client.interactions.create({
+            model: env.GEMINI_MODEL,
+            input: input.prompt,
+          });
+
+        return interaction.output_text ?? '';
+      },
+    );
+  }
+
+  async *streamText(
+    input: GenerateTextInput,
+  ): AsyncIterable<string> {
+    const startedAt = performance.now();
+
+    console.log('[AI TIMING] streamText started');
+
+    const stream =
+      await this.client.interactions.create({
+        model: env.GEMINI_MODEL,
+        input: input.prompt,
+        stream: true,
+      });
+
+    console.log(
+      `[AI TIMING] stream connection: ${Math.round(
+        performance.now() - startedAt,
+      )} ms`,
+    );      
+
+    let isFirstDelta = true;
+
+    for await (const event of stream) {
+      if (event.event_type === 'error') {
+        throw new Error(
+          event.error?.message ??
+            'Gemini streaming request failed.',
+        );
+      }
+
+      console.log(
+        '[GEMINI STREAM EVENT]',
+        JSON.stringify(event),
+      );
+
+      if (
+        event.event_type === 'step.delta' &&
+        event.delta.type === 'text'
+      ) {
+
+        if (isFirstDelta) {
+          console.log(
+            `[AI TIMING] time to first token: ${Math.round(
+              performance.now() - startedAt,
+            )} ms`,
+          );
+
+          isFirstDelta = false;
+        }
+
+        yield event.delta.text;
+      }
+    }
+
+    console.log(
+      `[AI TIMING] stream complete: ${Math.round(
+        performance.now() - startedAt,
+      )} ms`,
+    );
+
+  }
+
+  async rewriteQuery(
+    input: RewriteQueryInput,
+  ): Promise<string> {
+    return this.withRetry(
+      async () => {
+        const history = input.history
+          .map(
+            (message) =>
+              `${message.role}: ${message.content}`,
+          )
+          .join('\n');
+
+        const prompt = `
+  You are a query rewriting assistant for a lesson-based AI study application.
+
+  Rewrite the user's latest question into a standalone question that can be understood without the conversation history.
+
+  Use the conversation history only to resolve references or ambiguities that depend on the previous conversation.
+  Examples:
+  - "it", "they", "this", "that"
+  - "this country", "that event", "the previous topic"
+  - references to a person, place, concept, event, or object mentioned earlier
+
+  Rules:
+  - Preserve the user's original intent.
+  - Do not answer the question.
+  - Do not add information that is not present in the conversation.
+  - If the question is already standalone, return it unchanged.
+  - Return only the rewritten question.
+
+  Conversation history:
+  ${history || '(No previous conversation)'}
+
+  Latest user question:
+  ${input.question}
+  `.trim();
+
+        const interaction =
+          await this.client.interactions.create({
+            model: env.GEMINI_MODEL,
+            input: prompt,
+          });
+
+        return (
+          interaction.output_text?.trim() ??
+          input.question
+        );
+      },
+    );
+  }
+
+  async generateEmbedding(
+    input: GenerateEmbeddingInput,
+  ): Promise<number[]> {
+    return this.withRetry(
+      async () => {
+        const response =
+          await this.client.models.embedContent({
+            model: env.GEMINI_EMBEDDING_MODEL,
+            contents: input.text,
+            config: {
+              taskType: input.task,
+              outputDimensionality:
+                env.GEMINI_EMBEDDING_DIMENSIONS,
+            },
+          });
+
+        return response.embeddings?.[0]?.values ?? [];
+      },
+    );
+  }
+
+  async generateEmbeddings(
+    input: GenerateEmbeddingsInput,
+  ): Promise<number[][]> {
+    return this.withRetry(
+      async () => {
+        const response =
+          await this.client.models.embedContent({
+            model: env.GEMINI_EMBEDDING_MODEL,
+            contents: input.texts,
+            config: {
+              taskType: input.task,
+              outputDimensionality:
+                env.GEMINI_EMBEDDING_DIMENSIONS,
+            },
+          });
+
+        return (
+          response.embeddings?.map(
+            (embedding) =>
+              embedding.values ?? [],
+          ) ?? []
+        );
+      },
+    );
+  }
+
+  private async withRetry<T>(
+    operation: () => Promise<T>,
+  ): Promise<T> {
+    for (
+      let attempt = 0;
+      attempt <= this.maxRetries;
+      attempt += 1
+    ) {
+      try {
+        return await operation();
+      } catch (error) {
+        if (
+          !this.isRateLimitError(error) ||
+          attempt === this.maxRetries
+        ) {
+          throw error;
+        }
+
+        const delay =
+          this.initialRetryDelayMs *
+          2 ** attempt;
+
+        await this.sleep(delay);
+      }
+    }
+
+    throw new Error(
+      'Retry operation failed unexpectedly.',
+    );
+  }
+
+  private isRateLimitError(error: unknown): boolean {
+    if (
+      typeof error === 'object' &&
+      error !== null
+    ) {
+      const candidate = error as {
+        status?: number;
+        code?: number;
+        message?: string;
+      };
+
+      if (
+        candidate.status === 429 ||
+        candidate.status === 503 ||
+        candidate.code === 429 ||
+        candidate.code === 503
+      ) {
+        return true;
+      }
+
+      if (
+        candidate.message?.includes('429') ||
+        candidate.message?.includes('503') ||
+        candidate.message
+          ?.toLowerCase()
+          .includes('resource exhausted') ||
+        candidate.message
+          ?.toLowerCase()
+          .includes('service unavailable')
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private sleep(
+    delayMs: number,
+  ): Promise<void> {
+    return new Promise((resolve) => {
+      setTimeout(resolve, delayMs);
+    });
+  }
+}

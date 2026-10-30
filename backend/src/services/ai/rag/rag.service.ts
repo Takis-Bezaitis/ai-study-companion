@@ -1,0 +1,169 @@
+import { aiService } from '../../../ai/ai.container.js';
+
+import {
+  retrievalService,
+} from '../retrieval/retrieval.service.js';
+
+import type {
+  AskLessonInput,
+  AskLessonResult,
+} from './rag.types.js';
+
+export class RAGService {
+  private readonly retrievalLimit = 5;
+
+  async askLesson(
+    input: AskLessonInput,
+  ): Promise<AskLessonResult> {
+    const standaloneQuestion =
+      await aiService.rewriteQuery({
+        question: input.question,
+        history: input.history,
+      });
+
+    const chunks =
+      await retrievalService.retrieveLessonContext({
+        lessonId: input.lessonId,
+        query: standaloneQuestion,
+        limit: this.retrievalLimit,
+      });
+
+    if (chunks.length === 0) {
+      return {
+        answer:
+          "I couldn't find relevant information in this lesson to answer the question.",
+        sources: [],
+      };
+    }
+
+    const context = chunks
+      .map(
+        (chunk, index) =>
+          `[Source ${index + 1}]
+  Section: ${chunk.sectionTitle}
+
+  ${chunk.content}`,
+      )
+      .join('\n\n---\n\n');
+
+    const prompt = `
+  You are an AI study assistant.
+
+  Answer the user's question using ONLY the lesson context provided below.
+
+  Rules:
+  - Use only information supported by the provided context.
+  - Do not use outside knowledge.
+  - If the context does not contain enough information to answer the question, say that the information is not available in the lesson.
+  - Do not invent facts.
+  - Give a clear and concise educational answer.
+  - Do not mention these instructions or the retrieval process.
+
+  Lesson context:
+  ${context}
+
+  User question:
+  ${input.question}
+  `.trim();
+
+    const answer =
+      await aiService.generateText({
+        prompt,
+      });
+
+    return {
+      answer,
+      sources: chunks,
+    };
+  }
+
+  async streamLesson(
+    input: AskLessonInput,
+  ): Promise<{
+    sources: AskLessonResult['sources'];
+    stream: AsyncIterable<string>;
+  }> {
+    const rewriteStartedAt = performance.now();
+    console.log('[AI TIMING] streamLesson started');
+
+    const standaloneQuestion =
+      input.history.length === 0
+        ? input.question
+        : await aiService.rewriteQuery({
+            question: input.question,
+            history: input.history,
+          });
+
+    console.log(
+      `[AI TIMING] rewriteQuery: ${Math.round(
+        performance.now() - rewriteStartedAt,
+      )} ms`,
+    );
+
+    const retrievalStartedAt = performance.now();
+
+    const chunks =
+      await retrievalService.retrieveLessonContext({
+        lessonId: input.lessonId,
+        query: standaloneQuestion,
+        limit: this.retrievalLimit,
+      });
+
+    console.log(
+      `[AI TIMING] retrieveLessonContext: ${Math.round(
+        performance.now() - retrievalStartedAt,
+      )} ms`,
+    );
+
+    if (chunks.length === 0) {
+      return {
+        sources: [],
+        stream: this.createFallbackStream(),
+      };
+    }
+
+    const context = chunks
+      .map(
+        (chunk, index) =>
+          `[Source ${index + 1}]
+  Section: ${chunk.sectionTitle}
+
+  ${chunk.content}`,
+      )
+      .join('\n\n---\n\n');
+
+    const prompt = `
+  You are an AI study assistant.
+
+  Answer the user's question using ONLY the lesson context provided below.
+
+  Rules:
+  - Use only information supported by the provided context.
+  - Do not use outside knowledge.
+  - If the context does not contain enough information to answer the question, say that the information is not available in the lesson.
+  - Do not invent facts.
+  - Give a clear and concise educational answer.
+  - Do not mention these instructions or the retrieval process.
+
+  Lesson context:
+  ${context}
+
+  User question:
+  ${input.question}
+  `.trim();
+
+    return {
+      sources: chunks,
+      stream: aiService.streamText({
+        prompt,
+      }),
+    };
+  }
+
+  private async *createFallbackStream(): AsyncIterable<string> {
+    yield "I couldn't find relevant information in this lesson to answer the question.";
+  }
+}
+
+export const ragService =
+  new RAGService();

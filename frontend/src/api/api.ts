@@ -10,6 +10,34 @@ export const API = {
   },
 
   categories: `${BASE_URL}/api/categories`,
-  lessons: `${BASE_URL}/api/lessons`,
+  lessons: {
+    base: `${BASE_URL}/api/lessons`,
+    ask: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/ask`,
+    stream: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/ask/stream`,
+    chunks: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/chunks`,
+    openQuestions: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/open-questions`,
+    evaluateOpenQuestion: (lessonId: string, questionId: string,) =>
+      `${BASE_URL}/api/lessons/${lessonId}/open-questions/${questionId}/evaluate`,
+  },
+  
+  games: {
+    roadRaceMission: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/games/road-race/mission`,
+    startRoadRace: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/games/road-race/start`,
+    nextRoadRaceBatch: (sessionId: string) => `${BASE_URL}/api/games/sessions/${sessionId}/spawns/next`,
+    catchItems: (lessonId: string) => `${BASE_URL}/api/lessons/${lessonId}/games/catch-items`,
+  },
+
+  completeGameSession: (sessionId: string) => `${BASE_URL}/api/games/sessions/${sessionId}/complete`,
+
   progress: `${BASE_URL}/api/progress`,
+
+  leaderboards: {
+    overall: `${BASE_URL}/api/leaderboards/overall`,
+    myScore: `${BASE_URL}/api/leaderboards/me/score`,
+    lesson: (lessonId: string) => `${BASE_URL}/api/leaderboards/lessons/${lessonId}`,
+    games: `${BASE_URL}/api/leaderboards/games`,
+    game: (gameType: string) => `${BASE_URL}/api/leaderboards/games/${gameType}`,
+    knowledgeCheck: `${BASE_URL}/api/leaderboards/knowledge-check`,
+  },
+
 };

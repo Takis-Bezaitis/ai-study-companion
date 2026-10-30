@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getLesson } from "../../api/lessons";
+import { getLesson } from "../../../api/lessons";
 
 export const lessonQueryKey = (lessonId: string) =>
   ["lesson", lessonId] as const;

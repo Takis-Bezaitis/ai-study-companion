@@ -1,24 +1,133 @@
+import { useEffect, useState } from "react";
+
 import AskAI from "./AskAI";
 import AIChat from "./AIChat";
 
+import { useAskLesson } from "../../hooks/ai/useAskLesson";
+import { useAiMessageStore, type AiMessage } from "../../store/aiMessageStore";
+
+const EMPTY_MESSAGES: AiMessage[] = [];
+
 type AIChatPanelProps = {
   onClose: () => void;
+  lessonId: string;
 };
 
-const AIChatPanel = ({ onClose }: AIChatPanelProps) => {
-  return (
-    <section className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl 
-      border border-default bg-surface shadow-xl h-full">
-      {/* Chat messages */}
-      <AIChat onClose={onClose}/>
+const AIChatPanel = ({ onClose, lessonId, }: AIChatPanelProps) => {
+  const [hasStartedStreaming, setHasStartedStreaming] = useState(false);
 
-      {/* Ask AI */}
+  const messages = useAiMessageStore(
+    (state) =>
+      state.messagesByLesson[lessonId] ??
+      EMPTY_MESSAGES,
+  );
+
+  const appendMessageContent = useAiMessageStore(
+    (state) => state.appendMessageContent,
+  );
+
+  const addMessage = useAiMessageStore(
+    (state) => state.addMessage,
+  );
+
+  const askLessonMutation = useAskLesson();
+
+  const submitQuestion = (question: string, ) => {
+    const trimmedQuestion = question.trim();
+
+    if (
+      !trimmedQuestion ||
+      askLessonMutation.isPending
+    ) {
+      return;
+    }
+
+    setHasStartedStreaming(false);
+
+    const history = messages
+      .slice(-20)
+      .filter(
+        (message) =>
+          message.content.trim().length > 0,
+      )
+      .map((message) => ({
+        role: message.role,
+        content: message.content,
+      }));
+
+    addMessage(lessonId, {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: trimmedQuestion,
+    });
+
+    const assistantMessageId = crypto.randomUUID();
+
+    addMessage(lessonId, {
+      id: assistantMessageId,
+      role: "assistant",
+      content: "",
+    });
+
+    askLessonMutation.mutate({
+      lessonId,
+      question: trimmedQuestion,
+      history,
+      onDelta: (text) => {
+        console.log("[STREAM UPDATE]", {
+          time: performance.now().toFixed(1),
+          chunkLength: text.length,
+        });
+        setHasStartedStreaming(true);
+
+        appendMessageContent(
+          lessonId,
+          assistantMessageId,
+          text,
+        );
+      },
+    });
+  };
+
+  useEffect(() => {
+    const lastAssistantMessage = [...messages]
+      .reverse()
+      .find((message) => message.role === "assistant");
+
+    if (!lastAssistantMessage?.content) return;
+
+    const length = lastAssistantMessage.content.length;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        console.log("[UI PAINT CHECK]", {
+          time: Math.round(performance.now()),
+          length,
+        });
+      });
+    });
+  }, [messages]);
+
+  return (
+    <section
+      className="flex h-full min-h-0 flex-1 flex-col overflow-hidden 
+      rounded-2xl border border-default bg-surface shadow-xl"
+    >
+      <AIChat
+        onClose={onClose}
+        messages={messages}
+        isLoading={askLessonMutation.isPending && !hasStartedStreaming}
+        error={askLessonMutation.error}
+      />
+
       <div className="relative shrink-0 border-t border-default p-3">
-        <AskAI />
+        <AskAI
+          onSubmit={submitQuestion}
+          disabled={askLessonMutation.isPending}
+        />
       </div>
     </section>
   );
 };
 
 export default AIChatPanel;
-

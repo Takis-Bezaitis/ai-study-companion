@@ -1,103 +1,217 @@
-import { BookOpen } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useLessonProgressStore } from "../../store/lessonProgressStore";
 
-import type { Lesson } from "../../types/custom";
+import {
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import ReactMarkdown from "react-markdown";
+
+import { useLessonChunks } from "../../hooks/queries/lessons/useLessonChunks";
 
 type LessonContentProps = {
-  lesson: Lesson;
+  lessonId: string;
 };
 
-const LessonContent = ({ lesson }: LessonContentProps) => {
+const LessonContent = ({
+  lessonId,
+}: LessonContentProps) => {
+  const currentPage = useLessonProgressStore(
+    (state) => state.pages[lessonId] ?? 0
+  );
+
+  const setPage = useLessonProgressStore(
+    (state) => state.setPage
+  );
+
+  const [pageInput, setPageInput] = useState("");
+
+  const articleRef = useRef<HTMLElement>(null);
+
+  const {
+    data: chunks,
+    isLoading,
+    isError,
+    error,
+  } = useLessonChunks(lessonId);
+
+  const totalPages = chunks?.length ?? 0;
+  const currentChunk = chunks?.[currentPage];
+
+  const isFirstPage = currentPage === 0;
+  const isLastPage = currentPage === totalPages - 1;
+
+  const [mainSection, subsectionTitle] = currentChunk?.sectionTitle.split(" — ") ?? [];
+
+  const handlePageInput = () => {
+    const page = Number(pageInput);
+
+    if (
+      Number.isInteger(page) &&
+      page >= 1 &&
+      page <= totalPages
+    ) {
+      setPage(lessonId, page - 1);
+      setPageInput("");
+    }
+  };
+
+
+  useEffect(() => {
+    articleRef.current?.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [currentPage]);
+
   return (
     <section
-      aria-labelledby="lesson-content-heading"
+      aria-label="Lesson content"
       className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-default bg-surface"
     >
-      <header className="flex shrink-0 items-center gap-3 border-b border-default p-5 sm:p-6">
+      <header className="flex shrink-0 items-center justify-between border-b border-default p-5 sm:p-6">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-color">
-          <BookOpen aria-hidden="true" size={20} />
+          <BookOpen
+            aria-hidden="true"
+            size={20}
+          />
         </div>
 
-        <h2
-          id="lesson-content-heading"
-          className="text-xl font-bold text-primary"
-        >
-          Lesson
-        </h2>
+        {totalPages > 0 && (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              disabled={isFirstPage}
+              aria-label="Previous page"
+              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-secondary transition-colors hover:bg-surface-secondary-hover hover:text-primary disabled:cursor-default disabled:opacity-40"
+              onClick={() => setPage(lessonId, currentPage - 1)}
+            >
+              <ChevronLeft
+                aria-hidden="true"
+                size={20}
+              />
+            </button>
+
+            <span className="min-w-14 text-center text-sm font-medium text-secondary">
+              {currentPage + 1} / {totalPages}
+            </span>
+
+            <button
+              type="button"
+              disabled={isLastPage}
+              aria-label="Next page"
+              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-secondary transition-colors hover:bg-surface-secondary-hover hover:text-primary disabled:cursor-default disabled:opacity-40"
+              onClick={() => setPage(lessonId, currentPage + 1)}
+            >
+              <ChevronRight
+                aria-hidden="true"
+                size={20}
+              />
+            </button>
+
+            <div className="flex items-center gap-2 text-sm text-secondary">
+              <label htmlFor="page-input">
+                Go to:
+              </label>
+
+              <input
+                id="page-input"
+                type="number"
+                min={1}
+                max={totalPages}
+                value={pageInput}
+                onChange={(e) =>
+                  setPageInput(e.target.value)
+                }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handlePageInput();
+                  }
+                }}
+                className="h-8 w-12 rounded-lg border border-default bg-surface px-2 text-center text-sm text-primary outline-none focus:border-primary-color"
+                aria-label="Page number"
+              />
+
+              <button
+                type="button"
+                onClick={handlePageInput}
+                className="cursor-pointer h-8 rounded-lg bg-primary px-3 text-sm font-medium text-white transition-colors hover:opacity-90"
+              >
+                Go
+              </button>
+            </div>
+
+          </div>
+        )}
       </header>
 
-      <article className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-8">
-        <div className="max-w-4xl space-y-6 text-sm leading-7 text-secondary sm:text-base">
-          <div>
-            <h1 className="text-2xl font-bold text-primary sm:text-3xl">
-              {lesson.title}
-            </h1>
+      <article ref={articleRef} className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-8">
+        {isLoading && (
+          <p className="text-secondary">
+            Loading lesson content...
+          </p>
+        )}
 
-            <p className="mt-4">
-              The Solar System consists of the Sun and all the objects
-              that orbit it. It includes planets, moons, asteroids,
-              comets, and many other smaller objects.
-            </p>
+        {isError && (
+          <p className="text-secondary">
+            {error instanceof Error
+              ? error.message
+              : "Failed to load lesson content."}
+          </p>
+        )}
+
+        {currentChunk && (
+          <div className="max-w-4xl text-sm leading-7 text-secondary sm:text-base">
+            <section>
+              <h2 className="text-2xl font-bold text-primary">
+                {mainSection}
+                <br />
+                <br />
+              </h2>
+
+              <h3 className="text-xl font-semibold text-primary">
+                {subsectionTitle}
+              </h3>
+
+              <div className="mt-3">
+                <ReactMarkdown
+                  components={{
+                    ul: ({ children }) => (
+                      <ul className="my-3 list-disc space-y-1 pl-6">
+                        {children}
+                      </ul>
+                    ),
+                    ol: ({ children }) => (
+                      <ol className="my-3 list-decimal space-y-1 pl-6">
+                        {children}
+                      </ol>
+                    ),
+                    li: ({ children }) => (
+                      <li className="pl-1">
+                        {children}
+                      </li>
+                    ),
+                    strong: ({ children }) => (
+                      <strong className="font-semibold text-primary">
+                        {children}
+                      </strong>
+                    ),
+                    h3: ({ children }) => (
+                      <h3 className="mt-6 text-lg font-semibold text-primary">
+                        {children}
+                      </h3>
+                    ),
+                  }}
+                >
+                  {currentChunk.content}
+                </ReactMarkdown>
+              </div>
+            </section>
           </div>
+        )}
 
-          <div>
-            <h2 className="text-xl font-bold text-primary">
-              The Inner Planets
-            </h2>
-
-            <p className="mt-3">
-              The four inner planets are Mercury, Venus, Earth, and
-              Mars. They are also known as terrestrial planets because
-              they have solid, rocky surfaces.
-            </p>
-
-            <ul className="mt-4 list-disc space-y-2 pl-6">
-              <li>
-                <strong className="text-primary">Mercury</strong> is the
-                closest planet to the Sun.
-              </li>
-
-              <li>
-                <strong className="text-primary">Venus</strong> has the
-                hottest surface of any planet in the Solar System.
-              </li>
-
-              <li>
-                <strong className="text-primary">Earth</strong> is the
-                only planet currently known to support life.
-              </li>
-
-              <li>
-                <strong className="text-primary">Mars</strong> is often
-                called the Red Planet because of its reddish surface.
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-bold text-primary">
-              The Outer Planets
-            </h2>
-
-            <p className="mt-3">
-              Jupiter, Saturn, Uranus, and Neptune are the outer
-              planets. They are much larger than the terrestrial
-              planets and are primarily composed of gases or ice.
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-bold text-primary">
-              Why is the Sun important?
-            </h2>
-
-            <p className="mt-3">
-              The Sun is the star at the center of our Solar System.
-              Its gravity keeps the planets in their orbits, while its
-              energy provides the light and heat necessary for life on
-              Earth.
-            </p>
-          </div>
-        </div>
       </article>
     </section>
   );

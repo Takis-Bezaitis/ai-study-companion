@@ -1,3 +1,7 @@
+export type ApiResponse<T> = 
+  | { data: T }
+  | { error: string };
+
 export interface User {
     id: string;
     email: string;
@@ -24,6 +28,10 @@ export interface Lesson {
   category: LessonCategory;
 }
 
-export type ApiResponse<T> = 
-  | { data: T }
-  | { error: string };
+export type LessonChunk = {
+  id: string;
+  content: string;
+  sectionTitle: string;
+  chunkIndex: number;
+};
+

@@ -85,3 +85,22 @@ export async function getLesson(lessonId: string) {
 
   return lesson;
 }
+
+export async function getLessonChunks(
+  lessonId: string,
+) {
+  return prisma.lessonChunk.findMany({
+    where: {
+      lessonId,
+    },
+    orderBy: {
+      chunkIndex: 'asc',
+    },
+    select: {
+      id: true,
+      content: true,
+      sectionTitle: true,
+      chunkIndex: true,
+    },
+  });
+}

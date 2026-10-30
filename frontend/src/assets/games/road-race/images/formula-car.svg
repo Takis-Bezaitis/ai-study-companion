@@ -1,0 +1,139 @@
+<svg
+  width="80"
+  height="140"
+  viewBox="0 0 80 140"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- PLAYER CAR - retro top-down silhouette -->
+
+  <!-- Front / small tires -->
+  <rect x="13" y="27" width="10" height="22" fill="#353535"/>
+  <rect x="57" y="27" width="10" height="22" fill="#353535"/>
+
+  <!-- Front tire highlights -->
+  <rect x="15" y="30" width="4" height="16" fill="#686868"/>
+  <rect x="61" y="30" width="4" height="16" fill="#686868"/>
+
+  <!-- Main body -->
+  <path
+    d="
+      M31 7
+      L49 7
+      L52 18
+      L54 35
+      L55 61
+      L58 83
+      L64 96
+      L58 113
+      L51 125
+      L29 125
+      L22 113
+      L16 96
+      L22 83
+      L25 61
+      L26 35
+      L28 18
+      Z
+    "
+    fill="#c92732"
+  />
+
+  <!-- Dark side sections -->
+  <path
+    d="
+      M26 36
+      L32 32
+      L32 82
+      L27 98
+      L21 94
+      L23 82
+      L25 60
+      Z
+    "
+    fill="#801923"
+  />
+
+  <path
+    d="
+      M54 36
+      L48 32
+      L48 82
+      L53 98
+      L59 94
+      L57 82
+      L55 60
+      Z
+    "
+    fill="#801923"
+  />
+
+  <!-- Nose -->
+  <path
+    d="
+      M32 7
+      L48 7
+      L51 19
+      L29 19
+      Z
+    "
+    fill="#e23a43"
+  />
+
+  <rect x="35" y="8" width="10" height="4" fill="#f05b61"/>
+
+  <!-- Cockpit -->
+  <path
+    d="
+      M31 25
+      L49 25
+      L51 43
+      L47 57
+      L33 57
+      L29 43
+      Z
+    "
+    fill="#17191d"
+  />
+
+  <!-- Cockpit glass -->
+  <path
+    d="
+      M34 28
+      L46 28
+      L48 41
+      L45 50
+      L35 50
+      L32 41
+      Z
+    "
+    fill="#31566b"
+  />
+
+  <!-- Driver -->
+  <rect x="35" y="33" width="10" height="11" fill="#eee9d5"/>
+  <rect x="33" y="37" width="14" height="5" fill="#eee9d5"/>
+  <rect x="35" y="39" width="10" height="3" fill="#252525"/>
+
+  <!-- Center stripe -->
+  <rect x="36" y="57" width="8" height="63" fill="#d4a91e"/>
+  <rect x="39" y="57" width="3" height="63" fill="#ffe36b"/>
+
+  <!-- Rear tires - deliberately wider -->
+  <rect x="4" y="84" width="17" height="34" fill="#353535"/>
+  <rect x="59" y="84" width="17" height="34" fill="#353535"/>
+
+  <!-- Rear tire highlights -->
+  <rect x="7" y="89" width="5" height="23" fill="#686868"/>
+  <rect x="68" y="89" width="5" height="23" fill="#686868"/>
+
+  <!-- Wide rear axle/body -->
+  <rect x="18" y="91" width="44" height="10" fill="#a71e28"/>
+
+  <!-- Rear wing -->
+  <rect x="14" y="101" width="52" height="7" fill="#292929"/>
+  <rect x="20" y="101" width="40" height="3" fill="#696969"/>
+
+  <!-- Rear center -->
+  <rect x="27" y="108" width="26" height="13" fill="#9c1b24"/>
+  <rect x="34" y="108" width="12" height="4" fill="#d42a34"/>
+</svg>

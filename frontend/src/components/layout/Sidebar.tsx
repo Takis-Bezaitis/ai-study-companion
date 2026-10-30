@@ -2,19 +2,33 @@ import { NavLink } from "react-router";
 import { useAuthStore } from "../../store/authStore";
 import { mainMenu, logoutMenuItem } from "../../config/menu";
 
+import { useQueryClient } from "@tanstack/react-query";
+import { API } from "../../api/api";
+
 type SidebarProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+  const queryClient = useQueryClient();
   const { user, logout } = useAuthStore();
 
   const avatarLetter = user?.name?.trim().charAt(0).toUpperCase() || "?";
-
-  const handleLogout = () => {
-    logout();
-    onClose();
+  
+  const handleLogout = async () => {
+    try {
+      await fetch(API.auth.logout, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout request failed:", error);
+    } finally {
+      logout();
+      queryClient.clear();
+      onClose();
+    }
   };
 
   return (
@@ -69,7 +83,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           >
             <div
               aria-hidden="true"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-button"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-2xl font-semibold text-button"
             >
               {avatarLetter}
             </div>

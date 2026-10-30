@@ -1,61 +1,23 @@
+import { Link } from "react-router";
+import type { Lesson } from "../../types/custom";
+
 import {
   ArrowRight,
-  Brain,
-  CarFront,
-  CircleHelp,
-  Gamepad2,
   MessageCircle,
   X,
 } from "lucide-react";
-import { Link } from "react-router";
+
+import { getLessonActivities } from "./lessonActivities";
 
 type LessonActionsDrawerProps = {
   open: boolean;
-  lessonId: string;
+  lesson: Lesson;
   onClose: () => void;
   onAskAI: () => void;
 };
 
-const LessonActionsDrawer = ({
-  lessonId,
-  open,
-  onClose,
-  onAskAI,
-}: LessonActionsDrawerProps) => {
-  const activities = [
-    {
-      title: "Quiz",
-      description: "Test your knowledge.",
-      icon: Brain,
-      href: `/lessons/${lessonId}/quiz`,
-      accent: "bg-primary-soft text-primary-color",
-      action: "Start Quiz",
-    },
-    {
-      title: "Question",
-      description: "Answer an AI-generated question.",
-      icon: CircleHelp,
-      href: `/lessons/${lessonId}`,
-      accent: "bg-primary-soft text-primary-color",
-      action: "Try Question",
-    },
-    {
-      title: "Catch Items",
-      description: "Learn through an arcade challenge.",
-      icon: Gamepad2,
-      href: `/lessons/${lessonId}/games`,
-      accent: "bg-accent-soft text-accent",
-      action: "Play Game",
-    },
-    {
-      title: "Road Race",
-      description: "Race through lesson questions.",
-      icon: CarFront,
-      href: `/lessons/${lessonId}/games`,
-      accent: "bg-accent-soft text-accent",
-      action: "Play Game",
-    },
-  ];
+const LessonActionsDrawer = ({lesson, open, onClose, onAskAI}: LessonActionsDrawerProps) => {
+  const activities = getLessonActivities(lesson.id);
 
   return (
     <>

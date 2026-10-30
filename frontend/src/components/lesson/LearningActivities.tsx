@@ -1,56 +1,20 @@
+import { Link } from "react-router";
+import type { Lesson } from "../../types/custom";
+
 import {
   ArrowRight,
-  Brain,
-  CarFront,
-  CircleHelp,
-  Gamepad2,
   MessageCircle,
 } from "lucide-react";
-import { Link } from "react-router";
+
+import { getLessonActivities } from "./lessonActivities";
 
 type LearningActivitiesProps = {
-  lessonId: string;
+  lesson: Lesson;
   onAskAI: () => void;
 };
 
-const LearningActivities = ({
-  lessonId,
-  onAskAI,
-}: LearningActivitiesProps) => {
-  const activities = [
-    {
-      title: "Quiz",
-      description: "Test your knowledge.",
-      icon: Brain,
-      href: `/lessons/${lessonId}/quiz`,
-      accent: "bg-primary-soft text-primary-color",
-      action: "Start Quiz",
-    },
-    {
-      title: "Question",
-      description: "Answer an AI-generated question.",
-      icon: CircleHelp,
-      href: `/lessons/${lessonId}`,
-      accent: "bg-primary-soft text-primary-color",
-      action: "Try Question",
-    },
-    {
-      title: "Catch Items",
-      description: "Learn through an arcade challenge.",
-      icon: Gamepad2,
-      href: `/lessons/${lessonId}/games`,
-      accent: "bg-accent-soft text-accent",
-      action: "Play Game",
-    },
-    {
-      title: "Road Race",
-      description: "Race through lesson questions.",
-      icon: CarFront,
-      href: `/lessons/${lessonId}/games`,
-      accent: "bg-accent-soft text-accent",
-      action: "Play Game",
-    },
-  ];
+const LearningActivities = ({lesson, onAskAI}: LearningActivitiesProps) => {
+  const activities = getLessonActivities(lesson.id);
 
   return (
     <section aria-labelledby="activities-heading" className="flex flex-col items-center">
