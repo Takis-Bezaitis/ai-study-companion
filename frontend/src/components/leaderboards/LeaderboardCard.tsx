@@ -29,7 +29,7 @@ const LeaderboardCard = ({
 }: LeaderboardCardProps) => {
   return (
     <section className="flex h-full min-w-0 flex-col rounded-2xl border border-default bg-surface p-4">
-      <h3 className="mb-4 truncate text-base font-semibold text-primary">
+      <h3 className="mb-4 shrink-0 truncate text-base font-semibold text-primary">
         {title}
       </h3>
 

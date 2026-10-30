@@ -91,6 +91,11 @@ export async function completeRoadRaceGame(
   const body = roadRaceCompleteBodySchema.safeParse(req.body);
 
   if (!params.success || !body.success) {
+    console.error('Invalid game completion parameters:', {
+      params: params.success ? null : params.error.issues,
+      body: body.success ? null : body.error.issues,
+    });
+
     return res.status(400).json({
       error: 'Invalid game completion parameters',
     });

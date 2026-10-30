@@ -4,6 +4,7 @@ import useGameAudio from "../../../hooks/games/useGameAudio";
 
 import type { RoadRaceGame } from "../../../types/games/roadRace.types";
 import type { GameSprite } from "../../../types/games/roadRace.types";
+import type { GameSpawn } from "../../../types/games/game.types";
 
 import formulaCarUrl from "../../../assets/games/road-race/images/formula-car.svg";
 import enemyCarUrl from "../../../assets/games/road-race/images/formula-enemy-car.svg";
@@ -35,6 +36,7 @@ type RoadRaceCanvasProps = {
       collected: boolean;
     }[];
   }) => void;
+  onFetchNextBatch: () => Promise<GameSpawn[]>;
 };
 
 type RoadStrip = {
@@ -179,12 +181,15 @@ const getSpawnX = (canvas: HTMLCanvasElement, road: RoadStrip[], spawnY: number,
   return minX + Math.random() * (maxX - minX);
 };
 
-const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDirectionRef, onGameOver}: RoadRaceCanvasProps) => {
+const RoadRaceCanvas = ({width, height, game, scoreTextRef, 
+  fuelBarRef, playerDirectionRef, onGameOver, onFetchNextBatch}: RoadRaceCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const {preload, playLoop, playOneShot, stop, stopAll, } = useGameAudio();
 
   const onGameOverRef = useRef(onGameOver);
   onGameOverRef.current = onGameOver;
+  const onFetchNextBatchRef = useRef(onFetchNextBatch);
+  onFetchNextBatchRef.current = onFetchNextBatch;
 
   useEffect(() => {
     let score = 0;
@@ -251,9 +256,36 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
       }
     >();
     
-    const itemPool = shuffle(game?.items ?? []);
+    const itemPool = shuffle([...(game?.items ?? [])]);
     let nextItemIndex = 0;
     let itemSpawnTimer = 0;
+    let isFetchingBatch = false;
+
+    const fetchNextBatch = async () => {
+      if (!isActive || isFetchingBatch) {
+        return;
+      }
+
+      isFetchingBatch = true;
+
+      try {
+        const batch = await onFetchNextBatchRef.current();
+
+        if (!isActive) {
+          return;
+        }
+
+        if (Array.isArray(batch) && batch.length > 0) {
+          itemPool.push(...shuffle(batch));
+        } else {
+          console.error("Invalid Road Race batch response:", batch);
+        }
+      } catch (error) {
+        console.error("Failed to fetch next Road Race batch:", error);
+      } finally {
+        isFetchingBatch = false;
+      }
+    };
 
     const resolvedSpawns: {
       spawnId: string;
@@ -322,16 +354,13 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
     };
 
     const spawnRoadItem = () => {
-      if (itemPool.length === 0) {
+      if (nextItemIndex >= itemPool.length) {
+        void fetchNextBatch();
         return;
       }
 
       const item = itemPool[nextItemIndex];
       nextItemIndex++;
-
-      if (nextItemIndex >= itemPool.length) {
-        nextItemIndex = 0;
-      }
 
       const size = canvas.width < MOBILE_SCREEN
         ? canvas.width * MOBILE_FUEL_SIZE_RATIO
@@ -344,7 +373,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
         return;
       }
 
-      const x = getSpawnX(canvas, road, spawnY, size, size, );
+      const x = getSpawnX(canvas, road, spawnY, size, size);
 
       roadItems.push({
         itemId: item.gameItemId,
@@ -597,6 +626,8 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
             signature: item.signature,
             collected: false,
           });
+
+          item.spawnId = undefined;
         }
       }
 
@@ -738,6 +769,8 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef, fuelBarRef, playerDi
             signature: item.signature,
             collected: true,
           });
+
+          item.spawnId = undefined;
         }
 
         if (item.isCorrect) {

@@ -18,7 +18,13 @@ const Login = () => {
   const DEMO_PASSWORD = "passworD123!";
 
   const demoUsers = [
-    { username: "Barry", email: "barry@example.com" },
+    { name: "Barry", email: "barry@example.com" },
+    { name: "Kim", email: "kim@example.com" },
+    { name: "Marcos", email: "marcos@example.com" },
+    { name: "Daryl", email: "daryl@example.com" },
+    { name: "Simon", email: "simon@example.com" },
+    { name: "Sandra", email: "sandra@example.com" },
+
   ];
 
   const loginAsDemoUser = async (email: string) => {
@@ -70,7 +76,7 @@ const Login = () => {
         <form
             onSubmit={handleSubmit}
             autoComplete="off"
-            className="bg-white px-8 py-6 rounded-xl shadow-lg w-full max-w-sm"
+            className="bg-white px-8 py-6 rounded-xl shadow-lg w-full max-w-sm text-black"
         >
             <h1 className="text-2xl mb-4 text-center">Login</h1>
 
@@ -127,7 +133,7 @@ const Login = () => {
             >
                 {demoLoading === user.email
                 ? "Logging in..."
-                : `Login as ${user.username}`}
+                : `Login as ${user.name}`}
             </Button>
             ))}
         </div>

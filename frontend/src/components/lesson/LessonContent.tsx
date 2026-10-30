@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLessonProgressStore } from "../../store/lessonProgressStore";
 
 import {
   BookOpen,
@@ -16,7 +17,14 @@ type LessonContentProps = {
 const LessonContent = ({
   lessonId,
 }: LessonContentProps) => {
-  const [currentPage, setCurrentPage] = useState(0);
+  const currentPage = useLessonProgressStore(
+    (state) => state.pages[lessonId] ?? 0
+  );
+
+  const setPage = useLessonProgressStore(
+    (state) => state.setPage
+  );
+
   const [pageInput, setPageInput] = useState("");
 
   const articleRef = useRef<HTMLElement>(null);
@@ -44,14 +52,11 @@ const LessonContent = ({
       page >= 1 &&
       page <= totalPages
     ) {
-      setCurrentPage(page - 1);
+      setPage(lessonId, page - 1);
       setPageInput("");
     }
   };
 
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [lessonId]);
 
   useEffect(() => {
     articleRef.current?.scrollTo({
@@ -80,11 +85,7 @@ const LessonContent = ({
               disabled={isFirstPage}
               aria-label="Previous page"
               className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-secondary transition-colors hover:bg-surface-secondary-hover hover:text-primary disabled:cursor-default disabled:opacity-40"
-              onClick={() => {
-                setCurrentPage(
-                  (page) => page - 1,
-                );
-              }}
+              onClick={() => setPage(lessonId, currentPage - 1)}
             >
               <ChevronLeft
                 aria-hidden="true"
@@ -101,11 +102,7 @@ const LessonContent = ({
               disabled={isLastPage}
               aria-label="Next page"
               className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-secondary transition-colors hover:bg-surface-secondary-hover hover:text-primary disabled:cursor-default disabled:opacity-40"
-              onClick={() => {
-                setCurrentPage(
-                  (page) => page + 1,
-                );
-              }}
+              onClick={() => setPage(lessonId, currentPage + 1)}
             >
               <ChevronRight
                 aria-hidden="true"

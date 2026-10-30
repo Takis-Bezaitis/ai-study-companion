@@ -26,6 +26,15 @@ export const roadRaceCompleteBodySchema = z.object({
 
       spawns.forEach((spawn, index) => {
         if (seen.has(spawn.spawnId)) {
+          console.error("Duplicate spawn detected:", {
+            spawnId: spawn.spawnId,
+            index,
+            firstIndex: spawns.findIndex(
+              (entry) => entry.spawnId === spawn.spawnId,
+            ),
+            collected: spawn.collected,
+          });
+
           ctx.addIssue({
             code: 'custom',
             path: [index, 'spawnId'],

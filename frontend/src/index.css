@@ -27,6 +27,16 @@ body {
   color: var(--color-text-primary);
 }
 
+/* Hide scrollbars while keeping scrolling enabled */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* =========================================================
    Theme Variables
    ========================================================= */

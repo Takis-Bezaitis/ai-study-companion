@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuthStore } from "../../store/authStore";
 
 import {
   generateOpenQuestion,
@@ -18,8 +19,12 @@ export function useOpenQuestion() {
     mutationFn: evaluateOpenQuestion,
     
     onSuccess: async () => {
+      const userId = useAuthStore.getState().user?.id;
+
+      if (!userId) return;
+
       await queryClient.invalidateQueries({
-        queryKey: myTotalScoreQueryKey,
+        queryKey: myTotalScoreQueryKey(userId),
       });
     },
   });

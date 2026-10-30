@@ -6,9 +6,13 @@ import { useGameViewport } from "../../../hooks/games/useGameViewport";
 import RoadRaceCanvas from "./RoadRaceCanvas";
 import RoadRaceUI from "./RoadRaceUI";
 
-import type { GameMission } from "../../../types/games/game.types";
+import type { GameMission, GameSpawn } from "../../../types/games/game.types";
 
-import { useStartRoadRace, useCompleteRoadRace } from "../../../hooks/queries/games/useRoadRace";
+import { 
+  useStartRoadRace, 
+  useCompleteRoadRace, 
+  useNextRoadRaceBatch, 
+} from "../../../hooks/queries/games/useRoadRace";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -43,6 +47,17 @@ const RoadRaceContainer = ({ lessonId, missionDetails, itemType, onBack, onConti
 
   const completeRoadRaceMutation = useCompleteRoadRace();
 
+  const { mutateAsync: fetchNextBatch } = useNextRoadRaceBatch();
+
+  const handleFetchNextBatch = async (): Promise<GameSpawn[]> => {
+    if (!game?.sessionId) {
+      throw new Error("No active Road Race session.");
+    }
+
+    return await fetchNextBatch(game.sessionId);
+  };
+
+
   const handleGameOver = (result: {
     gameScore: number;
     resolvedSpawns: {
@@ -64,7 +79,7 @@ const RoadRaceContainer = ({ lessonId, missionDetails, itemType, onBack, onConti
       },
       {
         onSuccess: (finalResult) => {
-          setFinalScore(finalResult.gameScore);
+          setFinalScore(finalResult.gameScore + finalResult.educationalScore);
         },
         onError: (error) => {
           setCompletionError(
@@ -157,6 +172,7 @@ const RoadRaceContainer = ({ lessonId, missionDetails, itemType, onBack, onConti
                 fuelBarRef={fuelBarRef}
                 playerDirectionRef={playerDirectionRef}
                 onGameOver={handleGameOver}
+                onFetchNextBatch={handleFetchNextBatch}
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center text-primary-color text-lg">

@@ -1,6 +1,6 @@
-
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { myTotalScoreQueryKey } from "../../leaderboards/useLeaderboard";
+import { useAuthStore } from "../../../store/authStore";
 
 import {
   getRoadRaceMission,
@@ -56,8 +56,12 @@ export function useCompleteRoadRace() {
     }) => completeRoadRaceGame(sessionId, input),
 
     onSuccess: async () => {
+      const userId = useAuthStore.getState().user?.id;
+
+      if (!userId) return;
+
       await queryClient.invalidateQueries({
-        queryKey: myTotalScoreQueryKey,
+        queryKey: myTotalScoreQueryKey(userId),
       });
     },
 

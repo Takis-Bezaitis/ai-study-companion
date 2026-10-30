@@ -1,8 +1,8 @@
-
 import { API } from "./api";
 import { apiFetch } from "./apiFetch";
 import type { ApiResponse } from "../types/custom";
 import type { RoadRaceGame } from "../types/games/roadRace.types";
+import type { GameSpawn } from "../types/games/game.types";
 
 export type RoadRaceMissionPreview = Pick<
   RoadRaceGame,
@@ -59,12 +59,12 @@ export async function startRoadRaceGame(lessonId: string, missionId: string, ite
   );
 }
 
-export async function getNextRoadRaceBatch(sessionId: string): Promise<RoadRaceBatch> {
+export async function getNextRoadRaceBatch(sessionId: string): Promise<GameSpawn[]> {
   const response = await apiFetch(API.games.nextRoadRaceBatch(sessionId), {
     method: "POST",
   });
 
-  return readResponse<RoadRaceBatch>(
+  return readResponse<GameSpawn[]>(
     response,
     "Failed to fetch the next Road Race batch",
   );
