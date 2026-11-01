@@ -297,7 +297,7 @@ const Dashboard = () => {
                   Lesson Leaderboards
                 </h2>
                 <p className="mt-1 text-sm text-secondary">
-                  Compare the top students in each lesson.
+                  Based on correct game and Knowledge Check answers.
                 </p>
               </div>
 

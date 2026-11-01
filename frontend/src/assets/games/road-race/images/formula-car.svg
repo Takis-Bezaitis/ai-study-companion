@@ -1,95 +1,106 @@
+
 <svg
   width="80"
   height="140"
   viewBox="0 0 80 140"
   xmlns="http://www.w3.org/2000/svg"
+  shape-rendering="crispEdges"
 >
-  <!-- PLAYER CAR - retro top-down silhouette -->
+  <!-- RETRO F1 - TOP DOWN -->
 
-  <!-- Front / small tires -->
-  <rect x="13" y="27" width="10" height="22" fill="#353535"/>
-  <rect x="57" y="27" width="10" height="22" fill="#353535"/>
+  <!-- Front tires -->
+  <rect x="4" y="22" width="16" height="25" fill="#353535"/>
+  <rect x="60" y="22" width="16" height="25" fill="#353535"/>
+  <rect x="7" y="26" width="6" height="17" fill="#686868"/>
+  <rect x="67" y="26" width="6" height="17" fill="#686868"/>
 
-  <!-- Front tire highlights -->
-  <rect x="15" y="30" width="4" height="16" fill="#686868"/>
-  <rect x="61" y="30" width="4" height="16" fill="#686868"/>
+  <!-- Rear tires -->
+  <rect x="4" y="91" width="17" height="31" fill="#353535"/>
+  <rect x="59" y="91" width="17" height="31" fill="#353535"/>
+  <rect x="7" y="96" width="6" height="21" fill="#686868"/>
+  <rect x="67" y="96" width="6" height="21" fill="#686868"/>
+
+  <!-- Front suspension -->
+  <path d="M20 27 L31 34 L30 37 L19 32 Z" fill="#292929"/>
+  <path d="M60 27 L49 34 L50 37 L61 32 Z" fill="#292929"/>
+  <path d="M20 41 L31 39 L32 42 L20 44 Z" fill="#292929"/>
+  <path d="M60 41 L49 39 L48 42 L60 44 Z" fill="#292929"/>
+
+  <!-- Rear suspension -->
+  <path d="M20 98 L30 94 L32 97 L21 103 Z" fill="#292929"/>
+  <path d="M60 98 L50 94 L48 97 L59 103 Z" fill="#292929"/>
+  <path d="M20 113 L31 108 L32 111 L21 118 Z" fill="#292929"/>
+  <path d="M60 113 L49 108 L48 111 L59 118 Z" fill="#292929"/>
 
   <!-- Main body -->
   <path
     d="
-      M31 7
-      L49 7
-      L52 18
-      L54 35
-      L55 61
-      L58 83
-      L64 96
-      L58 113
-      L51 125
-      L29 125
-      L22 113
-      L16 96
-      L22 83
-      L25 61
-      L26 35
-      L28 18
+      M33 5
+      L47 5
+      L50 15
+      L52 34
+      L51 51
+      L56 61
+      L60 75
+      L59 94
+      L56 111
+      L51 124
+      L46 132
+      L34 132
+      L29 124
+      L24 111
+      L21 94
+      L20 75
+      L24 61
+      L29 51
+      L28 34
+      L30 15
       Z
     "
     fill="#c92732"
   />
 
-  <!-- Dark side sections -->
+  <!-- Side shading -->
   <path
     d="
-      M26 36
-      L32 32
-      L32 82
-      L27 98
-      L21 94
-      L23 82
-      L25 60
+      M29 53
+      L35 49
+      L33 92
+      L29 113
+      L24 105
+      L24 77
       Z
     "
     fill="#801923"
   />
-
   <path
     d="
-      M54 36
-      L48 32
-      L48 82
-      L53 98
-      L59 94
-      L57 82
-      L55 60
+      M51 53
+      L45 49
+      L47 92
+      L51 113
+      L56 105
+      L56 77
       Z
     "
     fill="#801923"
   />
 
   <!-- Nose -->
+  <path d="M33 6 L47 6 L49 17 L31 17 Z" fill="#e23a43"/>
+  <rect x="37" y="8" width="6" height="4" fill="#f05b61"/>
+
+  <!-- Cockpit surround -->
   <path
     d="
-      M32 7
-      L48 7
-      L51 19
-      L29 19
-      Z
-    "
-    fill="#e23a43"
-  />
-
-  <rect x="35" y="8" width="10" height="4" fill="#f05b61"/>
-
-  <!-- Cockpit -->
-  <path
-    d="
-      M31 25
-      L49 25
-      L51 43
-      L47 57
-      L33 57
-      L29 43
+      M33 34
+      L47 34
+      L50 43
+      L49 58
+      L45 68
+      L35 68
+      L31 58
+      L30 43
       Z
     "
     fill="#17191d"
@@ -98,42 +109,28 @@
   <!-- Cockpit glass -->
   <path
     d="
-      M34 28
-      L46 28
-      L48 41
-      L45 50
-      L35 50
-      L32 41
+      M36 38
+      L44 38
+      L47 48
+      L45 59
+      L40 64
+      L35 59
+      L33 48
       Z
     "
     fill="#31566b"
   />
 
-  <!-- Driver -->
-  <rect x="35" y="33" width="10" height="11" fill="#eee9d5"/>
-  <rect x="33" y="37" width="14" height="5" fill="#eee9d5"/>
-  <rect x="35" y="39" width="10" height="3" fill="#252525"/>
+  <!-- Driver helmet -->
+  <rect x="35" y="44" width="10" height="12" fill="#eee9d5"/>
+  <rect x="33" y="47" width="14" height="5" fill="#eee9d5"/>
+  <rect x="35" y="51" width="10" height="3" fill="#252525"/>
 
   <!-- Center stripe -->
-  <rect x="36" y="57" width="8" height="63" fill="#d4a91e"/>
-  <rect x="39" y="57" width="3" height="63" fill="#ffe36b"/>
+  <rect x="37" y="69" width="6" height="54" fill="#d4a91e"/>
+  <rect x="39" y="69" width="2" height="54" fill="#ffe36b"/>
 
-  <!-- Rear tires - deliberately wider -->
-  <rect x="4" y="84" width="17" height="34" fill="#353535"/>
-  <rect x="59" y="84" width="17" height="34" fill="#353535"/>
-
-  <!-- Rear tire highlights -->
-  <rect x="7" y="89" width="5" height="23" fill="#686868"/>
-  <rect x="68" y="89" width="5" height="23" fill="#686868"/>
-
-  <!-- Wide rear axle/body -->
-  <rect x="18" y="91" width="44" height="10" fill="#a71e28"/>
-
-  <!-- Rear wing -->
-  <rect x="14" y="101" width="52" height="7" fill="#292929"/>
-  <rect x="20" y="101" width="40" height="3" fill="#696969"/>
-
-  <!-- Rear center -->
-  <rect x="27" y="108" width="26" height="13" fill="#9c1b24"/>
-  <rect x="34" y="108" width="12" height="4" fill="#d42a34"/>
+  <!-- Rear engine detail -->
+  <rect x="33" y="119" width="14" height="8" fill="#9c1b24"/>
+  <rect x="36" y="120" width="8" height="3" fill="#d42a34"/>
 </svg>
