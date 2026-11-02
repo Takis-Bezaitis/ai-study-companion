@@ -29,7 +29,7 @@ const OpenQuestionAnswer = ({onSubmit, disabled = false, isSubmitting = false}: 
   return (
     <section
       aria-labelledby="open-question-answer-heading"
-      className="shrink-0 rounded-2xl border border-default bg-surface p-3 sm:p-4"
+      className="shrink-0 rounded-2xl border border-default bg-surface p-3"
     >
       <header className="mb-3">
         <h2

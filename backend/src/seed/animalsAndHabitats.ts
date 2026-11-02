@@ -3,201 +3,184 @@ import prisma from "../lib/prismaClient.js";
 const lessonTitle = "Animals & Habitats";
 
 const gameItems = [
-  // Capitals — North
-  { type: "CAPITAL", name: "Tallinn", group: "NORTH" },
-  { type: "CAPITAL", name: "Riga", group: "NORTH" },
-  { type: "CAPITAL", name: "Vilnius", group: "NORTH" },
+  // GRASSLANDS (savannah and temperate grasslands)
+  { type: "ANIMAL", name: "Lion", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "African elephant", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Giraffe", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Zebra", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Cheetah", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Leopard", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Spotted hyena", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Wildebeest", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "African buffalo", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Gazelle", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Warthog", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Meerkat", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Ostrich", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Secretary bird", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Vulture", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Bison", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Prairie dog", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Pronghorn", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Coyote", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Ground squirrel", group: "GRASSLANDS" },
+  { type: "ANIMAL", name: "Saiga antelope", group: "GRASSLANDS" },
 
-  // Capitals — South
-  { type: "CAPITAL", name: "Tirana", group: "SOUTH" },
-  { type: "CAPITAL", name: "Nicosia", group: "SOUTH" },
-  { type: "CAPITAL", name: "Podgorica", group: "SOUTH" },
-  { type: "CAPITAL", name: "Skopje", group: "SOUTH" },
-  { type: "CAPITAL", name: "San Marino", group: "SOUTH" },
-  { type: "CAPITAL", name: "Vatican City", group: "SOUTH" },
-  { type: "CAPITAL", name: "Monaco", group: "SOUTH" },
+  // FOREST (temperate, boreal and tropical)
+  { type: "ANIMAL", name: "Red fox", group: "FOREST" },
+  { type: "ANIMAL", name: "Brown bear", group: "FOREST" },
+  { type: "ANIMAL", name: "Gray wolf", group: "FOREST" },
+  { type: "ANIMAL", name: "Deer", group: "FOREST" },
+  { type: "ANIMAL", name: "Wild boar", group: "FOREST" },
+  { type: "ANIMAL", name: "Squirrel", group: "FOREST" },
+  { type: "ANIMAL", name: "Badger", group: "FOREST" },
+  { type: "ANIMAL", name: "Hedgehog", group: "FOREST" },
+  { type: "ANIMAL", name: "Owl", group: "FOREST" },
+  { type: "ANIMAL", name: "Woodpecker", group: "FOREST" },
+  { type: "ANIMAL", name: "Lynx", group: "FOREST" },
+  { type: "ANIMAL", name: "Raccoon", group: "FOREST" },
+  { type: "ANIMAL", name: "Moose", group: "FOREST" },
+  { type: "ANIMAL", name: "Reindeer", group: "FOREST" },
+  { type: "ANIMAL", name: "Wolverine", group: "FOREST" },
+  { type: "ANIMAL", name: "Snowshoe hare", group: "FOREST" },
+  { type: "ANIMAL", name: "Orangutan", group: "FOREST" },
+  { type: "ANIMAL", name: "Gorilla", group: "FOREST" },
+  { type: "ANIMAL", name: "Jaguar", group: "FOREST" },
+  { type: "ANIMAL", name: "Sloth", group: "FOREST" },
+  { type: "ANIMAL", name: "Toucan", group: "FOREST" },
+  { type: "ANIMAL", name: "Parrot", group: "FOREST" },
+  { type: "ANIMAL", name: "Tree frog", group: "FOREST" },
+  { type: "ANIMAL", name: "Chameleon", group: "FOREST" },
 
-  // Capitals — West
-  { type: "CAPITAL", name: "Luxembourg City", group: "WEST" },
+  // COLD_REGIONS (polar, tundra and mountain)
+  { type: "ANIMAL", name: "Arctic fox", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Arctic hare", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Caribou", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Musk ox", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Lemming", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Snowy owl", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Arctic wolf", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Polar bear", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Walrus", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Ringed seal", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Bearded seal", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Beluga whale", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Narwhal", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Emperor penguin", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Adélie penguin", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Chinstrap penguin", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Leopard seal", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Weddell seal", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Crabeater seal", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Southern elephant seal", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Antarctic petrel", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Snow petrel", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Orca", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Mountain goat", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Ibex", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Snow leopard", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Yak", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Marmot", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Golden eagle", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Alpine chamois", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Pika", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Andean condor", group: "COLD_REGIONS" },
+  { type: "ANIMAL", name: "Himalayan tahr", group: "COLD_REGIONS" },
 
-  // Capitals — Central
-  { type: "CAPITAL", name: "Bratislava", group: "CENTRAL" },
-  { type: "CAPITAL", name: "Ljubljana", group: "CENTRAL" },
-  { type: "CAPITAL", name: "Vaduz", group: "CENTRAL" },
+  // FRESHWATER (wetlands, rivers and lakes)
+  { type: "ANIMAL", name: "Trout", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Salmon", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Catfish", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Pike", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Freshwater turtle", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Frog", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Salamander", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Beaver", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Otter", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Crocodile", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Alligator", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Dragonfly", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Crayfish", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Heron", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Flamingo", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Duck", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Swan", group: "FRESHWATER" },
+  { type: "ANIMAL", name: "Capybara", group: "FRESHWATER" },
 
-  // Capitals — East
-  { type: "CAPITAL", name: "Minsk", group: "EAST" },
-  { type: "CAPITAL", name: "Yerevan", group: "EAST" },
-  { type: "CAPITAL", name: "Baku", group: "EAST" },
-  { type: "CAPITAL", name: "Tbilisi", group: "EAST" },
-  { type: "CAPITAL", name: "Astana", group: "EAST" },
-  { type: "CAPITAL", name: "Pristina", group: "EAST" },
-  { type: "CAPITAL", name: "Chișinău", group: "EAST" },
-  { type: "CAPITAL", name: "Belgrade", group: "EAST" },
-  { type: "CAPITAL", name: "Ankara", group: "EAST" },
-  { type: "CAPITAL", name: "Moscow", group: "EAST" },
-
-  // Rivers — North
-  { type: "RIVER", name: "Narva", group: "NORTH" },
-  { type: "RIVER", name: "Daugava", group: "NORTH" },
-  { type: "RIVER", name: "Gauja", group: "NORTH" },
-  { type: "RIVER", name: "Neman", group: "NORTH" },
-  { type: "RIVER", name: "Göta", group: "NORTH" },
-
-  // Rivers — South
-  { type: "RIVER", name: "Vjosa", group: "SOUTH" },
-  { type: "RIVER", name: "Drin", group: "SOUTH" },
-  { type: "RIVER", name: "Neretva", group: "SOUTH" },
-  { type: "RIVER", name: "Drina", group: "SOUTH" },
-  { type: "RIVER", name: "Una", group: "SOUTH" },
-  { type: "RIVER", name: "Maritsa", group: "SOUTH" },
-  { type: "RIVER", name: "Vardar", group: "SOUTH" },
-  { type: "RIVER", name: "Tara", group: "SOUTH" },
-  { type: "RIVER", name: "Morača", group: "SOUTH" },
-  { type: "RIVER", name: "White Drin", group: "SOUTH" },
-  { type: "RIVER", name: "Sitnica", group: "SOUTH" },
-
-  // Rivers — West
-  { type: "RIVER", name: "Shannon", group: "WEST" },
-  { type: "RIVER", name: "Garonne", group: "WEST" },
-  { type: "RIVER", name: "Scheldt", group: "WEST" },
-  { type: "RIVER", name: "Meuse", group: "WEST" },
-  { type: "RIVER", name: "Moselle", group: "WEST" },
-  { type: "RIVER", name: "Sûre", group: "WEST" },
-  { type: "RIVER", name: "Alzette", group: "WEST" },
-  { type: "RIVER", name: "Severn", group: "WEST" },
-
-  // Rivers — Central
-  { type: "RIVER", name: "Inn", group: "CENTRAL" },
-  { type: "RIVER", name: "Sava", group: "CENTRAL" },
-  { type: "RIVER", name: "Drava", group: "CENTRAL" },
-  { type: "RIVER", name: "Kupa", group: "CENTRAL" },
-  { type: "RIVER", name: "Vltava", group: "CENTRAL" },
-  { type: "RIVER", name: "Morava", group: "CENTRAL" },
-  { type: "RIVER", name: "Váh", group: "CENTRAL" },
-  { type: "RIVER", name: "Tisza", group: "CENTRAL" },
-
-  // Rivers — East
-  { type: "RIVER", name: "Kura", group: "EAST" },
-  { type: "RIVER", name: "Aras", group: "EAST" },
-  { type: "RIVER", name: "Western Dvina", group: "EAST" },
-  { type: "RIVER", name: "Don", group: "EAST" },
-  { type: "RIVER", name: "Southern Bug", group: "EAST" },
-  { type: "RIVER", name: "Prut", group: "EAST" },
-  { type: "RIVER", name: "Ural", group: "EAST" },
-
-  // Lakes — North
-  { type: "LAKE", name: "Lake Peipus", group: "NORTH" },
-  { type: "LAKE", name: "Lake Päijänne", group: "NORTH" },
-  { type: "LAKE", name: "Lake Vättern", group: "NORTH" },
-  { type: "LAKE", name: "Lake Ladoga", group: "NORTH" },
-
-  // Lakes — South
-  { type: "LAKE", name: "Lake Shkodër", group: "SOUTH" },
-  { type: "LAKE", name: "Lake Ohrid", group: "SOUTH" },
-  { type: "LAKE", name: "Lake Prespa", group: "SOUTH" },
-  { type: "LAKE", name: "Lake Skadar", group: "SOUTH" },
-
-  // Lakes — Central
-  { type: "LAKE", name: "Lake Neusiedl", group: "CENTRAL" },
-  { type: "LAKE", name: "Lake Bled", group: "CENTRAL" },
-  { type: "LAKE", name: "Masurian Lakes", group: "CENTRAL" },
-
-  // Lakes — East
-  { type: "LAKE", name: "Lake Sevan", group: "EAST" },
-
-  // Mountains — North
-  { type: "MOUNTAIN", name: "Scandinavian Mountains", group: "NORTH" },
-
-  // Mountains — South
-  { type: "MOUNTAIN", name: "Albanian Alps", group: "SOUTH" },
-  { type: "MOUNTAIN", name: "Pindus Mountains", group: "SOUTH" },
-  { type: "MOUNTAIN", name: "Balkan Mountains", group: "SOUTH" },
-  { type: "MOUNTAIN", name: "Rhodope Mountains", group: "SOUTH" },
-  { type: "MOUNTAIN", name: "Dinaric Alps", group: "SOUTH" },
-  { type: "MOUNTAIN", name: "Šar Mountains", group: "SOUTH" },
-  { type: "MOUNTAIN", name: "Troodos Mountains", group: "SOUTH" },
-  { type: "MOUNTAIN", name: "Apennines", group: "SOUTH" },
-  { type: "MOUNTAIN", name: "Mount Vesuvius", group: "SOUTH" },
-  { type: "MOUNTAIN", name: "Mount Olympus", group: "SOUTH" },
-  { type: "MOUNTAIN", name: "Mount Triglav", group: "SOUTH" },
-  { type: "MOUNTAIN", name: "Mount Titano", group: "SOUTH" },
-
-  // Mountains — West
-  { type: "MOUNTAIN", name: "Pyrenees", group: "WEST" },
-  { type: "MOUNTAIN", name: "Massif Central", group: "WEST" },
-  { type: "MOUNTAIN", name: "Wicklow Mountains", group: "WEST" },
-  { type: "MOUNTAIN", name: "Scottish Highlands", group: "WEST" },
-
-  // Mountains — Central
-  { type: "MOUNTAIN", name: "Carpathian Mountains", group: "CENTRAL" },
-  { type: "MOUNTAIN", name: "High Tatras", group: "CENTRAL" },
-  { type: "MOUNTAIN", name: "Sudetes", group: "CENTRAL" },
-  { type: "MOUNTAIN", name: "Ore Mountains", group: "CENTRAL" },
-  { type: "MOUNTAIN", name: "Julian Alps", group: "CENTRAL" },
-  { type: "MOUNTAIN", name: "Jura Mountains", group: "CENTRAL" },
-  { type: "MOUNTAIN", name: "Mont Blanc", group: "CENTRAL" },
-  { type: "MOUNTAIN", name: "Matterhorn", group: "CENTRAL" },
-
-  // Mountains — East
-  { type: "MOUNTAIN", name: "Greater Caucasus", group: "EAST" },
-  { type: "MOUNTAIN", name: "Lesser Caucasus", group: "EAST" },
-  { type: "MOUNTAIN", name: "Armenian Highlands", group: "EAST" },
-  { type: "MOUNTAIN", name: "Pontic Mountains", group: "EAST" },
-  { type: "MOUNTAIN", name: "Taurus Mountains", group: "EAST" },
-  { type: "MOUNTAIN", name: "Crimean Mountains", group: "EAST" },
-  { type: "MOUNTAIN", name: "Mount Elbrus", group: "EAST" },
-  { type: "MOUNTAIN", name: "Mount Aragats", group: "EAST" },
-  { type: "MOUNTAIN", name: "Mount Ararat", group: "EAST" },
+  // MARINE (coral reefs, open ocean and deep sea)
+  { type: "ANIMAL", name: "Blue whale", group: "MARINE" },
+  { type: "ANIMAL", name: "Humpback whale", group: "MARINE" },
+  { type: "ANIMAL", name: "Dolphin", group: "MARINE" },
+  { type: "ANIMAL", name: "Tuna", group: "MARINE" },
+  { type: "ANIMAL", name: "Swordfish", group: "MARINE" },
+  { type: "ANIMAL", name: "Sailfish", group: "MARINE" },
+  { type: "ANIMAL", name: "Oceanic shark", group: "MARINE" },
+  { type: "ANIMAL", name: "Manta ray", group: "MARINE" },
+  { type: "ANIMAL", name: "Jellyfish", group: "MARINE" },
+  { type: "ANIMAL", name: "Squid", group: "MARINE" },
+  { type: "ANIMAL", name: "Sea turtle", group: "MARINE" },
+  { type: "ANIMAL", name: "Albatross", group: "MARINE" },
+  { type: "ANIMAL", name: "Clownfish", group: "MARINE" },
+  { type: "ANIMAL", name: "Parrotfish", group: "MARINE" },
+  { type: "ANIMAL", name: "Angelfish", group: "MARINE" },
+  { type: "ANIMAL", name: "Butterflyfish", group: "MARINE" },
+  { type: "ANIMAL", name: "Moray eel", group: "MARINE" },
+  { type: "ANIMAL", name: "Reef shark", group: "MARINE" },
+  { type: "ANIMAL", name: "Sea anemone", group: "MARINE" },
+  { type: "ANIMAL", name: "Sea urchin", group: "MARINE" },
+  { type: "ANIMAL", name: "Starfish", group: "MARINE" },
+  { type: "ANIMAL", name: "Seahorse", group: "MARINE" },
+  { type: "ANIMAL", name: "Lobster", group: "MARINE" },
+  { type: "ANIMAL", name: "Sea sponge", group: "MARINE" },
+  { type: "ANIMAL", name: "Anglerfish", group: "MARINE" },
+  { type: "ANIMAL", name: "Giant squid", group: "MARINE" },
+  { type: "ANIMAL", name: "Vampire squid", group: "MARINE" },
+  { type: "ANIMAL", name: "Gulper eel", group: "MARINE" },
+  { type: "ANIMAL", name: "Dumbo octopus", group: "MARINE" },
+  { type: "ANIMAL", name: "Deep-sea shrimp", group: "MARINE" },
+  { type: "ANIMAL", name: "Siphonophore", group: "MARINE" },
 ];
 
 const gameMissions = [
   {
-    title: "Escape to the North",
-    description:
-      "Head north and avoid everything coming from the south.",
-    correctGroup: "NORTH",
-    wrongGroup: "SOUTH",
+    title: "Grassland Sprint",
+    description: "Collect grassland animals and avoid forest animals.",
+    correctGroup: "GRASSLANDS",
+    wrongGroup: "FOREST",
     gameType: "ROAD_RACE" as const,
   },
   {
-    title: "Mediterranean Sprint",
-    description:
-      "Race toward the south and avoid items from the north.",
-    correctGroup: "SOUTH",
-    wrongGroup: "NORTH",
+    title: "Forest Run",
+    description: "Find forest animals and avoid animals from cold regions.",
+    correctGroup: "FOREST",
+    wrongGroup: "COLD_REGIONS",
     gameType: "ROAD_RACE" as const,
   },
   {
-    title: "Western Route",
-    description:
-      "Follow the route west and watch out for items from the east.",
-    correctGroup: "WEST",
-    wrongGroup: "EAST",
+    title: "Frozen Frontier",
+    description: "Collect animals adapted to cold regions and high mountains. Avoid grassland animals.",
+    correctGroup: "COLD_REGIONS",
+    wrongGroup: "GRASSLANDS",
     gameType: "ROAD_RACE" as const,
   },
   {
-    title: "Heading East",
-    description:
-      "Move east and avoid items coming from the west.",
-    correctGroup: "EAST",
-    wrongGroup: "WEST",
+    title: "Freshwater Dash",
+    description: "Collect freshwater and wetland animals while avoiding marine animals.",
+    correctGroup: "FRESHWATER",
+    wrongGroup: "MARINE",
     gameType: "ROAD_RACE" as const,
   },
   {
-    title: "Central Passage",
-    description:
-      "Stay in the heart of Europe and avoid items from the south.",
-    correctGroup: "CENTRAL",
-    wrongGroup: "SOUTH",
+    title: "Ocean Escape",
+    description: "Collect marine animals and avoid grassland animals.",
+    correctGroup: "MARINE",
+    wrongGroup: "GRASSLANDS",
     gameType: "ROAD_RACE" as const,
   },
 ];
 
 
-
-
-async function seedCountriesOfEurope() {
+async function seedAnimalsAndHabitats() {
   const lesson = await prisma.lesson.findFirst({
     where: {
       title: lessonTitle,
@@ -305,10 +288,10 @@ async function seedCountriesOfEurope() {
 }
 
 try {
-  await seedCountriesOfEurope();
+  await seedAnimalsAndHabitats();
 } catch (error) {
   console.error(
-    "Countries of Europe game seed failed:",
+    "Animals & Habitats game seed failed:",
     error,
   );
 

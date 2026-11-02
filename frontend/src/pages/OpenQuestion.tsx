@@ -156,7 +156,7 @@ const OpenQuestion = () => {
 
       <section
         aria-labelledby="open-question-title"
-        className="mx-auto mt-2 flex w-full max-w-6xl h-full min-h-0 flex-col gap-3 rounded-2xl
+        className="mx-auto mt-2 flex w-full max-w-6xl h-full min-h-0 flex-col gap-2 rounded-2xl
           border border-default bg-surface shadow-lg p-2.5"
       >
         <div className="flex items-start gap-4">
@@ -192,11 +192,15 @@ const OpenQuestion = () => {
 
         <div className="h-px w-full bg-(--color-border)"></div>
 
+        {/* Main content area */}
+        <div className="flex flex-1 min-h-0 flex-col gap-3">
+
         {/* Question */}
         {!evaluation && (
           <section
             aria-labelledby="question-heading"
-            className="h-36 shrink-0 overflow-y-auto rounded-2xl border border-default bg-surface-secondary p-3 sm:h-44 sm:p-4"
+            className="flex-1 min-h-0 overflow-y-auto rounded-2xl
+              border border-default bg-surface-secondary p-3 sm:p-4"
           >
             {question ? (
               <>
@@ -219,7 +223,7 @@ const OpenQuestion = () => {
                 </p>
               </>
             ) : (
-              <div className="flex min-h-40 flex-col items-center justify-center gap-3 text-center">
+              <div className="flex flex-col items-center justify-center gap-3 text-center">
                 {isGenerating ? (
                   <>
                     <LoaderCircle
@@ -244,7 +248,7 @@ const OpenQuestion = () => {
                       type="button"
                       onClick={handleGenerateQuestion}
                       disabled={isGenerating}
-                      className="mt-2 flex min-h-10 cursor-pointer items-center
+                      className="sm:mt-2 flex min-h-10 cursor-pointer items-center
                         justify-center gap-2 rounded-xl bg-button-main px-4 py-2
                         text-sm font-semibold text-button hover:bg-button-hover
                         disabled:cursor-not-allowed disabled:opacity-60"
@@ -303,7 +307,7 @@ const OpenQuestion = () => {
           aria-labelledby="feedback-heading"
           className={`min-h-0 overflow-y-auto rounded-2xl
             border border-default bg-background p-4 sm:p-5
-            ${evaluation ? "flex-1" : "shrink-0"}`}
+            ${evaluation ? "flex-1 min-h-0" : "flex-1 min-h-0"}`}
         >
           {evaluation ? (
             <div className="space-y-5">
@@ -481,6 +485,8 @@ const OpenQuestion = () => {
           )}
         </section>
 
+        </div>
+
         {/* Answer input */}
         {!evaluation && (
           <OpenQuestionAnswer
@@ -495,7 +501,9 @@ const OpenQuestion = () => {
             isSubmitting={isEvaluating}
           />
         )}
+
       </section>
+
     </main>
   );
 };

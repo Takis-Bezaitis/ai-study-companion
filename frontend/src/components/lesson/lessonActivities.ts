@@ -1,12 +1,13 @@
 
 import {
-  Brain,
+  //Brain, for later use
   CarFront,
   Lightbulb,
   Gamepad2,
 } from "lucide-react";
 
 export const getLessonActivities = (lessonId: string) => [
+  /* for later use
   {
     title: "Quiz",
     description: "Test your knowledge.",
@@ -15,6 +16,7 @@ export const getLessonActivities = (lessonId: string) => [
     accent: "bg-primary-soft text-primary-color",
     action: "Start Quiz",
   },
+  */
   {
     title: "Knowledge Check",
     description: "Answer an AI-generated question.",
