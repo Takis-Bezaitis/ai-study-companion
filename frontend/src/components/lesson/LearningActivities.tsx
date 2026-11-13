@@ -22,7 +22,7 @@ const LearningActivities = ({lesson, onAskAI}: LearningActivitiesProps) => {
       <button
         type="button"
         onClick={onAskAI}
-        className="group mb-5 w-60 cursor-pointer rounded-2xl border border-default bg-surface p-3 text-left transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-secondary-hover"
+        className="group mb-5 w-60 2xl:w-72 cursor-pointer rounded-2xl border border-default bg-surface p-3 text-left transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-secondary-hover"
       >
         <div className="flex items-center">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-color">
@@ -58,7 +58,7 @@ const LearningActivities = ({lesson, onAskAI}: LearningActivitiesProps) => {
         </h2>
       </header>
 
-      <div className="grid grid-cols-4 gap-2.5 md:grid-cols-1">
+      <div className="grid grid-cols-4 gap-2.5 2xl:gap-5 md:grid-cols-1">
         {activities.map((activity) => {
           const Icon = activity.icon;
 
@@ -66,7 +66,7 @@ const LearningActivities = ({lesson, onAskAI}: LearningActivitiesProps) => {
             <Link
               key={activity.title}
               to={activity.href}
-              className="group w-60 rounded-2xl border border-default bg-surface p-2.5 transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-secondary-hover"
+              className="group w-60 2xl:w-72 rounded-2xl border border-default bg-surface p-2.5 transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-secondary-hover"
             >
               <article className="flex h-full flex-col">
                 <div className="flex items-center">

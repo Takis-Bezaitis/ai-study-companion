@@ -1,6 +1,6 @@
 const Progress = () => {
   return (
-    <div>Progress</div>
+    <div>Progress - Coming Soon</div>
   )
 }
 

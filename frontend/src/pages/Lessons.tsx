@@ -79,7 +79,7 @@ const Lessons = () => {
   const categories = Array.from(groupedLessons.values());
 
   return (
-    <section className="w-full max-w-6xl p-4 sm:p-6">
+    <section className="w-full max-w-7xl mx-auto p-4 sm:p-6">
       <header className="mb-8">
         <h2 className="text-2xl font-bold text-primary sm:text-3xl">
           Lessons
@@ -107,13 +107,14 @@ const Lessons = () => {
           </p>
         </section>
       ) : (
-        <div className="space-y-10">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3">
           {categories.map((category) => (
             <section
               key={category.id}
               aria-labelledby={`category-${category.id}`}
+              className="min-w-0 rounded-2xl border border-default bg-surface p-4 sm:p-5"
             >
-              <header className="mb-4">
+              <header className="mb-3">
                 <h3
                   id={`category-${category.id}`}
                   className="text-lg font-bold text-primary sm:text-xl"
@@ -122,7 +123,7 @@ const Lessons = () => {
                 </h3>
               </header>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-3">
                 {category.lessons.map((lesson) => (
                   <Link
                     key={lesson.id}

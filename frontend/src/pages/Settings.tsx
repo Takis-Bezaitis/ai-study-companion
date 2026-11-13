@@ -1,6 +1,6 @@
 const Settings = () => {
   return (
-    <div>Settings</div>
+    <div>Settings - Coming Soon</div>
   )
 }
 

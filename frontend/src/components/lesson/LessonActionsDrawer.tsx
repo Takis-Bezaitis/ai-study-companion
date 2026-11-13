@@ -96,7 +96,7 @@ const LessonActionsDrawer = ({lesson, open, onClose, onAskAI}: LessonActionsDraw
           </h2>
         </header>
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3">
           {activities.map((activity) => {
             const Icon = activity.icon;
 
