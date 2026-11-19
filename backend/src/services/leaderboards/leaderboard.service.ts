@@ -135,8 +135,7 @@ export class LeaderboardService {
    * Knowledge Check ranking
    */
   async getKnowledgeCheckLeaderboard() {
-    const scores =
-      await leaderboardRepository.getKnowledgeCheckScores();
+    const scores = await leaderboardRepository.getKnowledgeCheckScores();
 
     const users = await leaderboardRepository.getUsers(
       scores.map((item) => item.userId),
@@ -155,11 +154,31 @@ export class LeaderboardService {
       .sort(
         (a, b) =>
           b.score - a.score ||
-          a.userId.localeCompare(b.userId),
+          a.name.localeCompare(b.name),
       );
+    
+    let currentRank = 0;
+    let previousScore: number | null = null;
+
+    const rankedLeaderboard = leaderboard.map((item, index) => {
+      if (item.score !== previousScore) {
+        currentRank = index + 1;
+        previousScore = item.score;
+      }
+
+      return {
+        ...item,
+        rank: currentRank,
+      };
+    });
+
+    const topFive = rankedLeaderboard.slice(0, LEADERBOARD_LIMIT);
+    const lastScore = topFive[topFive.length - 1]?.score;
 
     return {
-      leaderboard: leaderboard.slice(0, LEADERBOARD_LIMIT),
+      leaderboard: rankedLeaderboard.filter(
+        (item) => item.score >= (lastScore ?? 0),
+      ),
     };
   }
 

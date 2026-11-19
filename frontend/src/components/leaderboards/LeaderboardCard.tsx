@@ -4,6 +4,7 @@ export type LeaderboardEntry = {
   userId: string;
   name: string;
   score: number;
+  rank?: number;
 };
 
 type LeaderboardCardProps = {
@@ -57,37 +58,42 @@ const LeaderboardCard = ({
             <span className="text-right">Score</span>
           </div>
 
-          <ol className="flex flex-col">
-            {entries.slice(0, 5).map((entry, index) => (
-              <li
-                key={entry.id ?? entry.userId}
-                className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 border-b border-default py-3 last:border-b-0"
-              >
-                <span
-                  className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
-                    rankStyles[index] ??
-                    "bg-surface-secondary text-secondary"
-                  }`}
+          <div className={`min-h-0 flex-1 ${
+              entries.length > 5 ? "overflow-y-auto" : "overflow-y-hidden"
+            }`}
+          >
+            <ol className="flex flex-col">
+              {entries.map((entry, index) => (
+                <li
+                  key={entry.id ?? entry.userId}
+                  className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 border-b border-default py-3 last:border-b-0"
                 >
-                  {index + 1}
-                </span>
-
-                <span
-                  className="min-w-0 truncate text-sm font-medium text-primary"
-                  title={entry.name}
-                >
-                  {entry.name}
-                </span>
-
-                <span className="whitespace-nowrap text-right text-sm font-semibold tabular-nums text-primary">
-                  {entry.score.toLocaleString("el-GR")}
-                  <span className="ml-1 text-xs font-normal text-secondary">
-                    {scoreLabel}
+                  <span
+                    className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
+                      rankStyles[(entry.rank ?? index + 1) - 1] ??
+                        "bg-surface-secondary text-secondary"
+                    }`}
+                  >
+                    {entry.rank ?? index + 1}
                   </span>
-                </span>
-              </li>
-            ))}
-          </ol>
+
+                  <span
+                    className="min-w-0 truncate text-sm font-medium text-primary"
+                    title={entry.name}
+                  >
+                    {entry.name}
+                  </span>
+
+                  <span className="whitespace-nowrap text-right text-sm font-semibold tabular-nums text-primary">
+                    {entry.score.toLocaleString("el-GR")}
+                    <span className="ml-1 text-xs font-normal text-secondary pr-2">
+                      {scoreLabel}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
         </>
       )}
     </section>

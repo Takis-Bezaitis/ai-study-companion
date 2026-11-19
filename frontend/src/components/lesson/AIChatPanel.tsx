@@ -74,10 +74,11 @@ const AIChatPanel = ({ onClose, lessonId, }: AIChatPanelProps) => {
       question: trimmedQuestion,
       history,
       onDelta: (text) => {
-        console.log("[STREAM UPDATE]", {
+        /*console.log("[STREAM UPDATE]", {
           time: performance.now().toFixed(1),
           chunkLength: text.length,
-        });
+        });*/
+        
         setHasStartedStreaming(true);
 
         appendMessageContent(

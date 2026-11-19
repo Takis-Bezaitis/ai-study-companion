@@ -108,7 +108,7 @@ export async function streamAskLesson({
   let buffer = "";
 
   const processEvent = (rawEvent: string) => {
-    console.log("[SSE RAW EVENT]", rawEvent);
+    //console.log("[SSE RAW EVENT]", rawEvent);
 
     const lines = rawEvent.split("\n");
 
@@ -136,17 +136,17 @@ export async function streamAskLesson({
     const event = JSON.parse(data);
 
     if (eventType === "delta") {
-        console.log(
-    `[SSE DELTA +${Math.round(performance.now())}ms]`,
-    event.text,
-  );
+        /*console.log(
+          `[SSE DELTA +${Math.round(performance.now())}ms]`,
+          event.text,
+        );*/
 
         onDelta(event.text);
         return;
     }
 
     if (eventType === "sources") {
-        console.log("[SSE SOURCES]", event.sources);
+        //console.log("[SSE SOURCES]", event.sources);
         onSources?.(event.sources);
         return;
     }

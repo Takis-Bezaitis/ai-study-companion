@@ -10,6 +10,7 @@ import type { LeaderboardEntry } from "../components/leaderboards/LeaderboardCar
 import LessonLeaderboard from "../components/leaderboards/LessonLeaderboard";
 
 import { useMediaQuery } from "../hooks/useMediaQuery";
+import { useHorizontalScroll } from "../hooks/leaderboards/useHorizontalScroll";
 
 type Tab = "overall" | "lessons" | "games";
 
@@ -83,14 +84,19 @@ async function fetchAvailableGames(): Promise<
   return result.data.games;
 }
 
-function ScrollControls({onPrevious, onNext}: {onPrevious: () => void; onNext: () => void;}) {
+function ScrollControls({onPrevious, onNext, canScrollLeft, canScrollRight,}: 
+  {onPrevious: () => void; onNext: () => void;canScrollLeft: boolean;canScrollRight: boolean;}) {
   return (
     <div className="flex shrink-0 items-center gap-2">
       <button
         type="button"
+        disabled={!canScrollLeft}
         onClick={onPrevious}
         aria-label="Scroll left"
-        className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg border border-default bg-surface text-primary transition-colors hover:bg-surface-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-color"
+        className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg 
+        border border-default bg-surface text-primary transition-colors hover:bg-surface-secondary 
+        focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-color
+        disabled:cursor-not-allowed disabled:opacity-40"
       >
         <span aria-hidden="true" className="text-xl leading-none">
           ‹
@@ -99,9 +105,13 @@ function ScrollControls({onPrevious, onNext}: {onPrevious: () => void; onNext: (
 
       <button
         type="button"
+        disabled={!canScrollRight}
         onClick={onNext}
         aria-label="Scroll right"
-        className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg border border-default bg-surface text-primary transition-colors hover:bg-surface-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-color"
+        className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg 
+        border border-default bg-surface text-primary transition-colors hover:bg-surface-secondary 
+        focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-color
+        disabled:cursor-not-allowed disabled:opacity-40"
       >
         <span aria-hidden="true" className="text-xl leading-none">
           ›
@@ -180,14 +190,22 @@ const Dashboard = () => {
     enabled: activeTab === "games",
   });
 
-  const scrollCards = (ref: React.RefObject<HTMLDivElement | null>, direction: "left" | "right") => {
-    if (!ref.current) return;
+  const overallScroll = useHorizontalScroll(
+    overallScrollRef,
+    activeTab === "overall", 2,
+  );
 
-    ref.current.scrollBy({
-      left: direction === "left" ? -320 : 320,
-      behavior: "smooth",
-    });
-  };
+  const lessonsScroll = useHorizontalScroll(
+    lessonsScrollRef,
+    activeTab === "lessons",
+    lessonsQuery.data?.length ?? 0,
+  );
+
+  const gamesScroll = useHorizontalScroll(
+    gamesScrollRef,
+    activeTab === "games",
+    gamesQuery.data?.length ?? 0,
+  );
 
   return (
     <main className="h-full overflow-y-auto bg-background text-primary">
@@ -247,13 +265,14 @@ const Dashboard = () => {
                   Compare overall and Knowledge Check scores.
                 </p>
               </div>
-
-              {isSmallScreen && (
-                <ScrollControls
-                  onPrevious={() => scrollCards(overallScrollRef, "left")}
-                  onNext={() => scrollCards(overallScrollRef, "right")}
-                />
-              )}
+              
+              <ScrollControls
+                onPrevious={() => overallScroll.scroll("left")}
+                onNext={() => overallScroll.scroll("right")}
+                canScrollLeft={overallScroll.canScrollLeft}
+                canScrollRight={overallScroll.canScrollRight}
+              />
+              
             </div>
 
             <div
@@ -302,8 +321,10 @@ const Dashboard = () => {
               </div>
 
               <ScrollControls
-                onPrevious={() => scrollCards(lessonsScrollRef, "left")}
-                onNext={() => scrollCards(lessonsScrollRef, "right")}
+                onPrevious={() => lessonsScroll.scroll("left")}
+                onNext={() => lessonsScroll.scroll("right")}
+                canScrollLeft={lessonsScroll.canScrollLeft}
+                canScrollRight={lessonsScroll.canScrollRight}
               />
             </div>
 
@@ -359,8 +380,10 @@ const Dashboard = () => {
               </div>
 
               <ScrollControls
-                onPrevious={() => scrollCards(gamesScrollRef, "left")}
-                onNext={() => scrollCards(gamesScrollRef, "right")}
+                onPrevious={() => gamesScroll.scroll("left")}
+                onNext={() => gamesScroll.scroll("right")}
+                canScrollLeft={gamesScroll.canScrollLeft}
+                canScrollRight={gamesScroll.canScrollRight}
               />
             </div>
 

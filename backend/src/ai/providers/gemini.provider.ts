@@ -44,7 +44,7 @@ export class GeminiProvider implements AIProvider {
   ): AsyncIterable<string> {
     const startedAt = performance.now();
 
-    console.log('[AI TIMING] streamText started');
+    //console.log('[AI TIMING] streamText started');
 
     const stream =
       await this.client.interactions.create({
@@ -53,11 +53,11 @@ export class GeminiProvider implements AIProvider {
         stream: true,
       });
 
-    console.log(
+    /*console.log(
       `[AI TIMING] stream connection: ${Math.round(
         performance.now() - startedAt,
       )} ms`,
-    );      
+    );*/    
 
     let isFirstDelta = true;
 
@@ -69,10 +69,10 @@ export class GeminiProvider implements AIProvider {
         );
       }
 
-      console.log(
+      /*console.log(
         '[GEMINI STREAM EVENT]',
         JSON.stringify(event),
-      );
+      );*/
 
       if (
         event.event_type === 'step.delta' &&
@@ -80,11 +80,11 @@ export class GeminiProvider implements AIProvider {
       ) {
 
         if (isFirstDelta) {
-          console.log(
+          /*console.log(
             `[AI TIMING] time to first token: ${Math.round(
               performance.now() - startedAt,
             )} ms`,
-          );
+          );*/
 
           isFirstDelta = false;
         }
@@ -93,11 +93,11 @@ export class GeminiProvider implements AIProvider {
       }
     }
 
-    console.log(
+    /*console.log(
       `[AI TIMING] stream complete: ${Math.round(
         performance.now() - startedAt,
       )} ms`,
-    );
+    );*/
 
   }
 

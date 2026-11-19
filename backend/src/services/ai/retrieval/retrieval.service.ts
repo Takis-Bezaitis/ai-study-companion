@@ -22,11 +22,11 @@ export class RetrievalService {
     const embeddingStartedAt = performance.now();
     const embedding = await aiService.generateEmbedding({text: input.query, task: 'RETRIEVAL_QUERY',});
 
-    console.log(
+    /*console.log(
       `[AI TIMING] generateEmbedding: ${Math.round(
         performance.now() - embeddingStartedAt,
       )} ms`,
-    );
+    );*/
 
     if (embedding.length === 0) {
       throw new Error(
@@ -44,11 +44,11 @@ export class RetrievalService {
           input.limit ?? this.defaultLimit,
       });
 
-    console.log(
+    /*console.log(
       `[AI TIMING] searchSimilar: ${Math.round(
         performance.now() - searchStartedAt,
       )} ms`,
-    );
+    );*/
 
     return chunks;
   }
