@@ -18,6 +18,39 @@ import { useOpenQuestion } from "../hooks/ai/useOpenQuestion";
 
 const TYPEWRITER_INTERVAL_MS = 8;
 
+const TypewriterText = ({ text }: { text: string }) => {
+  const [displayedLength, setDisplayedLength] = useState(0);
+
+  useEffect(() => {
+    let index = 0;
+
+    const intervalId = window.setInterval(() => {
+      index += 3;
+
+      setDisplayedLength(Math.min(index, text.length));
+
+      if (index >= text.length) {
+        window.clearInterval(intervalId);
+      }
+    }, TYPEWRITER_INTERVAL_MS);
+
+    return () => window.clearInterval(intervalId);
+  }, [text]);
+
+  return (
+    <>
+      {text.slice(0, displayedLength)}
+
+      {displayedLength < text.length && (
+        <span
+          aria-hidden="true"
+          className="ml-0.5 inline-block h-5 w-0.5 animate-pulse bg-primary align-middle"
+        />
+      )}
+    </>
+  );
+};
+
 const OpenQuestion = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const navigate = useNavigate();
@@ -40,34 +73,8 @@ const OpenQuestion = () => {
     evaluateMutation,
   } = useOpenQuestion();
 
-  const [displayedQuestion, setDisplayedQuestion] = useState("");
-
   const question = generateMutation.data;
   const evaluation = evaluateMutation.data;
-
-  useEffect(() => {
-    if (!question?.question) {
-      setDisplayedQuestion("");
-      return;
-    }
-
-    const text = question.question;
-    let index = 0;
-
-    setDisplayedQuestion("");
-
-    const intervalId = window.setInterval(() => {
-      index += 3;
-
-      setDisplayedQuestion(text.slice(0, index));
-
-      if (index >= text.length) {
-        window.clearInterval(intervalId);
-      }
-    }, TYPEWRITER_INTERVAL_MS);
-
-    return () => window.clearInterval(intervalId);
-  }, [question?.id, question?.question]);
 
   const handleGenerateQuestion = () => {
     if (!lessonId || generateMutation.isPending) {
@@ -213,13 +220,10 @@ const OpenQuestion = () => {
                 </h2>
 
                 <p className="whitespace-pre-wrap text-base leading-7 text-primary sm:text-lg">
-                  {displayedQuestion}
-                  {displayedQuestion.length < question.question.length && (
-                    <span
-                      aria-hidden="true"
-                      className="ml-0.5 inline-block h-5 w-0.5 animate-pulse bg-primary align-middle"
-                    />
-                  )}
+                  <TypewriterText
+                    key={`${question.id}-${question.question}`}
+                    text={question.question}
+                  />
                 </p>
               </>
             ) : (

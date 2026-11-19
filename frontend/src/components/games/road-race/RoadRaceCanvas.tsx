@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 import useGameAudio from "../../../hooks/games/useGameAudio";
 
@@ -187,13 +187,16 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef,
   const {preload, playLoop, playOneShot, stop, stopAll, } = useGameAudio();
 
   const onGameOverRef = useRef(onGameOver);
-  onGameOverRef.current = onGameOver;
   const onFetchNextBatchRef = useRef(onFetchNextBatch);
-  onFetchNextBatchRef.current = onFetchNextBatch;
+
+  useLayoutEffect(() => {
+    onGameOverRef.current = onGameOver;
+    onFetchNextBatchRef.current = onFetchNextBatch;
+  }, [onGameOver, onFetchNextBatch]);
 
   useEffect(() => {
     let score = 0;
-    let educationalScore = 0;
+    // let educationalScore = 0;
     let fuel = 100;
 
     let fuelTimer = 0;
@@ -243,7 +246,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef,
     let generatedStrips = 0;
     let speedLevel = 0;
     let currentRoadColors = ROAD_COLORS[0];
-    let currentColorIndex = 0;
+    //let currentColorIndex = 0;
     let colorGroupRemaining = getRandomInt(1, 4);
     let animationFrameId = 0;
     let lastTime = performance.now();
@@ -318,7 +321,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef,
       colorGroupRemaining--;
 
       if (colorGroupRemaining === 0) {
-        currentColorIndex++;
+        //currentColorIndex++;
         colorGroupRemaining = getRandomInt(1, 4);
       }
 
@@ -408,7 +411,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef,
 
     const changeColorPalette = (level: number,) => {
       currentRoadColors = ROAD_COLORS[level % ROAD_COLORS.length];
-      currentColorIndex = 0;
+      //currentColorIndex = 0;
       colorGroupRemaining = getRandomInt(1, 4);
     };
 
@@ -777,7 +780,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef,
           void playOneShot("correct", correctSound, 0.3);
           fuel = Math.min(100, fuel + CORRECT_ITEM_FUEL,);
           score += CORRECT_ITEM_SCORE;
-          educationalScore += CORRECT_ITEM_SCORE;
+          // educationalScore += CORRECT_ITEM_SCORE;
         } else {
           void playOneShot("wrong", wrongSound, 0.3);
           fuel = Math.max(0, fuel - WRONG_ITEM_FUEL,);
