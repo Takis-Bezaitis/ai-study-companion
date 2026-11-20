@@ -11,6 +11,7 @@ import aiRoutes from './routes/ai.routes.js';
 import gameRoutes from './routes/game.routes.js';
 import leaderboardRoutes from "./routes/leaderboard.routes.js";
 
+import { env } from './config/env.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
@@ -19,7 +20,7 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: env.FRONTEND_URL,
     credentials: true,
   }),
 );
