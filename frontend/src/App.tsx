@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import LoadingScreen from "./components/common/LoadingScreen";
 import { useAuthStore } from "./store/authStore";
 import { routes } from "./routes/routes";
+import OrientationGuard from "./components/layout/OrientationGuard";
 
 function App() {
   const { checkAuth } = useAuthStore();
@@ -15,6 +16,7 @@ function App() {
   
   return (
     <Suspense fallback={<LoadingScreen />}>
+      <OrientationGuard />
       <Toaster 
         position="top-right" 
         reverseOrder={false} 
@@ -27,4 +29,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
