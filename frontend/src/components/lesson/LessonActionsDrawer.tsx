@@ -23,7 +23,7 @@ const LessonActionsDrawer = ({lesson, open, onClose, onAskAI}: LessonActionsDraw
     <>
       {/* Backdrop */}
       <div
-        className={`xl:hidden absolute inset-0 z-20 bg-black/20 backdrop-blur-[2px] transition-opacity 
+        className={`xl:hidden fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px] transition-opacity 
             duration-300 ${
           open
             ? "pointer-events-auto opacity-100"
@@ -36,7 +36,7 @@ const LessonActionsDrawer = ({lesson, open, onClose, onAskAI}: LessonActionsDraw
       {/* Drawer */}
       <aside
         aria-label="Lesson actions"
-        className={`xl:hidden absolute inset-y-0 right-0 z-30 w-full max-w-md overflow-y-auto rounded-l-2xl border-l border-default bg-surface p-4 shadow-2xl transition-transform duration-300 ease-out sm:p-5 ${
+        className={`xl:hidden fixed inset-y-0 right-0 z-50 w-full max-w-md overflow-y-auto rounded-l-2xl border-l border-default bg-surface p-4 shadow-2xl transition-transform duration-300 ease-out sm:p-5 ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
