@@ -13,7 +13,7 @@ type AIChatProps = {
 const AIChat = ({ onClose, messages, isLoading, error }: AIChatProps) => {
 
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+    <div className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
       <div className="h-9 shrink-0 bg-primary">
         <button
           type="button"
