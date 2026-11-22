@@ -104,7 +104,7 @@ const Lesson = () => {
               </div>
 
               {showAskAI && (
-                <div className="fixed inset-0 z-60 bg-black/20">
+                <div className="absolute inset-0 z-20 md:static md:min-h-0 md:w-2/5 xl:hidden">
                   <AIChatPanel onClose={() => setShowAskAI(false)} lessonId={lesson.id}/>
                 </div>
               )}
