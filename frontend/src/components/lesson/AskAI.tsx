@@ -76,7 +76,7 @@ const AskAI = ({
               : "Ask a question..."
           }
           className="min-w-0 flex-1 rounded-xl border border-default 
-          bg-background px-3 py-2.5 text-sm text-primary 
+          bg-background px-3 py-2.5 text-base md:text-sm text-primary 
           outline-none placeholder:text-muted focus:border-primary 
           disabled:cursor-not-allowed disabled:opacity-60"
           onChange={(e) =>

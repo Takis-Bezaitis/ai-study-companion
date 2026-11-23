@@ -130,7 +130,8 @@ const LessonContent = ({
                     handlePageInput();
                   }
                 }}
-                className="h-8 w-12 rounded-lg border border-default bg-surface px-2 text-center text-sm text-primary outline-none focus:border-primary-color"
+                className="h-8 w-12 rounded-lg border border-default bg-surface px-2 text-center 
+                text-base md:text-sm text-primary outline-none focus:border-primary-color"
                 aria-label="Page number"
               />
 
