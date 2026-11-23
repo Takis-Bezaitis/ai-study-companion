@@ -9,10 +9,11 @@ type LessonHeaderProps = {
 
 const LessonHeader = ({ lesson }: LessonHeaderProps) => {
   return (
-    <header>
+    <header className="flex flex-col">
       <Link
         to="/lessons"
-        className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-secondary transition-colors hover:text-primary-color"
+        className="mb-2 inline-flex items-center gap-2 text-sm font-medium 
+          text-secondary transition-colors hover:text-primary-color sm:mb-6"
       >
         <ArrowLeft aria-hidden="true" size={18} />Back to Lessons
       </Link>

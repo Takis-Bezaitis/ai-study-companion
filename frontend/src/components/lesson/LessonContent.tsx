@@ -70,8 +70,9 @@ const LessonContent = ({
       aria-label="Lesson content"
       className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-default bg-surface"
     >
-      <header className="flex shrink-0 items-center justify-between border-b border-default p-5 sm:p-6">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary-color">
+      <header className="flex shrink-0 items-center justify-between border-b border-default p-2 sm:p-4">
+        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl 
+          bg-primary-soft text-primary-color">
           <BookOpen
             aria-hidden="true"
             size={20}
@@ -84,7 +85,9 @@ const LessonContent = ({
               type="button"
               disabled={isFirstPage}
               aria-label="Previous page"
-              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-secondary transition-colors hover:bg-surface-secondary-hover hover:text-primary disabled:cursor-default disabled:opacity-40"
+              className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg 
+                text-secondary transition-colors hover:bg-surface-secondary-hover 
+                hover:text-primary disabled:cursor-default disabled:opacity-40"
               onClick={() => setPage(lessonId, currentPage - 1)}
             >
               <ChevronLeft
@@ -93,7 +96,7 @@ const LessonContent = ({
               />
             </button>
 
-            <span className="min-w-14 text-center text-sm font-medium text-secondary">
+            <span className="w-14 text-center text-sm font-medium text-secondary">
               {currentPage + 1} / {totalPages}
             </span>
 
@@ -101,7 +104,9 @@ const LessonContent = ({
               type="button"
               disabled={isLastPage}
               aria-label="Next page"
-              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-secondary transition-colors hover:bg-surface-secondary-hover hover:text-primary disabled:cursor-default disabled:opacity-40"
+              className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg 
+                text-secondary transition-colors hover:bg-surface-secondary-hover 
+                hover:text-primary disabled:cursor-default disabled:opacity-40"
               onClick={() => setPage(lessonId, currentPage + 1)}
             >
               <ChevronRight
@@ -148,7 +153,7 @@ const LessonContent = ({
         )}
       </header>
 
-      <article ref={articleRef} className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-8">
+      <article ref={articleRef} className="min-h-0 flex-1 overflow-y-auto p-2 sm:p-4">
         {isLoading && (
           <p className="text-secondary">
             Loading lesson content...
@@ -164,15 +169,13 @@ const LessonContent = ({
         )}
 
         {currentChunk && (
-          <div className="max-w-4xl text-sm leading-7 text-secondary sm:text-base">
+          <div className="text-sm leading-7 text-secondary sm:text-base">
             <section>
               <h2 className="text-2xl font-bold text-primary">
                 {mainSection}
-                <br />
-                <br />
               </h2>
 
-              <h3 className="text-xl font-semibold text-primary">
+              <h3 className="mt-2.5 text-xl font-semibold text-primary">
                 {subsectionTitle}
               </h3>
 
@@ -203,6 +206,11 @@ const LessonContent = ({
                       <h3 className="mt-6 text-lg font-semibold text-primary">
                         {children}
                       </h3>
+                    ),
+                    p: ({ children }) => (
+                      <p className="text-base text-secondary">
+                        {children}
+                      </p>
                     ),
                   }}
                 >

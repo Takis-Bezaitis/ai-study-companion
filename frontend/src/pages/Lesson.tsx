@@ -61,13 +61,13 @@ const Lesson = () => {
   }
 
   return (
-    <section className="flex h-full min-h-0 w-full flex-col overflow-hidden p-4 sm:p-6 sm:pt-2">
+    <section className="flex h-full min-h-0 w-full flex-col overflow-hidden px-2.5 sm:p-6 sm:pt-2">
       <div className="grid min-h-0 w-full flex-1 gap-6 xl:flex">
         {/* Main learning area */}
         <div className="min-h-0 min-w-0 overflow-hidden xl:flex-9">
           <div className="flex h-full min-h-0 flex-col overflow-hidden">
 
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 mb-2">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 mb-0.5 sm:mb-2">
               <LessonHeader lesson={lesson} />
 
               {/* Activities choices for mobile, sm, md, lg views */}
