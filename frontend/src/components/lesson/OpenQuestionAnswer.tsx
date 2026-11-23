@@ -63,7 +63,7 @@ const OpenQuestionAnswer = ({onSubmit, disabled = false, isSubmitting = false}: 
             : "Write your answer here..."
         }
         className="min-h-20 w-full resize-none rounded-xl border border-default
-          bg-background px-3 py-2 text-sm leading-6 text-primary outline-none
+          bg-background px-3 py-2 text-base md:text-sm leading-6 text-primary outline-none
           placeholder:text-muted focus:border-primary disabled:cursor-not-allowed
           disabled:opacity-60"
       />
