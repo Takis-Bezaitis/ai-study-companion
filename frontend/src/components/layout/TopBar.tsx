@@ -12,8 +12,9 @@ const TopBar = ({ onMenuClick }: TopBarProps) => {
   const { data: score, isPending, isError} = useMyTotalScore();
 
   return (
-    <header className="m-3 flex h-14 shrink-0 items-center justify-between rounded-2xl border border-default bg-surface px-4 sm:px-6">
-      <div className="flex min-w-0 items-center gap-3">
+    <header className="mx-3 my-1.5 sm:my-3 flex h-12 sm:h-14 shrink-0 items-center justify-between 
+      rounded-2xl border border-default bg-surface px-2 sm:px-6">
+      <div className="flex min-w-0 items-center sm:gap-3">
         <button
           type="button"
           onClick={onMenuClick}
@@ -23,7 +24,7 @@ const TopBar = ({ onMenuClick }: TopBarProps) => {
           <Menu aria-hidden="true" size={22} />
         </button>
 
-        <h1 className="truncate text-lg font-semibold text-primary sm:text-xl lg:text-2xl">
+        <h1 className="truncate text-base font-semibold text-primary sm:text-xl lg:text-2xl">
           Hello, {user?.name} 👋
         </h1>
       </div>

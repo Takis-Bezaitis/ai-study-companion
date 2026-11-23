@@ -29,9 +29,9 @@ const OpenQuestionAnswer = ({onSubmit, disabled = false, isSubmitting = false}: 
   return (
     <section
       aria-labelledby="open-question-answer-heading"
-      className="shrink-0 rounded-2xl border border-default bg-surface p-3"
+      className="shrink-0 rounded-2xl border border-default bg-surface p-1.5 sm:p-3"
     >
-      <header className="mb-3">
+      <header className="mb-1 sm:mb-3">
         <h2
           id="open-question-answer-heading"
           className="text-base font-bold text-primary"
@@ -63,12 +63,12 @@ const OpenQuestionAnswer = ({onSubmit, disabled = false, isSubmitting = false}: 
             : "Write your answer here..."
         }
         className="min-h-20 w-full resize-none rounded-xl border border-default
-          bg-background px-3 py-2 text-base md:text-sm leading-6 text-primary outline-none
+          bg-background px-1.5 py-1 sm:px-3 sm:py-2 text-base md:text-sm leading-6 text-primary outline-none
           placeholder:text-muted focus:border-primary disabled:cursor-not-allowed
           disabled:opacity-60"
       />
 
-      <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+      <div className="mt-2 flex flex-wrap items-center justify-between sm:gap-3">
         <span className="text-xs text-muted" aria-live="polite">
           {answer.length}/{MAX_ANSWER_LENGTH} characters
         </span>
@@ -77,8 +77,8 @@ const OpenQuestionAnswer = ({onSubmit, disabled = false, isSubmitting = false}: 
           type="button"
           disabled={!canSubmit}
           onClick={handleSubmit}
-          className="flex min-h-10 cursor-pointer items-center justify-center
-            gap-2 rounded-xl bg-button-main px-4 py-2 text-sm font-semibold
+          className="flex min-h-8 sm:min-h-10 cursor-pointer items-center justify-center
+            gap-2 rounded-xl bg-button-main px-2 sm:px-4 py-2 text-sm font-semibold
             text-button transition-colors hover:bg-button-hover
             disabled:cursor-not-allowed disabled:opacity-60"
         >

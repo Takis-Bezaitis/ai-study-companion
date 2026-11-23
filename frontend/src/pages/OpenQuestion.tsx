@@ -150,7 +150,7 @@ const OpenQuestion = () => {
   }
 
   return (
-    <main className="flex h-full min-h-0 flex-col overflow-hidden bg-background p-4 sm:p-6 sm:pt-2">
+    <main className="flex h-full min-h-0 flex-col overflow-hidden bg-background px-2.5 sm:p-6 sm:pt-2">
       <div className="flex justify-start">
         <button
           type="button"
@@ -163,36 +163,38 @@ const OpenQuestion = () => {
 
       <section
         aria-labelledby="open-question-title"
-        className="mx-auto mt-2 flex w-full max-w-6xl h-full min-h-0 flex-col gap-2 rounded-2xl
+        className="mx-auto mt-0.5 sm:mt-2 flex w-full max-w-6xl h-full min-h-0 flex-col gap-2 rounded-2xl
           border border-default bg-surface shadow-lg p-2.5"
       >
         <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-color">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl 
+            bg-primary-soft text-primary-color sm:h-12 sm:w-12">
             <BookOpen aria-hidden="true" size={24} />
           </div>
-          <div className="min-w-0">
-            <p className="mb-1 text-sm font-medium text-primary-color">
+          <div className="min-w-0 flex items-baseline sm:block">
+            <p className="sm:mb-1 text-sm font-medium text-primary-color">
               {lesson.category.name}
             </p>
-            <h1 className="text-2xl font-bold text-primary sm:text-3xl">
+            <h1 className="text-lg font-bold text-primary ml-2 sm:ml-0 sm:text-3xl">
               {lesson.title}
             </h1>
           </div>
         </div>
 
         <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-color">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl 
+            bg-primary-soft text-primary-color sm:h-12 sm:w-12">
             <Lightbulb aria-hidden="true" size={24} />
           </div>
           <div className="min-w-0">
             <h1
               id="open-question-title"
-              className="text-xl font-bold text-primary sm:text-2xl"
+              className="text-base font-bold text-primary sm:text-2xl"
             >
               Knowledge Check
             </h1>
-            <p className="mt-1 text-sm text-secondary">
-                Think it through, write your answer, and get AI feedback.
+            <p className="sm:mt-1 text-sm text-secondary">
+                Write your answer, and get AI feedback.
             </p>
           </div>
         </div>
@@ -207,7 +209,7 @@ const OpenQuestion = () => {
           <section
             aria-labelledby="question-heading"
             className="flex-1 min-h-0 overflow-y-auto rounded-2xl
-              border border-default bg-surface-secondary p-3 sm:p-4"
+              border border-default bg-surface-secondary p-1 sm:p-4 content-center"
           >
             {question ? (
               <>
@@ -244,7 +246,7 @@ const OpenQuestion = () => {
                     <h2 className="font-semibold text-primary">
                       Ready to test your understanding?
                     </h2>
-                    <p className="max-w-md text-sm leading-6 text-secondary">
+                    <p className="max-w-md text-sm text-secondary">
                       Generate an open question based on your lesson material.
                     </p>
 
@@ -252,8 +254,8 @@ const OpenQuestion = () => {
                       type="button"
                       onClick={handleGenerateQuestion}
                       disabled={isGenerating}
-                      className="sm:mt-2 flex min-h-10 cursor-pointer items-center
-                        justify-center gap-2 rounded-xl bg-button-main px-4 py-2
+                      className="sm:mt-2 flex min-h-8 sm:min-h-10 cursor-pointer items-center
+                        justify-center gap-2 rounded-xl bg-button-main px-2 sm:px-4 py-2
                         text-sm font-semibold text-button hover:bg-button-hover
                         disabled:cursor-not-allowed disabled:opacity-60"
                     >
@@ -310,8 +312,8 @@ const OpenQuestion = () => {
           aria-live="polite"
           aria-labelledby="feedback-heading"
           className={`min-h-0 overflow-y-auto rounded-2xl
-            border border-default bg-background p-4 sm:p-5
-            ${evaluation ? "flex-1 min-h-0" : "flex-1 min-h-0"}`}
+            border border-default bg-background p-2 sm:p-5
+            ${evaluation ? "flex-1 min-h-0" : "shrink-0"}`}
         >
           {evaluation ? (
             <div className="space-y-5">
@@ -474,7 +476,7 @@ const OpenQuestion = () => {
               </button>
             </div>
           ) : (
-            <div className="flex min-h-32 flex-col items-center justify-center gap-2 text-center">
+            <div className="flex sm:min-h-32 flex-col items-center justify-center sm:gap-2 text-center">
               <h2
                 id="feedback-heading"
                 className="font-semibold text-primary"
@@ -482,7 +484,7 @@ const OpenQuestion = () => {
                 Your feedback will appear here
               </h2>
 
-              <p className="max-w-md text-sm leading-6 text-secondary">
+              <p className="max-w-md text-sm text-secondary">
                 Submit your answer to see your score, what you got right, and how you can improve.
               </p>
             </div>
