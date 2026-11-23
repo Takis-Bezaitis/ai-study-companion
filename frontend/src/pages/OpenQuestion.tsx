@@ -229,7 +229,7 @@ const OpenQuestion = () => {
                 </p>
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center gap-3 text-center">
+              <div className="flex flex-col items-center justify-center sm:gap-3 text-center">
                 {isGenerating ? (
                   <>
                     <LoaderCircle
