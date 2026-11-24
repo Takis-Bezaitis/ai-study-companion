@@ -254,7 +254,7 @@ const OpenQuestion = () => {
                       type="button"
                       onClick={handleGenerateQuestion}
                       disabled={isGenerating}
-                      className="mt-1 sm:mt-2 flex min-h-8 sm:min-h-10 cursor-pointer items-center
+                      className="mt-1 sm:mt-2 flex h-7 sm:min-h-10 cursor-pointer items-center
                         justify-center gap-2 rounded-xl bg-button-main px-2 sm:px-4 py-2
                         text-sm font-semibold text-button hover:bg-button-hover
                         disabled:cursor-not-allowed disabled:opacity-60"
@@ -452,7 +452,7 @@ const OpenQuestion = () => {
                 type="button"
                 onClick={handleGenerateQuestion}
                 disabled={isGenerating}
-                className="flex min-h-10 w-fit max-w-full cursor-pointer items-center
+                className="flex h-7 sm:min-h-10 w-fit max-w-full cursor-pointer items-center
                   justify-center gap-2 self-start rounded-xl bg-button-main
                   px-5 py-2 text-sm font-semibold text-button
                   hover:bg-button-hover disabled:cursor-not-allowed

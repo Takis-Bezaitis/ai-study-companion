@@ -1,5 +1,5 @@
 import { ArrowRight, Bot } from "lucide-react";
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 type AskAIProps = {
   onSubmit: (question: string) => void;
@@ -26,6 +26,14 @@ const AskAI = ({
     onSubmit(question);
     setAiQuestion("");
   };
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (window.matchMedia("(min-width: 769px)").matches) {
+      inputRef.current?.focus();
+    }
+  }, []);
 
   return (
     <section
@@ -65,9 +73,9 @@ const AskAI = ({
         </label>
 
         <input
+          ref={inputRef}
           id={questionInputId}
           type="text"
-          autoFocus
           value={aiQuestion}
           disabled={disabled}
           placeholder={

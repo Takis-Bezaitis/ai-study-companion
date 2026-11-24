@@ -77,7 +77,7 @@ const OpenQuestionAnswer = ({onSubmit, disabled = false, isSubmitting = false}: 
           type="button"
           disabled={!canSubmit}
           onClick={handleSubmit}
-          className="flex min-h-8 sm:min-h-10 cursor-pointer items-center justify-center
+          className="flex h-7 sm:min-h-10 cursor-pointer items-center justify-center
             gap-2 rounded-xl bg-button-main px-2 sm:px-4 py-2 text-sm font-semibold
             text-button transition-colors hover:bg-button-hover
             disabled:cursor-not-allowed disabled:opacity-60"
