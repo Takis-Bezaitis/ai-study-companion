@@ -110,7 +110,7 @@ const RoadRaceStartScreen = ({title, description, onStart, onBack}: RoadRaceStar
             </h1>
 
             {description && (
-              <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-secondary sm:text-base">
+              <p className="mx-auto mt-4 max-w-xl h-14 text-sm leading-6 text-secondary sm:text-base">
                 {description}
               </p>
             )}

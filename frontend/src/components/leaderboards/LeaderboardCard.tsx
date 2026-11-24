@@ -29,8 +29,8 @@ const LeaderboardCard = ({
   scoreLabel = "points",
 }: LeaderboardCardProps) => {
   return (
-    <section className="flex h-full min-w-0 flex-col rounded-2xl border border-default bg-surface p-4">
-      <h3 className="mb-4 shrink-0 truncate text-base font-semibold text-primary">
+    <section className="flex h-76.25 min-w-0 flex-col rounded-2xl border border-default bg-surface p-3 sm:h-full sm:p-4">
+      <h3 className="mb-3 shrink-0 truncate text-base font-semibold text-primary">
         {title}
       </h3>
 
@@ -66,7 +66,8 @@ const LeaderboardCard = ({
               {entries.map((entry, index) => (
                 <li
                   key={entry.id ?? entry.userId}
-                  className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 border-b border-default py-3 last:border-b-0"
+                  className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 border-b 
+                    border-default py-2 sm:py-3 last:border-b-0"
                 >
                   <span
                     className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${

@@ -164,7 +164,7 @@ const OpenQuestion = () => {
       <section
         aria-labelledby="open-question-title"
         className="mx-auto mt-0.5 sm:mt-2 flex w-full max-w-6xl h-full min-h-0 flex-col gap-2 rounded-2xl
-          border border-default bg-surface shadow-lg p-2.5"
+          border border-default bg-surface shadow-lg p-2.5 mb-2"
       >
         <div className="flex items-start gap-4">
           <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl 
@@ -254,7 +254,7 @@ const OpenQuestion = () => {
                       type="button"
                       onClick={handleGenerateQuestion}
                       disabled={isGenerating}
-                      className="sm:mt-2 flex min-h-8 sm:min-h-10 cursor-pointer items-center
+                      className="mt-1 sm:mt-2 flex min-h-8 sm:min-h-10 cursor-pointer items-center
                         justify-center gap-2 rounded-xl bg-button-main px-2 sm:px-4 py-2
                         text-sm font-semibold text-button hover:bg-button-hover
                         disabled:cursor-not-allowed disabled:opacity-60"

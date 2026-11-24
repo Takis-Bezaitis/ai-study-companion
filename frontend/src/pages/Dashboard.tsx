@@ -254,7 +254,7 @@ const Dashboard = () => {
             id="dashboard-panel-overall"
             role="tabpanel"
             aria-labelledby="dashboard-tab-overall"
-            className="flex min-w-0 flex-col gap-2 sm:gap-4"
+            className="flex min-w-0 flex-col gap-4"
           >
             <div className="flex items-center justify-between gap-3">
               <div>
@@ -316,7 +316,7 @@ const Dashboard = () => {
                   Lesson Leaderboards
                 </h2>
                 <p className="text-xs text-secondary sm:mt-1 sm:text-sm">
-                  Based on correct game and Knowledge Check answers.
+                  On correct game and Knowledge Check answers.
                 </p>
               </div>
 

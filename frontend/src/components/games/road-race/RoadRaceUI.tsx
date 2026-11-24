@@ -13,7 +13,7 @@ const RoadRaceUI = ({scoreTextRef, fuelBarRef, onBack,}: RoadRaceUIProps) => {
       <div className="flex justify-between place-items-center">
          <GameBackButton onBack={onBack} />
          
-        <div className="w-25 sm:min-w-35 text-sm md:text-lg font-semibold text-primary">
+        <div className="w-fit sm:min-w-35 text-sm md:text-lg font-semibold text-primary">
           Score: <span ref={scoreTextRef}></span>
         </div>
          
