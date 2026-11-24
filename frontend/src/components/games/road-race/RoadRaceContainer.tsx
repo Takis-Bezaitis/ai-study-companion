@@ -28,10 +28,10 @@ type RoadRaceContainerProps = {
 const RoadRaceContainer = ({ lessonId, missionDetails, itemType, onBack, onContinue }: RoadRaceContainerProps) => {
   const [finalScore, setFinalScore] = useState<number | null>(null);
   const [completionError, setCompletionError] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasAreaRef = useRef<HTMLDivElement>(null);
   const isLandscape = useMediaQuery("(min-width: 768px)",);
   const orientation = isLandscape ? "landscape" : "portrait";
-  const viewport = useGameViewport(containerRef, orientation, );
+  const viewport = useGameViewport(canvasAreaRef, orientation, );
   const scoreTextRef = useRef<HTMLSpanElement | null>(null);
   const fuelBarRef = useRef<HTMLDivElement | null>(null);
   const playerDirectionRef = useRef<"left" | "right" | null>(null);
@@ -108,20 +108,32 @@ const RoadRaceContainer = ({ lessonId, missionDetails, itemType, onBack, onConti
     return null;
   }
 
-  return (
-    <section className="flex h-full min-h-0 w-full items-center justify-center overflow-hidden p-4 sm:p-6">
-      <div
-        ref={containerRef}
-        className="flex h-full min-h-0 w-full items-center justify-center"
-      >
-        <div className="flex flex-col items-center">
-          <RoadRaceUI 
-            scoreTextRef={scoreTextRef}
-            fuelBarRef={fuelBarRef}
-            onBack={onBack}
-          />
+  
+return (
+    <section className="flex h-full min-h-0 w-full items-center justify-center overflow-hidden p-2 sm:p-6">
+      <div className="grid h-full min-h-0 w-full grid-rows-[auto_minmax(0,1fr)_auto]">
+
+        {/* Top space: HUD */}
+        <div className="flex justify-center pb-1 sm:pb-2">
           <div
-            className="relative overflow-hidden rounded-2xl bg-black shadow-2xl"
+            className="w-full"
+            style={{ maxWidth: viewport.width }}
+          >
+            <RoadRaceUI
+              scoreTextRef={scoreTextRef}
+              fuelBarRef={fuelBarRef}
+              onBack={onBack}
+            />
+          </div>
+        </div>
+
+        {/* Middle space: Canvas */}
+        <div
+          ref={canvasAreaRef}
+          className="flex min-h-0 min-w-0 items-center justify-center overflow-hidden"
+        >
+          <div
+            className="relative shrink-0 overflow-hidden rounded-2xl bg-black shadow-2xl"
             style={{
               width: viewport.width,
               height: viewport.height,
@@ -155,7 +167,7 @@ const RoadRaceContainer = ({ lessonId, missionDetails, itemType, onBack, onConti
                 </p>
                 <button
                   type="button"
-                  className="mt-6 rounded-xl bg-white px-6 py-3 font-semibold text-black cursor-pointer"
+                  className="mt-6 cursor-pointer rounded-xl bg-white px-6 py-3 font-semibold text-black"
                   onClick={onContinue}
                 >
                   Continue
@@ -175,17 +187,20 @@ const RoadRaceContainer = ({ lessonId, missionDetails, itemType, onBack, onConti
                 onFetchNextBatch={handleFetchNextBatch}
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-primary-color text-lg">
+              <div className="flex h-full w-full items-center justify-center text-lg text-primary-color">
                 Preparing race...
               </div>
             )}
           </div>
+        </div>
 
+        {/* Bottom space: Mobile controls */}
+        <div className="flex shrink-0 items-center justify-center pt-1 sm:pt-2">
           {!isLandscape && (
-            <div className="flex w-full max-w-sm items-center justify-center gap-4 my-2 px-4 sm:px-0">
+            <div className="flex h-10 w-full max-w-sm items-center justify-center gap-4 px-4 sm:h-11 sm:px-0">
               <button
                 type="button"
-                className="cursor-pointer flex h-9 sm:h-11 flex-1 items-center justify-center rounded-xl border border-default bg-surface text-primary shadow-sm active:scale-95"
+                className="flex h-full flex-1 cursor-pointer items-center justify-center rounded-xl border border-default bg-surface text-primary shadow-sm active:scale-95"
                 aria-label="Move left"
                 onPointerDown={() => {
                   playerDirectionRef.current = "left";
@@ -205,7 +220,7 @@ const RoadRaceContainer = ({ lessonId, missionDetails, itemType, onBack, onConti
 
               <button
                 type="button"
-                className="cursor-pointer flex h-9 sm:h-11 flex-1 items-center justify-center rounded-xl border border-default bg-surface text-primary shadow-sm active:scale-95"
+                className="flex h-full flex-1 cursor-pointer items-center justify-center rounded-xl border border-default bg-surface text-primary shadow-sm active:scale-95"
                 aria-label="Move right"
                 onPointerDown={() => {
                   playerDirectionRef.current = "right";
@@ -224,23 +239,25 @@ const RoadRaceContainer = ({ lessonId, missionDetails, itemType, onBack, onConti
               </button>
             </div>
           )}
-
-          {isPending && (
-            <span className="sr-only text-primary-color text-lg">Preparing game items</span>
-          )}
-
-          {isError && (
-            <p role="alert" className="text-sm text-destructive">
-              {error instanceof Error
-                ? error.message
-                : "Failed to start the game."}
-            </p>
-          )}
-
         </div>
+
+        {isPending && (
+          <span className="sr-only text-lg text-primary-color">
+            Preparing game items
+          </span>
+        )}
+
+        {isError && (
+          <p role="alert" className="text-sm text-destructive">
+            {error instanceof Error
+              ? error.message
+              : "Failed to start the game."}
+          </p>
+        )}
       </div>
     </section>
   );
+
 };
 
 export default RoadRaceContainer;

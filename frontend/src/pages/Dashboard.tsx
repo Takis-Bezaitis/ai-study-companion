@@ -209,12 +209,12 @@ const Dashboard = () => {
 
   return (
     <main className="h-full overflow-y-auto bg-background text-primary">
-      <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6 p-4 sm:p-6 lg:p-8">
+      <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 p-3 sm:p-6 lg:p-8">
         <header>
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Dashboard
           </h1>
-          <p className="mt-2 text-sm text-secondary sm:text-base">
+          <p className="mt-1 text-sm text-secondary sm:mt-2 sm:text-base">
             Explore student performance across activities, lessons, and games.
           </p>
         </header>
@@ -254,14 +254,14 @@ const Dashboard = () => {
             id="dashboard-panel-overall"
             role="tabpanel"
             aria-labelledby="dashboard-tab-overall"
-            className="flex min-w-0 flex-col gap-4"
+            className="flex min-w-0 flex-col gap-2 sm:gap-4"
           >
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h2 className="text-lg font-semibold sm:text-xl">
+                <h2 className="text-base font-semibold sm:text-xl">
                   Overall Leaderboards
                 </h2>
-                <p className="mt-1 text-sm text-secondary">
+                <p className="text-xs text-secondary sm:mt-1 sm:text-sm">
                   Compare overall and Knowledge Check scores.
                 </p>
               </div>
@@ -312,10 +312,10 @@ const Dashboard = () => {
           >
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h2 className="text-lg font-semibold sm:text-xl">
+                <h2 className="text-base font-semibold sm:text-xl">
                   Lesson Leaderboards
                 </h2>
-                <p className="mt-1 text-sm text-secondary">
+                <p className="text-xs text-secondary sm:mt-1 sm:text-sm">
                   Based on correct game and Knowledge Check answers.
                 </p>
               </div>
@@ -371,10 +371,10 @@ const Dashboard = () => {
           >
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h2 className="text-lg font-semibold sm:text-xl">
+                <h2 className="text-base font-semibold sm:text-xl">
                   Game Leaderboards
                 </h2>
-                <p className="mt-1 text-sm text-secondary">
+                <p className="text-xs text-secondary sm:mt-1 sm:text-sm">
                   Explore the best scores in each game.
                 </p>
               </div>

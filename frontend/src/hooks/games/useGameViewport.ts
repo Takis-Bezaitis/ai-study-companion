@@ -1,8 +1,5 @@
-import {
-  type RefObject,
-  useEffect,
-  useState,
-} from "react";
+
+import { type RefObject, useEffect, useState } from "react";
 
 type GameOrientation = "portrait" | "landscape";
 
@@ -13,22 +10,15 @@ type GameViewport = {
 };
 
 const GAME_SIZES = {
-  portrait: {
-    width: 680,
-    height: 1100,
-  },
-  landscape: {
-    width: 1200,
-    height: 1100,
-  },
+  portrait: { width: 680, height: 1100 },
+  landscape: { width: 1200, height: 1100 },
 } as const;
 
 export function useGameViewport(
   containerRef: RefObject<HTMLDivElement | null>,
-  orientation: GameOrientation,
+  orientation: GameOrientation
 ): GameViewport {
   const gameSize = GAME_SIZES[orientation];
-  const VIEWPORT_USAGE = orientation === "landscape" ? 1 : 0.96;
 
   const [viewport, setViewport] = useState<GameViewport>({
     width: gameSize.width,
@@ -38,24 +28,16 @@ export function useGameViewport(
 
   useEffect(() => {
     const container = containerRef.current;
-
-    if (!container) {
-      return;
-    }
+    if (!container) return;
 
     const updateViewport = () => {
       const { width, height } = container.getBoundingClientRect();
 
-      if (width <= 0 || height <= 0) {
-        return;
-      }
-
-      const availableWidth = width * VIEWPORT_USAGE;
-      const availableHeight = height * VIEWPORT_USAGE;
+      if (width <= 0 || height <= 0) return;
 
       const scale = Math.min(
-        availableWidth / gameSize.width,
-        availableHeight / gameSize.height,
+        width / gameSize.width,
+        height / gameSize.height
       );
 
       setViewport({
@@ -68,15 +50,10 @@ export function useGameViewport(
     updateViewport();
 
     const observer = new ResizeObserver(updateViewport);
-
     observer.observe(container);
 
     return () => observer.disconnect();
-  }, [
-    containerRef,
-    gameSize.width,
-    gameSize.height,
-  ]);
+  }, [containerRef, gameSize.width, gameSize.height]);
 
   return viewport;
 }

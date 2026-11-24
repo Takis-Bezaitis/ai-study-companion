@@ -95,7 +95,7 @@ const Lesson = () => {
 
             {/* UI for mobile, sm, md, lg views: LessonContent and AIChatPanel */}
             <div
-              className={`relative min-h-0 flex-1 overflow-hidden ${
+              className={`relative min-h-0 flex-1 overflow-hidden mb-2 ${
                 showAskAI ? "md:flex md:gap-4" : ""
               }`}
             >

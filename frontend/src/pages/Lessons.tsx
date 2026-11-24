@@ -10,13 +10,13 @@ const Lessons = () => {
 
   if (isLoading) {
     return (
-      <section className="mx-auto w-full max-w-6xl p-4 sm:p-6">
-        <header className="mb-8">
+      <section className="mx-auto w-full max-w-6xl p-3 sm:p-6">
+        <header className="mb-5 sm:mb-8">
           <h2 className="text-2xl font-bold text-primary sm:text-3xl">
             Lessons
           </h2>
 
-          <p className="mt-2 text-secondary">
+          <p className="mt-1 text-sm text-secondary sm:mt-2 sm:text-base">
             Explore your lessons and keep learning.
           </p>
         </header>
@@ -28,8 +28,8 @@ const Lessons = () => {
 
   if (isError) {
     return (
-      <section className="mx-auto w-full max-w-6xl p-4 sm:p-6">
-        <header className="mb-8">
+      <section className="mx-auto w-full max-w-6xl p-3 sm:p-6">
+        <header className="mb-5 sm:mb-8">
           <h2 className="text-2xl font-bold text-primary sm:text-3xl">
             Lessons
           </h2>
@@ -79,13 +79,13 @@ const Lessons = () => {
   const categories = Array.from(groupedLessons.values());
 
   return (
-    <section className="w-full max-w-7xl mx-auto p-4 sm:p-6">
-      <header className="mb-8">
+    <section className="w-full max-w-7xl mx-auto p-3 sm:p-6">
+      <header className="mb-5 sm:mb-8">
         <h2 className="text-2xl font-bold text-primary sm:text-3xl">
           Lessons
         </h2>
 
-        <p className="mt-2 text-secondary">
+        <p className="mt-1 text-sm text-secondary sm:mt-2 sm:text-base">
           Explore your lessons and build your knowledge.
         </p>
       </header>
