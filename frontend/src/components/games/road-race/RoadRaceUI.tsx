@@ -22,7 +22,7 @@ const RoadRaceUI = ({scoreTextRef, fuelBarRef, onBack,}: RoadRaceUIProps) => {
             ⛽
           </span>
 
-          <div className="h-3 w-48 overflow-hidden rounded-full bg-gray-300">
+          <div className="h-4 w-40 sm:h-3 sm:w-48 overflow-hidden rounded-full bg-gray-300">
             <div
               ref={fuelBarRef}
               className="h-full rounded-full bg-green-500 transition-colors"

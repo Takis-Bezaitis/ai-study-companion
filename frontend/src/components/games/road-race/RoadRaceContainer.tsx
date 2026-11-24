@@ -182,10 +182,10 @@ const RoadRaceContainer = ({ lessonId, missionDetails, itemType, onBack, onConti
           </div>
 
           {!isLandscape && (
-            <div className="flex w-full max-w-sm items-center justify-center gap-4 my-2">
+            <div className="flex w-full max-w-sm items-center justify-center gap-4 my-2 px-4 sm:px-0">
               <button
                 type="button"
-                className="cursor-pointer flex h-11 flex-1 items-center justify-center rounded-xl border border-default bg-surface text-primary shadow-sm active:scale-95"
+                className="cursor-pointer flex h-9 sm:h-11 flex-1 items-center justify-center rounded-xl border border-default bg-surface text-primary shadow-sm active:scale-95"
                 aria-label="Move left"
                 onPointerDown={() => {
                   playerDirectionRef.current = "left";
@@ -205,7 +205,7 @@ const RoadRaceContainer = ({ lessonId, missionDetails, itemType, onBack, onConti
 
               <button
                 type="button"
-                className="cursor-pointer flex h-11 flex-1 items-center justify-center rounded-xl border border-default bg-surface text-primary shadow-sm active:scale-95"
+                className="cursor-pointer flex h-9 sm:h-11 flex-1 items-center justify-center rounded-xl border border-default bg-surface text-primary shadow-sm active:scale-95"
                 aria-label="Move right"
                 onPointerDown={() => {
                   playerDirectionRef.current = "right";

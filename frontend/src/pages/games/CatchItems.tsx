@@ -11,9 +11,9 @@ const CatchItems = () => {
 
   return (
     <section className="flex h-full min-h-0 w-full items-center justify-center overflow-hidden p-4 sm:p-6">
-      <div className="w-full max-w-2xl">
+      <div className="w-full m-3 max-w-2xl">
         <div className="text-center">
-          <p className="mb-2 text-7xl font-black uppercase text-accent">
+          <p className="mb-2 text-5xl sm:text-7xl font-black uppercase text-accent">
             ParaWords
           </p>
           <p className="text-2xl text-primary">

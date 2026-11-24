@@ -84,9 +84,10 @@ const RoadRaceStartScreen = ({title, description, onStart, onBack}: RoadRaceStar
   const isMobileOrTablet = useMediaQuery("(max-width: 1023px)");
 
   return (
-    <section className="flex h-full min-h-0 w-full items-center justify-center overflow-hidden p-4 sm:p-6">
-      <div className="w-full max-w-2xl">
-        <div className="border-2 border-primary bg-surface px-5 py-7 
+    <section className="flex h-full min-h-0 w-full items-center justify-center overflow-hidden 
+      p-2 sm:p-6">
+      <div className="w-full m-3 sm:max-w-2xl">
+        <div className="border-2 border-primary bg-surface px-2 py-3 
           shadow-[8px_8px_0_var(--color-primary)] sm:px-8 sm:py-9">
 
           <div className="mb-6 flex justify-start">
@@ -100,7 +101,7 @@ const RoadRaceStartScreen = ({title, description, onStart, onBack}: RoadRaceStar
           </div>
 
           <div className="text-center">
-            <p className="mb-2 text-7xl font-black uppercase text-accent">
+            <p className="mb-2 text-5xl sm:text-7xl font-black uppercase text-accent">
               Road Race
             </p>
 
@@ -139,7 +140,7 @@ const RoadRaceStartScreen = ({title, description, onStart, onBack}: RoadRaceStar
             </div>
           </div>
 
-          <div className="mt-7 flex justify-center sm:mt-8">
+          <div className="mt-4 mb-3 flex justify-center sm:mt-8">
             <button
               type="button"
               onClick={onStart}
