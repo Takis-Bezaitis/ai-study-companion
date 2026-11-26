@@ -42,6 +42,11 @@ const OpenQuestionAnswer = ({onSubmit, disabled = false, isSubmitting = false}: 
         <p className="mt-1 text-sm text-secondary">
           Explain your answer using what you learned in this lesson.
         </p>
+        <p className="text-sm text-secondary">
+          Demo version: Do not enter personal or sensitive information. 
+          Answers are not stored in our database, but are processed via 
+          the Google Gemini API (Free Tier).
+        </p>
       </header>
 
       <label htmlFor={answerInputId} className="sr-only">
