@@ -60,6 +60,10 @@ const AskAI = ({
             <p className="text-sm text-secondary">
               Ask anything about this lesson.
             </p>
+
+            <p className="text-sm text-secondary">Demo version: Do not enter personal or sensitive information. 
+              Conversations are not stored in our database, but are processed via 
+              the Google Gemini API (Free Tier).</p>
           </div>
         </div>
       </header>
