@@ -97,7 +97,7 @@ const AIChatPanel = ({ onClose, lessonId, }: AIChatPanelProps) => {
 
     if (!lastAssistantMessage?.content) return;
 
-    const length = lastAssistantMessage.content.length;
+    //const length = lastAssistantMessage.content.length;
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
