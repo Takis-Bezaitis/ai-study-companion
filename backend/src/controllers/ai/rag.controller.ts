@@ -49,9 +49,10 @@ function getAIErrorMessage(
     if (
       candidate.status === 503 ||
       candidate.code === 503 ||
-      candidate.message?.includes('503')
+      candidate.message?.includes('503') ||
+      candidate.message?.toLowerCase().includes('high demand')
     ) {
-      return 'The AI service is temporarily unavailable. Please try again later.';
+      return 'The AI service is temporarily unavailable, possibly due to high demand. Please try again later.';
     }
   }
 
@@ -74,11 +75,11 @@ export async function streamAskLesson(
   const result =
     await ragService.streamLesson(input);
 
-  /*console.log(
+  console.log(
     `[AI TIMING] request → stream ready: ${Math.round(
       performance.now() - requestStartedAt,
     )} ms`,
-  );*/
+  );
 
   res.status(200);
 
@@ -122,17 +123,23 @@ export async function streamAskLesson(
 
       const now = performance.now();
 
-      /*console.log(
+      console.log(
         `[AI TIMING] delta received; gap: ${Math.round(
           now - previousDeltaAt,
         )} ms`,
-      );*/
+      );
 
       previousDeltaAt = now;
 
       sendEvent('delta', {
         text: chunk,
       });
+
+      /*console.log(
+        "[BACKEND DELTA SENT]",
+        new Date().toISOString(),
+        chunk.length,
+      );*/
     }
 
     if (!res.writableEnded) {

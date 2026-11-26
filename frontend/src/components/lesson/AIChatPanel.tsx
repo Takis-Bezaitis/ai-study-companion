@@ -101,10 +101,10 @@ const AIChatPanel = ({ onClose, lessonId, }: AIChatPanelProps) => {
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        console.log("[UI PAINT CHECK]", {
+        /*console.log("[UI PAINT CHECK]", {
           time: Math.round(performance.now()),
           length,
-        });
+        });*/
       });
     });
   }, [messages]);

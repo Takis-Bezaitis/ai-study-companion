@@ -94,11 +94,11 @@ export class RAGService {
             history: input.history,
           });
 
-    /*console.log(
+    console.log(
       `[AI TIMING] rewriteQuery: ${Math.round(
         performance.now() - rewriteStartedAt,
       )} ms`,
-    );*/
+    );
 
     const retrievalStartedAt = performance.now();
 
@@ -109,11 +109,11 @@ export class RAGService {
         limit: this.retrievalLimit,
       });
 
-    /*console.log(
+    console.log(
       `[AI TIMING] retrieveLessonContext: ${Math.round(
         performance.now() - retrievalStartedAt,
       )} ms`,
-    );*/
+    );
 
     if (chunks.length === 0) {
       return {
@@ -151,6 +151,13 @@ export class RAGService {
   User question:
   ${input.question}
   `.trim();
+
+  console.log('[AI PROMPT SIZE]', {
+    questionLength: input.question.length,
+    chunksCount: chunks.length,
+    contextCharacters: context.length,
+    promptCharacters: prompt.length,
+  });
 
     return {
       sources: chunks,
