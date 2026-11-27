@@ -39,13 +39,13 @@ const OpenQuestionAnswer = ({onSubmit, disabled = false, isSubmitting = false}: 
           Your answer
         </h2>
 
-        <p className="mt-1 text-sm text-secondary">
+        <p className="text-sm text-secondary">
           Explain your answer using what you learned in this lesson.
         </p>
-        <p className="text-sm text-secondary">
-          Demo version: Do not enter personal or sensitive information. 
-          Answers are not stored in our database, but are processed via 
-          the Google Gemini API (Free Tier).
+        <p className="mt-1 text-xs text-secondary">
+          Demo: Don't enter personal or sensitive info. 
+          Answers aren't saved in our database; they're processed by 
+          Google Gemini API (Free Tier).
         </p>
       </header>
 
@@ -73,7 +73,7 @@ const OpenQuestionAnswer = ({onSubmit, disabled = false, isSubmitting = false}: 
           disabled:opacity-60"
       />
 
-      <div className="mt-2 flex flex-wrap items-center justify-between sm:gap-3">
+      <div className="sm:mt-2 flex flex-wrap items-center justify-between sm:gap-3">
         <span className="text-xs text-muted" aria-live="polite">
           {answer.length}/{MAX_ANSWER_LENGTH} characters
         </span>

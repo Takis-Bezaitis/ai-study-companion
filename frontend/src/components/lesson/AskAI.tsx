@@ -40,7 +40,7 @@ const AskAI = ({
       aria-labelledby="ask-ai-heading"
       className="rounded-2xl border border-default bg-surface p-3"
     >
-      <header className="mb-4 flex items-start justify-between gap-3">
+      <header className="mb-1.5 sm:mb-4 flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div
             className="flex h-10 w-10 shrink-0 items-center justify-center 
@@ -61,9 +61,9 @@ const AskAI = ({
               Ask anything about this lesson.
             </p>
 
-            <p className="text-sm text-secondary">Demo version: Do not enter personal or sensitive information. 
-              Conversations are not stored in our database, but are processed via 
-              the Google Gemini API (Free Tier).</p>
+            <p className="mt-1 text-xs text-secondary">Demo: Don't enter personal or sensitive 
+              info. Messages aren't saved in our database; they're processed by 
+              Google Gemini API (Free Tier).</p>
           </div>
         </div>
       </header>

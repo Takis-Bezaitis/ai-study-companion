@@ -202,7 +202,7 @@ const OpenQuestion = () => {
         <div className="h-px w-full bg-(--color-border)"></div>
 
         {/* Main content area */}
-        <div className="flex flex-1 min-h-0 flex-col gap-3">
+        <div className="flex flex-1 min-h-0 flex-col gap-2">
 
         {/* Question */}
         {!evaluation && (
@@ -247,7 +247,7 @@ const OpenQuestion = () => {
                       Ready to test your understanding?
                     </h2>
                     <p className="max-w-md text-sm text-secondary">
-                      Generate an open question based on your lesson material.
+                      Generate a question based on your lesson material.
                     </p>
 
                     <button
