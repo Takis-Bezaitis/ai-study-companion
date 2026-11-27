@@ -188,6 +188,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef,
 
   const onGameOverRef = useRef(onGameOver);
   const onFetchNextBatchRef = useRef(onFetchNextBatch);
+  const gameOverRef = useRef(false);
 
   useLayoutEffect(() => {
     onGameOverRef.current = onGameOver;
@@ -195,6 +196,10 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef,
   }, [onGameOver, onFetchNextBatch]);
 
   useEffect(() => {
+    if (gameOverRef.current) {
+      return;
+    }
+
     let score = 0;
     // let educationalScore = 0;
     let fuel = 100;
@@ -228,6 +233,10 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef,
       ? canvas.width * MOBILE_CAR_WIDTH_RATIO
       : canvas.width * CAR_WIDTH_RATIO;
     const carHeight = carWidth / CAR_ASPECT_RATIO;
+
+    const playerMoveSpeed = canvas.width < MOBILE_SCREEN
+      ? PLAYER_MOVE_SPEED * 0.65
+      : PLAYER_MOVE_SPEED;
 
     const enemyCollisionWidth = carWidth * ENEMY_COLLISION_WIDTH_RATIO;
     const enemyCollisionHeight = carHeight * ENEMY_COLLISION_HEIGHT_RATIO;
@@ -544,7 +553,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef,
 
       playerX += movementDirection * (collisionPushTimer > 0
           ? COLLISION_PUSH_SPEED
-          : PLAYER_MOVE_SPEED) *
+          : playerMoveSpeed) *
         deltaTime;
 
       score += SCORE_PER_SECOND * deltaTime;
@@ -837,6 +846,7 @@ const RoadRaceCanvas = ({width, height, game, scoreTextRef,
       if (fuel <= 0) {
         fuel = 0;
         gameOver = true;
+        gameOverRef.current = true;
         stop("engine");
       }
 

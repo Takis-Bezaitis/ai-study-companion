@@ -476,7 +476,10 @@ const OpenQuestion = () => {
               </button>
             </div>
           ) : (
-            <div className="flex sm:min-h-32 flex-col items-center justify-center sm:gap-2 text-center">
+            <div
+              className={`flex flex-col items-center justify-center text-center
+                ${question ? "hidden sm:flex" : "sm:min-h-32 sm:gap-2"}`}
+            >
               <h2
                 id="feedback-heading"
                 className="font-semibold text-primary"
