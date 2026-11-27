@@ -5,9 +5,10 @@ import type { Lesson } from "../../types/custom";
 
 type LessonHeaderProps = {
   lesson: Lesson;
+  showAskAI: boolean;
 };
 
-const LessonHeader = ({ lesson }: LessonHeaderProps) => {
+const LessonHeader = ({ lesson, showAskAI }: LessonHeaderProps) => {
   return (
     <header className="flex flex-col">
       <Link
@@ -33,7 +34,10 @@ const LessonHeader = ({ lesson }: LessonHeaderProps) => {
         </div>
       </div>
       {lesson.description && (
-      <p className="sm:mt-2 max-w-3xl text-sm text-secondary sm:text-base">
+      <p className={`sm:mt-2 max-w-3xl text-sm text-secondary sm:text-base ${
+          showAskAI ? "hidden sm:block" : "block"
+        }`}
+      >
         {lesson.description}
       </p>
       )}

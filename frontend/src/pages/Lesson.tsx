@@ -68,7 +68,7 @@ const Lesson = () => {
           <div className="flex h-full min-h-0 flex-col overflow-hidden">
 
             <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 mb-0.5 sm:mb-2">
-              <LessonHeader lesson={lesson} />
+              <LessonHeader lesson={lesson} showAskAI={showAskAI} />
 
               {/* Activities choices for mobile, sm, md, lg views */}
               <aside className="flex items-end justify-end xl:hidden">

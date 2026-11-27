@@ -246,7 +246,7 @@ const OpenQuestion = () => {
                     <h2 className="font-semibold text-primary">
                       Ready to test your understanding?
                     </h2>
-                    <p className="max-w-md text-sm text-secondary">
+                    <p className="hidden sm:block max-w-md text-sm text-secondary">
                       Generate a question based on your lesson material.
                     </p>
 
