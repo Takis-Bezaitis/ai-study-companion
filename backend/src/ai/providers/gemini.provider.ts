@@ -54,11 +54,11 @@ export class GeminiProvider implements AIProvider {
         store: false,
       });
 
-    console.log(
+    /*console.log(
       `[AI TIMING] stream connection: ${Math.round(
         performance.now() - startedAt,
       )} ms`,
-    );
+    );*/
 
     let isFirstDelta = true;
 
@@ -81,11 +81,11 @@ export class GeminiProvider implements AIProvider {
       ) {
 
         if (isFirstDelta) {
-          console.log(
+          /*console.log(
             `[AI TIMING] time to first token: ${Math.round(
               performance.now() - startedAt,
             )} ms`,
-          );
+          );*/
 
           isFirstDelta = false;
         }

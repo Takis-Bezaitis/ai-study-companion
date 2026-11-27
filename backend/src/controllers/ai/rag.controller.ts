@@ -75,11 +75,11 @@ export async function streamAskLesson(
   const result =
     await ragService.streamLesson(input);
 
-  console.log(
+  /*console.log(
     `[AI TIMING] request → stream ready: ${Math.round(
       performance.now() - requestStartedAt,
     )} ms`,
-  );
+  );*/
 
   res.status(200);
 
@@ -123,11 +123,11 @@ export async function streamAskLesson(
 
       const now = performance.now();
 
-      console.log(
+      /*console.log(
         `[AI TIMING] delta received; gap: ${Math.round(
           now - previousDeltaAt,
         )} ms`,
-      );
+      );*/
 
       previousDeltaAt = now;
 
