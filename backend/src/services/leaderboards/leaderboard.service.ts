@@ -85,6 +85,7 @@ export class LeaderboardService {
         name: userMap.get(item.userId)?.name ?? "Unknown user",
         score: item._sum.educationalScore ?? 0,
       }))
+      .filter((item) => item.score > 0)
       .sort(
         (a, b) =>
           b.score - a.score ||
